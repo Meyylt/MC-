@@ -1,0 +1,156 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f9f9f9;
+}
+.home{
+    text-decoration: none;
+    color: black;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    background: white;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.dot {
+    color: green;
+}
+
+nav a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: gray;
+}
+
+.inscription {
+    border: 1px solid green;
+    padding: 10px 20px;
+    border-radius: 10px;
+    background: white;
+    color: green;
+    cursor: pointer;
+}
+
+.hero {
+    position: relative;
+    width: 100%;
+    height: 400px;
+}
+
+.hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+}
+
+.overlay h1 {
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+.search-bar {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 5px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    width: 700px;
+}
+
+.search-bar input {
+    border: none;
+    outline: none;
+    padding: 10px;
+    width: 700px;
+    font-size: 16px;
+    background: transparent;
+}
+.services {
+    padding: 30px;
+}
+
+.services h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    column-gap: 0px;
+}
+
+.service-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid green;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    height: 357px;
+    width: 284px;
+}
+
+.service-card img {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 10px;
+}
+
+.service-card p {
+    color: green;
+    font-size: 20px;
+    margin-top: 50px;
+    font-weight: 400;
+}
+
+.service-card:hover p {
+    color: white; /* Change la couleur du texte en blanc */
+}
+.service-card:hover {
+    background-color: green; /* Change le fond en vert pour que le texte reste lisible */
+    transform: scale(1.05);
+    transition: 0.3s ease-in-out;
+}
+.how-it-works {
+    width: 1350px; /* Prend toute la largeur de l'écran */
+    overflow: hidden; /* Évite les débordements */
+}
+
+.full-width-image {
+    width: 100%; /* L'image prend toute la largeur */
+    height: auto; /* Garde le ratio de l'image */
+    display: block; /* Supprime l'espace blanc sous l'image */
+}
+.isnc{
+    text-decoration: none;
+    color: green;
+}
+
