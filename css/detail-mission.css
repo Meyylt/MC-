@@ -135,6 +135,10 @@ nav a:hover{
            padding-left: 10px;
             align-items: center;
 }
+.freelancer-info img{
+    width: 50px;
+    height: 50px;
+}
 .freelancer-info p{
     padding-left: 15px;
     font-family: 'Raleway', sans-serif;
@@ -144,7 +148,7 @@ nav a:hover{
     margin-top: 5px;
 }
 .free h3{
-    margin-top: 20px;
+    margin-top: 40px;
     margin-bottom: 20px;
     font-family: 'Raleway', sans-serif;
     font-size: 35px;
