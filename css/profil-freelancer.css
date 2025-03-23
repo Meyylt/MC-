@@ -99,7 +99,7 @@ nav a:hover{
     height: 150px;
     margin: 0 auto 10px;
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
     
     
 }
@@ -172,6 +172,11 @@ nav a:hover{
 .projets img{
     width: 250px;
     height: 150px;
+    overflow: hidden;
+    transition: transform 0.3s; 
+}
+.projets img:hover {
+    transform: scale(1.05);
 }
 .projet{
     position: relative;

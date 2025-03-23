@@ -1,0 +1,144 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: poppins;
+}
+
+
+
+/* Navbar */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    background: #fff;
+    height: 70px;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: bold;
+    padding: 3px 10px; 
+    display: inline-block; 
+}
+
+.logo .dot {
+    color: green;
+    font-size: 30px;
+}
+
+header input{
+    padding: 5px;
+     width: 650px;
+     background-color: #eceaea;
+     border-radius: 10px;
+    border: 1px solid lightgray;
+     
+}
+.header-icons {
+    display: flex;
+    gap: 0px;
+}
+.header-icons img {
+    width: 30px;
+    height: 30px;
+}
+.icon{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+}
+
+
+
+
+.container {
+    display: grid;
+    grid-template-columns: 1.1fr 1.9fr;
+    gap: 20px;
+    padding: 20px;
+    height: 550px;
+    margin-top: 35px;
+}
+
+.conversations{
+    
+    padding: 20px;
+    border-radius: 10px;
+    padding-top: 15px;
+    border: 2px solid rgb(122, 122, 122);
+    
+}
+.conversations h2{
+    font-family: 'Raleway', sans-serif;
+    font-size: 35px;
+    padding-top: 20px;
+}
+.conversation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.conversation-item {
+    display: flex;
+    height: 70px;
+    align-items: center;
+    padding: 10px;
+    background-color: white;
+    border-radius: 10px;
+    border: 2px solid rgb(155, 154, 154);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.conversation-item:hover {
+    background-color: #F3F4F6;
+}
+.conversation-item image {
+    width: 30px;
+    height: 50px;
+}
+.conversation-item p {
+    font-family: 'Raleway', sans-serif;
+    font-size: 25px;
+    margin-left: 20px;
+}
+
+
+
+
+
+
+
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    border-radius: 10px;
+    border: 2px solid rgb(122, 122, 122);
+}
+
+.message-box {
+    text-align: center;
+}
+.message-box h3 {
+    
+    font-family: 'Raleway', sans-serif;
+    font-size: 30px;
+}
+.message-box p {
+    
+    font-family: 'Raleway', sans-serif;
+    font-size: 25px;
+    padding-top: 10px;
+}
+
+
+
