@@ -1,0 +1,144 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: poppins;
+}
+
+
+
+/* Navbar */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    background: #fff;
+    height: 70px;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: bold;
+    padding: 3px 10px; 
+    display: inline-block; 
+}
+
+.logo .dot {
+    color: green;
+    font-size: 30px;
+}
+
+
+.header-icons {
+    display: flex;
+    gap: 0px;
+}
+.header-icons img {
+    width: 35px;
+    height: 35px;
+}
+nav{
+    background-color: #003912;
+    height: 100px;
+    padding-top: 15px;
+}
+nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: white;
+    font-size: 25px;
+    font-weight: 200;
+  margin-right: 57px;
+  
+    
+}
+nav a:hover{
+    color: green;
+}
+.contnaire{
+    position: relative;
+    text-align: center;
+    
+}
+.background-image {
+    width: 100%;
+    height: auto;
+}
+.mission-button {
+    position: absolute;
+    top: 40%; /* Ajuste selon l'endroit où tu veux afficher le bouton */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    color: rgb(24, 24, 24);
+    border: none;
+    padding: 10px 20px;
+    font-size: 2rem;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 40%;
+    height: 70px;
+    font-weight: 300;
+}
+main h2{
+    margin-top: 20px;
+    padding-left: 30px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 30px;
+    padding-bottom: 50px;
+}
+.freelancers-container {
+    display: flex;
+    gap: 70px;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+.freelancer-card {
+    position: relative;
+    width: 300px;
+    height: 450px;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s;    
+}
+.freelancer-card:hover {
+    transform: scale(1.05);
+}
+.freelancer-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 15px;
+}
+.freelancer-info {
+    position: absolute;
+    inset: 0; /* Prend toute la place disponible dans .freelancer-card */
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.freelancer-card:hover .freelancer-info {
+    opacity: 1;
+}
+.icon{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin: 20px;
+}
+.icon img{
+    height: 30px;
+    width: 30px;
+}
+.link{
+    text-decoration: none;
+   
+}
