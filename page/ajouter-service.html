@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ajouter un service</title>
+    <link rel="stylesheet" href="../css/ajouter-service.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="logo">SkillNet<span class="dot">●</span></div>
+      <div class="icons">
+        <img  src="../images/bell 1.png" alt="Notification" class="icon" />
+        <img src="../images/mail 1.png" alt="Message" class="icon" />
+        <img src="../images/user 1 (1).png" alt="Profil" class="icon profile-icon" />
+      </div>
+    </header>
+    <main>
+      <h4>Ajoutez les informations correspondantes à votre service !</h4>
+      <form id="serviceForm">
+        <input
+          type="text"
+          id="titre"
+          name="titre"
+          placeholder="Titre"
+          required
+        />
+        <select id="categorie" name="categorie">
+          <option>Musique & Audio</option>
+          <option>Graphisme & Design</option>
+          <option>Développement Web</option>
+          <option>Rédaction & Traduction</option>
+        </select>
+        <input
+          type="text"
+          id="description"
+          name="description"
+          placeholder="Description"
+          required
+        />
+        <input type="text" id="prix" name="prix" placeholder="DA" required />
+        <input
+          type="text"
+          id="delais"
+          name="delais"
+          placeholder="3 jours"
+          required
+        />
+        <button type="submit" id="poster">Poster</button>
+      </form>
+    </main>
+
+    <!-- Boîte de confirmation (POP-UP) -->
+    <div id="confirmationPopup" class="popup-overlay">
+      <div class="popup-content">
+        <img id="closePopup" src="../images/fermer.png" alt="Fermer" class="close-btn" />
+      
+        <p>Votre mission a été postée avec succès.</p>
+      </div>
+    </div>
+
+    <script src="../js/ajouterservice.js"></script>
+    <!-- Lien vers le JavaScript -->
+  </body>
+</html>
