@@ -77,11 +77,78 @@ nav a:hover{
 
 .container {
     display: grid;
-    grid-template-columns: 1.6fr 1.4fr;
-    gap: 20px;
+    grid-template-columns: 1.5fr 1.5fr;
+    gap: 30px;
     padding: 20px;
     margin-top: 35px;
 }
+.info-paiment{
+    padding: 20px;
+    border-radius: 10px;
+    padding-top: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    height: 500px;
+    
+}
+.info-paiment hr{
+    border: none; height: 2px; background-color: #d1d5db;
+    margin-top: 40px;
+}
+.cb{
+    display: flex; 
+    gap: 0.5rem;
+}
+.cb p{
+    font-family: 'Raleway', sans-serif;
+    font-size: 25px;
+}
+.cb img{
+    width: 40px;
+    height: 20px;
+    margin-top: 9px;
+}
+.cb input{
+    width: 10%;
+}
+.input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 20px;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    background-color: #f7f6f6;
+    font-family: 'Raleway', sans-serif;
+    font-size: 20px;
+    height: 70px;
+}
+.poste{
+    display: flex; 
+    gap: 0.5rem;
+    margin-top: 30px;
+}
+.poste p{
+    font-family: 'Raleway', sans-serif;
+    font-size: 25px;
+}
+.poste input{
+    width: 10%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .informations{
     
@@ -91,7 +158,6 @@ nav a:hover{
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     
     height: 500px;
-    margin-top: 50px;
     
 }
 .informations h2{
@@ -99,6 +165,17 @@ nav a:hover{
     font-size: 50px;
     padding-top: 20px;
     padding-left: 100px;
+}
+.informations hr{
+    border: none; height: 2px; background-color: #777777;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.informations h3{
+    font-family: 'Raleway', sans-serif;
+    font-size: 25px;
+    margin-left: 20px;
+    color: #292929;
 }
 .informations p{
     font-family: 'Raleway', sans-serif;
@@ -117,61 +194,19 @@ nav a:hover{
     margin-left: 170px;
     font-size: 20px;
 }
-.information{
-        display: flex;
-        margin-top: 20px;
-        margin-left: 50px;
+.total {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    margin-top: 30px;
 }
-.information img{
-    margin-left: 60px;
-}
-.information p{
+
+.total span{
     margin-left: 20px;
     font-family: 'Raleway', sans-serif;
     font-size: 25px;
+    color: #292929;
 }
-.freelancer-info{
-           display: flex;
-           padding-left: 10px;
-            align-items: center;
-}
-.freelancer-info img{
-    width: 50px;
-    height: 50px;
-}
-.freelancer-info p{
-    padding-left: 15px;
-    font-family: 'Raleway', sans-serif;
-    font-size: 20px;
-}
-.free{
-    margin-top: 5px;
-}
-.free h3{
-    margin-top: 40px;
-    margin-bottom: 20px;
-    font-family: 'Raleway', sans-serif;
-    font-size: 35px;
-}
-.free p{
-    font-family: 'Raleway', sans-serif;
-    font-size: 30px;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
