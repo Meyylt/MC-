@@ -1,0 +1,173 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: poppins;
+}
+
+
+
+/* Navbar */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    background: #fff;
+    height: 70px;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: bold;
+    padding: 3px 10px; 
+    display: inline-block; 
+}
+
+.logo .dot {
+    color: green;
+    font-size: 30px;
+}
+
+header input{
+    padding: 5px;
+     width: 650px;
+     background-color: #eceaea;
+     border-radius: 10px;
+    border: 1px solid lightgray;
+     
+}
+.header-icons {
+    display: flex;
+    gap: 0px;
+}
+.header-icons img {
+    width: 30px;
+    height: 30px;
+}
+.icon{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+}
+
+nav{
+    background-color: #003912;
+    height: 100px;
+    padding-top: 30px;
+    padding-left: 40px;
+    
+}
+nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: white;
+    font-size: 30px;
+    font-family: 'Raleway', sans-serif;
+    
+   
+    
+}
+nav a:hover{
+    color: green;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+    padding: 20px;
+    height: 400px;
+}
+.box {
+    background-color: #003912;
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+}
+.missions-en-cours{
+    background-color: #003912;
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    padding-top: 15px;
+    
+}
+.missions-en-cours h2{
+    font-family: 'Raleway', sans-serif;
+    font-size: 35px;
+    padding-bottom: 30px;
+}
+.mission {
+    background-color: white;
+    
+    font-family: 'Raleway', sans-serif;
+    padding: 8px 12px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    
+    
+}
+.mission p{
+    color: #292828;
+    font-size: 20px;
+}
+.mission span{
+    color: #666464;
+}
+
+.encour{
+    padding-top: 25px;
+    padding-left: 20px;
+    padding-bottom: 20px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 30px;
+}
+
+.suggestions {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 50px;
+    padding-left: 75px;
+    padding-right: 75px;
+}
+.suggestion {
+    background-color: #003912;
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    position: relative;
+    width: 350px;
+    height: 370px;
+}
+.suggestion h1{
+    font-family: 'Raleway', sans-serif;
+    padding-bottom: 30px;
+    font-size: 40px;
+}
+.suggestion p {
+    margin: 5px 0;
+    font-family: 'Raleway', sans-serif;
+    padding-bottom: 15px;
+    font-size: 20px;
+}
+.suggestion .icon {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background-color: white;
+    color: #003912;
+    padding: 5px;
+    border-radius: 50%;
+    width: 50px;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -41,16 +41,18 @@ header {
 nav{
     background-color: #003912;
     height: 100px;
-    padding-top: 15px;
+    padding-top: 30px;
+    padding-left: 40px;
+    
 }
 nav a {
     margin: 0 10px;
     text-decoration: none;
     color: white;
-    font-size: 25px;
-    font-weight: 200;
-  margin-right: 57px;
-  
+    font-size: 30px;
+    font-family: 'Raleway', sans-serif;
+    
+   
     
 }
 nav a:hover{
