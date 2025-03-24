@@ -146,7 +146,13 @@ nav a:hover{
     position: relative;
     width: 350px;
     height: 370px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
     
+}
+.suggestion:hover {
+    transform: scale(1.05);
+    transition: 0.3s ease-in-out;
 }
 .suggestion h1{
     font-family: 'Raleway', sans-serif;
