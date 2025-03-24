@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitrine Client Notif</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/vitrine-client-notis.css">
+</head>
+<body>
+   
+    
+    <header >
+        <div class="logo">
+            <span>SkillNet</span><span class="dot">●</span>
+        </div>
+        <input type="text" placeholder="Que cherchez-vous ? exemple: Développement web" >
+       
+        <div class="header-icons">
+           <button class="icon"> <img src="../images/bell 1.png" alt="Image" ></button>
+           <button class="icon"> <img src="../images/mail 1.png" alt="Image" ></button>
+           <button class="icon"> <img src="../images/user 1 (1).png" alt="Image" > </button>
+        </div>
+    </header>
+   
+    <nav>
+        <a href="#">Design</a>
+        <a href="#">Programmation</a>
+        <a href="#">Rédaction & Traduction</a>
+        <a href="#">Vidéo & animation</a>
+        <a href="#">Musique & Audio</a>
+    </nav>
+
+    
+    <main>
+        <section class="profile-card">
+            <h2>Développeur de site vitrine</h2>
+            <div class="profile-info">
+                <img src="../images/freelanceur1.png" alt="Profil" >
+                <div class="profile-info-texte">
+                    <a href="../page/profil-freelancer.html"><h3>DAHMANI Linda</h3></a>
+                    <p>★ 5k</p>
+                </div>
+                <div class="action-buttons">
+                    <button class="accept">Accepter</button>
+                    <button class="decline">Refuser</button>
+                </div>
+            </div>
+        </section>
+        <section class="profile-card">
+            <h2>Développeur de site vitrine</h2>
+            <div class="profile-info">
+                <img src="../images/freelanceur1.png" alt="Profil" >
+                <div class="profile-info-texte">
+                    <a href="../page/profil-freelancer.html"><h3>DAHMANI Linda</h3></a>
+                    <p>★ 5k</p>
+                </div>
+                <div class="action-buttons">
+                    <button type="submit" id="accepter" class="accept">Accepter</button>
+                    <button class="decline">Refuser</button>
+                </div>
+            </div>
+        </section>
+        
+            
+        
+
+
+     </main>
+
+        <!-- Boîte de confirmation (POP-UP) -->
+          <div id="confirmationPopup" class="popup-overlay">
+          <div class="popup-content">
+             <img id="closePopup" src="../images/fermer.png" alt="Fermer" class="close-btn" />
+        
+             <h2>Vous venez d’accorder une mission a DAHMANI Linda !</h2>
+             <p>Vous pouvez maintenat proceder au paiement</p>
+             <button type="submit" id="confirmer" class="confirmer">CONFIRMER</button>
+            </div>
+         </div>
+
+          <!-- Boîte de confirmation (POP-UP) -->
+            <div id="missionconfirmer" class="confirmerpopup-overlay">
+             <div class="confirmerpopup-content">
+                 <img id="confirmerclosePopup" src="../images/fermer.png" alt="confirmer" class="confirmerclose-btn" />
+        
+                  <p>Vous avez confirmer la mission avec succées !</p>
+               </div>
+           </div>
+  
+      
+      
+      <script src="../js/acceptermission.js"></script>
+      <!-- Lien vers le JavaScript -->
+    
+    
+</body>
+</html>
