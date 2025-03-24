@@ -1,0 +1,41 @@
+/* Par défaut, le pop-up est caché */
+.pop-up-nitif {
+    display: none;
+    width: 300px;
+    height: 400px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    position: absolute;
+    top: 55px; /* Juste en dessous du header */
+    right: 140px; /* Ajuste selon ta mise en page */
+    border-radius: 10px;
+    padding: 10px;
+    z-index: 10;
+}
+.notifications{
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 50px;
+}
+.notification {
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    color: rgb(0, 0, 0);
+    position: relative;
+    height: 50px;
+    
+}
+.notification p{
+    font-family: 'Raleway', sans-serif;
+    
+    font-size: 15px;
+}
+
+.notification-container {
+    display: flex; /* Aligne les éléments sur une ligne */
+    align-items: center; /* Centre l'image et le texte verticalement */
+    gap: 10px; /* Espace entre l'image et le texte */
+}
