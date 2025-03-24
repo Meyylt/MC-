@@ -28,6 +28,9 @@
     height: 50px;
     
 }
+.notification:hover {
+    background-color: #F3F4F6;
+}
 .notification p{
     font-family: 'Raleway', sans-serif;
     
