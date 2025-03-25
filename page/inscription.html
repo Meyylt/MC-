@@ -7,11 +7,9 @@
     <link rel="stylesheet" href="../css/inscription.css">
     <link rel="stylesheet" href="../css/navbar.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Italiana&display=swap" rel="stylesheet">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Italiana&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
     
@@ -26,7 +24,6 @@
         </nav>
     </header>
     
-
     <main class="login-container">
         <div class="image-section">
             <img src="../images/typing_pic 12.png" alt="Votre talent, notre vitrine">
@@ -37,19 +34,15 @@
             <h2>Inscription</h2>
             <input type="text" placeholder="Nom" id="nom">
             <input type="text" placeholder="Prénom" id="prenom">
-            <input type="date" placeholder="Date de naissance" id="dateNaissance">
             <input type="email" placeholder="E-mail" id="email">
             <input type="password" placeholder="Mot de passe" id="password">
-            <button onclick="ouvrirPopup()" class="signin-btn" id="sinscrire">S'inscrire</button>
+            <button class="signin-btn" id="sinscrire">S'inscrire</button>
             <div id="popup" class="popup-overlay">
                 <div class="popup-content">
                     <span class="close" onclick="fermerPopup()">&times;</span>
-                    
-                    <!-- Ton formulaire existant ici -->
                     <h1>Votre compte a été créé avec succès !</h1>
                     <h2 class="subtitle">Qu’est-ce que vous voulez faire chez SkillNet ?</h2>
                     <p class="description">Nous voulons en savoir plus pour rendre votre expérience plus agréable</p>
-            
                     <div class="options">
                         <div class="option">
                             <img src="../images/paiement 1.png" alt="Acheter des services">
@@ -60,12 +53,12 @@
                             <p>Vendre des services</p>
                         </div>
                     </div>
-            
                     <button class="suivant">Suivant</button>
                 </div>
             </div>
         </div>
     </main>
+
     <script>
         function ouvrirPopup() {
             document.getElementById("popup").classList.add("active");
@@ -75,14 +68,45 @@
             document.getElementById("popup").classList.remove("active");
         }
         
-        
         window.onclick = function(event) {
             var popup = document.getElementById("popup");
             if (event.target === popup) {
                 fermerPopup();
             }
-        }
-        </script>
-        
+        };
+
+        document.getElementById("sinscrire").addEventListener("click", function(event){
+            event.preventDefault(); // Empêche la page de se recharger
+            
+            const nom = document.getElementById("nom").value;
+            const prenom = document.getElementById("prenom").value;
+            const adresse_mail = document.getElementById("email").value;
+            const mot_de_passe = document.getElementById("password").value;
+
+            if (!nom || !prenom || !adresse_mail || !mot_de_passe) {
+                alert("⚠️ Tous les champs sont obligatoires !");
+                return;
+            }
+
+            fetch("http://localhost:3000/clients/add", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ nom, prenom, adresse_mail, mot_de_passe })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.message.includes("succès")) {
+                    ouvrirPopup();
+                }
+            })
+            .catch(error => {
+                console.error("Erreur :", error);
+                alert("❌ Une erreur est survenue !");
+            });
+        });
+    </script>
 </body>
 </html>
