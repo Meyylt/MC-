@@ -13,6 +13,11 @@ body {
     min-height: 100vh;
     background-color: #f5f5f5;
 }
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
 
 header {
     width: 100%;
