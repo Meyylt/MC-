@@ -70,30 +70,51 @@
                   }
 
                   try {
-                      const response = await fetch("http://localhost:3000/clients/login", {
-                          method: "POST",
-                          headers: { "Content-Type": "application/json" },
-                          body: JSON.stringify({ adresse_mail: mail, mot_de_passe: password })
-                      });
+                         let response = await fetch("http://localhost:3000/clients/login", {
+                             method: "POST",
+                             headers: { "Content-Type": "application/json" },
+                             body: JSON.stringify({ adresse_mail: mail, mot_de_passe: password })
+                         });
 
-                      const data = await response.json();
+                         let data = await response.json();
 
-                      if (response.ok) {
-                          alert(data.message);
+                         if (!response.ok) {
+                             console.warn("Utilisateur non trouvé en tant que client, testons freelancer...");
             
-                          // Sauvegarde des infos utilisateur dans localStorage
-                          localStorage.setItem("utilisateur", JSON.stringify(data.utilisateur));
-                          localStorage.setItem("token", data.token);
-                          // Redirection vers la page d'accueil
-                          window.location.href = "vitrine-client.html";
-                      } else {
-                          alert(data.message);
-                      }
-                  } catch (error) {
-                      console.error("❌ Erreur lors de la connexion :", error);
-                      alert("❌ Une erreur est  !");
-                  }
-              });
+                             // On essaie la connexion en tant que freelancer
+                             response = await fetch("http://localhost:3000/freelancers/login", {
+                                 method: "POST",
+                                 headers: { "Content-Type": "application/json" },
+                                 body: JSON.stringify({ adresse_mail: mail, mot_de_passe: password })
+                             });
+
+                             data = await response.json();
+                         }
+
+                         if (response.ok) {
+                             alert(data.message);
+                             console.log("Données utilisateur reçues :", data.utilisateur);
+
+                             // Sauvegarde des infos utilisateur
+                             localStorage.setItem("utilisateur", JSON.stringify(data.utilisateur));
+                             localStorage.setItem("token", data.token);
+
+                             // Redirection selon le type d'utilisateur
+                             if (data.utilisateur.idClient) {
+                                 window.location.href = "vitrine-client.html";
+                             } else if (data.utilisateur.idFreelancer) {
+                                 window.location.href = "vitrine-freelancer.html";
+                             } else {
+                                 alert("❌ Erreur : type d'utilisateur inconnu !");
+                             }
+                         } else {
+                             alert(data.message);
+                         }
+                     } catch (error) {
+                         console.error("❌ Erreur lors de la connexion :", error);
+                         alert("❌ Une erreur est survenue, vérifiez votre connexion !");
+                     }
+                 });
       </script>
 </body>
 </html>

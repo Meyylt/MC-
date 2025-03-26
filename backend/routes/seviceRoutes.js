@@ -18,7 +18,7 @@ router.post("/add", authMiddleware, (req,res)=> {
             console.error("❌ Erreur lors de l'ajout de la mission :", err);
             return res.status(500).json({ message: "Erreur serveur" });
                 }
-                res.status(201).json({ message: "✅ Mission ajoutée avec succès !" });
+                res.status(201).json({ message: "✅ Service ajoutée avec succès !" });
             });
         });
         

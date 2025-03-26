@@ -44,7 +44,13 @@ router.post("/login", (req, res) => {
         return res.status(400).json({ message: "⚠️ Tous les champs sont requis" });
     }
 
-    const query = "SELECT * FROM Utilisateur WHERE adresse_mail = ?";
+     // Requête pour récupérer idClient en plus des infos utilisateur
+     const query = `
+     SELECT Utilisateur.*, Client.idClient 
+     FROM Utilisateur 
+     LEFT JOIN Client ON Utilisateur.idUtilisateur = Client.idUtilisateur 
+     WHERE Utilisateur.adresse_mail = ?`;
+
 
     bd.query(query, [adresse_mail], (err, results) => {
         if (err) {
@@ -64,7 +70,8 @@ router.post("/login", (req, res) => {
         }
 
         // Génération du token JWT
-        const token = jwt.sign({ id: utilisateur.idUtilisateur }, SECRET_KEY);
+        const token = jwt.sign({ idClient: utilisateur.idClient }, SECRET_KEY);
+        
 
         res.status(200).json({ message: "✅ Connexion réussie", token, utilisateur });
     });
