@@ -26,6 +26,8 @@ const missionRoutes = require("./routes/missionRoutes");
 app.use("/missions", missionRoutes);
 const freelancerRoutes = require("./routes/freelanceurRoutes");
 app.use("/freelancers", freelancerRoutes);
+const serviceRoutes = require("./routes/freelanceurRoutes");
+app.use("/services",serviceRoutes);
 
 // 🌍 Route d'accueil
 app.get("/", (req, res) => {
