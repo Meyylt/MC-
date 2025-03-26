@@ -34,11 +34,11 @@
         
         <div class="login-form">
             <h2>Connexion</h2>
-            <input type="text" placeholder="Nom d’utilisateur">
-            <input type="password" placeholder="Mot de passe">
+            <input id="mail" type="text" placeholder="Nom d’utilisateur">
+            <input id="password" type="password" placeholder="Mot de passe">
             <a href="#" class="forgot-password">Mot de passe oublié?</a>
-            <a class="link" href="accueil-freelancer.html"><button class="login-btn">Connexion</button></a>
-            <button class="signup-alt-btn">Inscription</button>
+            <a class="link" href="accueil-freelancer.html"><button id="connexion" class="login-btn">Connexion</button></a>
+            <button  class="signup-alt-btn">Inscription</button>
             <div class="separator">Ou</div>
             <button class="google-login">
                 <img src="../images/chercher.png" alt="Google"> 
@@ -46,6 +46,54 @@
             <p class="terms">En continuant, vous acceptez notre Politique de confidentialité & cookies et conditions Générales.</p>
         </div>
     </main>
+      <script>
+         document.getElementById("connexion").addEventListener("click", async function(event) {
+                  event.preventDefault(); // Empêche la page de se recharger
 
+                  const mail = document.getElementById("mail").value;
+                  const password = document.getElementById("password").value;
+
+                  if (!mail || !password) {
+                      alert("⚠️ Tous les champs sont obligatoires !");
+                      return;
+                  }
+
+                  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                  if (!emailRegex.test(mail)) {
+                      alert("⚠️ L'adresse e-mail n'est pas valide !");
+                      return;
+                  }
+
+                  if (password.length < 6) {
+                      alert("⚠️ Le mot de passe doit contenir au moins 6 caractères !");
+                      return;
+                  }
+
+                  try {
+                      const response = await fetch("http://localhost:3000/clients/login", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ adresse_mail: mail, mot_de_passe: password })
+                      });
+
+                      const data = await response.json();
+
+                      if (response.ok) {
+                          alert(data.message);
+            
+                          // Sauvegarde des infos utilisateur dans localStorage
+                          localStorage.setItem("utilisateur", JSON.stringify(data.utilisateur));
+
+                          // Redirection vers la page d'accueil
+                          window.location.href = "vitrine-client.html";
+                      } else {
+                          alert(data.message);
+                      }
+                  } catch (error) {
+                      console.error("❌ Erreur lors de la connexion :", error);
+                      alert("❌ Une erreur est survenue !");
+                  }
+              });
+      </script>
 </body>
 </html>
