@@ -93,5 +93,44 @@
 
     <script src="../js/ajouterMission.js"></script>
     <!-- Lien vers le JavaScript -->
+     <script>
+     document.getElementById("missionForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const titre = document.getElementById("titre").value;
+    const description = document.getElementById("description").value;
+    const dureEstime = document.getElementById("delais").value;
+    const budget = document.getElementById("prix").value;
+    const statut = "En cours";
+
+    const token = localStorage.getItem("token"); // Récupérer le token
+    if (!token) {
+        alert("Utilisateur non connecté !");
+        return;
+    }
+
+    try {
+        const response = await fetch("http://localhost:3000/missions/add", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}` // Envoyer le token dans les headers
+            },
+            body: JSON.stringify({ titre, description, dureEstime, budget, statut }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            document.getElementById("confirmationPopup").style.display = "flex";
+        } else {
+            alert(result.message);
+        }
+    } catch (error) {
+        console.error("Erreur :", error);
+    }
+});
+
+     </script>
   </body>
 </html>

@@ -34,8 +34,9 @@ router.post("/add", (req, res) => {
     });
 });
 
+const jwt = require("jsonwebtoken"); // Importer JWT
+const SECRET_KEY = "votre_secret"; // ⚠️ Stocker dans un fichier .env
 
-// Route de connexion
 router.post("/login", (req, res) => {
     const { adresse_mail, mot_de_passe } = req.body;
 
@@ -57,12 +58,15 @@ router.post("/login", (req, res) => {
 
         const utilisateur = results[0];
 
-        // Vérification en comparant directement les mots de passe
+        // Vérification du mot de passe en clair (⚠️ moins sécurisé)
         if (mot_de_passe !== utilisateur.mot_de_passe) {
             return res.status(401).json({ message: "❌ Adresse e-mail ou mot de passe incorrect" });
         }
 
-        res.status(200).json({ message: "✅ Connexion réussie", utilisateur });
+        // Génération du token JWT
+        const token = jwt.sign({ id: utilisateur.idUtilisateur }, SECRET_KEY);
+
+        res.status(200).json({ message: "✅ Connexion réussie", token, utilisateur });
     });
 });
 

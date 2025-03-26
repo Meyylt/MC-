@@ -27,15 +27,13 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
   
-      if (!delais.match(/^\d+\s*jours?$/i)) {
-        alert("Le délai doit être sous la forme 'X jours' !");
+      if (!delais.match(/^\d+$/)) {
+        alert("Le délai doit être un nombre uniquement !");
         return;
-      }
+    }
   
       console.log("Affichage du pop-up...");
      
-      // Afficher le pop-up
-      popup.style.display = "flex";
     });
   
     // Fermer le pop-up quand on clique sur ❌

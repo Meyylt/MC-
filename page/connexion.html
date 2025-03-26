@@ -83,7 +83,7 @@
             
                           // Sauvegarde des infos utilisateur dans localStorage
                           localStorage.setItem("utilisateur", JSON.stringify(data.utilisateur));
-
+                          localStorage.setItem("token", data.token);
                           // Redirection vers la page d'accueil
                           window.location.href = "vitrine-client.html";
                       } else {
@@ -91,7 +91,7 @@
                       }
                   } catch (error) {
                       console.error("❌ Erreur lors de la connexion :", error);
-                      alert("❌ Une erreur est survenue !");
+                      alert("❌ Une erreur est  !");
                   }
               });
       </script>
