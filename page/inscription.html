@@ -37,6 +37,10 @@
 
     <div class="login-form">
         <h2>Inscription</h2>
+        <div class="radio-group">
+            <label><input type="radio" name="choix" value="client"> Client</label>
+            <label><input type="radio" name="choix" value="freelancer"> Freelancer</label>
+          </div>
         <input type="text" placeholder="Nom" id="nom">
         <p class="error-message" id="error-nom"></p>
 
@@ -96,6 +100,7 @@
         const prenom = document.getElementById("prenom").value.trim();
         const adresse_mail = document.getElementById("email").value.trim();
         const mot_de_passe = document.getElementById("password").value.trim();
+        const choix = document.querySelector('input[name="choix"]:checked');
 
         const errorNom = document.getElementById("error-nom");
         const errorPrenom = document.getElementById("error-prenom");
@@ -146,7 +151,11 @@
         // Si une erreur est détectée, stopper l'envoi du formulaire
         if (!isValid) return;
 
-        fetch("http://localhost:3000/clients/add", {
+        // Détermine si c'est un client ou un freelancer
+         const endpoint = choix.value === "client" ? "http://localhost:3000/clients/add" : "http://localhost:3000/freelancers/add";
+
+
+        fetch(endpoint, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -156,7 +165,11 @@
         .then(response => response.json())
         .then(data => {
             if (data.message.includes("succès")) {
-                ouvrirPopup();
+                if (choix.value === "client") {
+                window.location.href = "vitrine-client.html";
+            } else {
+                window.location.href = "vitrine-freelancer.html";
+            }
             } else {
                 errorEmail.textContent = "❌ Une erreur est survenue lors de l'inscription.";
             }
