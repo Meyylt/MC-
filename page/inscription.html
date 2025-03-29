@@ -25,7 +25,7 @@
     <nav>
         <a href="#">Devenir freelanceur</a>
         <a href="../page/connexion.html"><strong>Se connecter</strong></a>
-        <a href="../page/inscription.html" class="btn-outline">S’inscrire</a>
+        <a href="../page/inscription.html" class="btn-outline">S'inscrire</a>
     </nav>
 </header>
 
@@ -38,9 +38,9 @@
     <div class="login-form">
         <h2>Inscription</h2>
         <div class="radio-group">
-            <label><input type="radio" name="choix" value="client"> Client</label>
+            <label><input type="radio" name="choix" value="client" checked> Client</label>
             <label><input type="radio" name="choix" value="freelancer"> Freelancer</label>
-          </div>
+        </div>
         <input type="text" placeholder="Nom" id="nom">
         <p class="error-message" id="error-nom"></p>
 
@@ -59,7 +59,7 @@
             <div class="popup-content">
                 <span class="close" onclick="fermerPopup()">&times;</span>
                 <h1>Votre compte a été créé avec succès !</h1>
-                <h2 class="subtitle">Qu’est-ce que vous voulez faire chez SkillNet ?</h2>
+                <h2 class="subtitle">Qu'est-ce que vous voulez faire chez SkillNet ?</h2>
                 <p class="description">Nous voulons en savoir plus pour rendre votre expérience plus agréable</p>
 
                 <div class="options">
@@ -114,7 +114,7 @@
 
         let isValid = true;
 
-        // Vérification nom et prénom (uniquement lettres)
+        // Validation des champs (votre code existant)
         const regexNomPrenom = /^[A-Za-zÀ-ÖØ-öø-ÿ\s-]+$/;
         if (!nom) {
             errorNom.textContent = "⚠️ Le nom est requis.";
@@ -132,7 +132,6 @@
             isValid = false;
         }
 
-        // Vérification email
         const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         if (!adresse_mail) {
             errorEmail.textContent = "⚠️ L'adresse e-mail est requise.";
@@ -142,41 +141,56 @@
             isValid = false;
         }
 
-        // Vérification mot de passe
         if (!mot_de_passe) {
             errorPassword.textContent = "⚠️ Le mot de passe est requis.";
             isValid = false;
         }
 
-        // Si une erreur est détectée, stopper l'envoi du formulaire
         if (!isValid) return;
 
-        // Détermine si c'est un client ou un freelancer
-         const endpoint = choix.value === "client" ? "http://localhost:3000/clients/add" : "http://localhost:3000/freelancers/add";
-
+        const endpoint = choix.value === "client" 
+            ? "http://localhost:3000/clients/add" 
+            : "http://localhost:3000/freelancers/add";
 
         fetch(endpoint, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ nom, prenom, adresse_mail, mot_de_passe })
+            body: JSON.stringify({ 
+                nom, 
+                prenom, 
+                adresse_mail, 
+                mot_de_passe,
+                role: choix.value
+            })
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message.includes("succès")) {
-                if (choix.value === "client") {
-                window.location.href = "vitrine-client.html";
-            } else {
-                window.location.href = "vitrine-freelancer.html";
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw err; });
             }
+            return response.json();
+        })
+        .then(data => {
+            if (data.message && data.message.includes("succès")) {
+                // Stockage temporaire pour la redirection
+                localStorage.setItem("tempAuth", JSON.stringify({
+                    email: adresse_mail,
+                    role: choix.value
+                }));
+                
+                if (choix.value === "client") {
+                    window.location.href = "vitrine-client.html";
+                } else {
+                    window.location.href = "vitrine-freelancer.html";
+                }
             } else {
-                errorEmail.textContent = "❌ Une erreur est survenue lors de l'inscription.";
+                throw new Error(data.message || "Erreur lors de l'inscription");
             }
         })
         .catch(error => {
-            console.error("Erreur :", error);
-            errorEmail.textContent = "❌ Erreur de connexion au serveur.";
+            console.error("Erreur:", error);
+            errorEmail.textContent = error.message || "❌ Erreur de connexion au serveur";
         });
     });
 </script>
