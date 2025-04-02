@@ -1,0 +1,96 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: poppins;
+}
+nav{
+    background-color: #003912;
+    height: 100px;
+    padding-top: 30px;
+    padding-left: 40px;
+    
+}
+nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: white;
+    font-size: 30px;
+    font-family: 'Raleway', sans-serif;
+    
+   
+    
+}
+nav a:hover{
+    color: green;
+}
+.container {
+    display: grid;
+    grid-template-columns: 1.2fr 1.8fr;
+    gap: 20px;
+    padding: 20px;
+    height: 550px;
+}
+
+.profile{
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 10px;
+    padding-top: 15px;
+    display: flex;
+    flex-direction: column;
+    margin-left: 400px;
+    width: 500px;
+    height: 520px;
+   
+    
+}
+.profile img {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 10px;
+    display: block;
+    margin-bottom: 15px;
+    
+    
+}
+.profile h1 {
+    align-items: center;
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
+    font-size: 20px;
+    
+}
+.information{
+    padding-top: 50px;
+}
+.information p{
+    font-family: 'Raleway', sans-serif;
+    font-size: 20px;
+    padding-top: 15px;
+    
+}
+
+.profile button {
+    background-color: #003912;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 50px;
+    width: 300px;
+    margin-left: 60px;
+    font-size: 20px;
+}
+.icon{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin: 20px;
+}
+.icon img{
+    height: 30px;
+    width: 30px;
+}

@@ -1,0 +1,146 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: poppins;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar */
+
+nav{
+    background-color: #003912;
+    height: 100px;
+    padding-top: 30px;
+    padding-left: 40px;
+    
+}
+nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: white;
+    font-size: 30px;
+    font-family: 'Raleway', sans-serif;
+    
+   
+    
+}
+nav a:hover{
+    color: green;
+}
+.icon{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin: 20px;
+}
+.icon img{
+    height: 30px;
+    width: 30px;
+}
+.link{
+    text-decoration: none;
+   
+}
+main h2{
+    font-size: 40px;
+    font-family: 'Raleway', sans-serif;
+    padding-top: 20px;
+    padding-left: 30px;
+}
+.missions{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+.mission{
+    flex-grow: 0;
+    flex-shrink: 0;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    padding-top: 15px;
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    height: 350px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    overflow: hidden; 
+}
+.mission:hover {
+    transform: scale(1.02); /* Légère augmentation de taille */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée */
+    cursor: pointer; /* Change le curseur en main */
+}
+.mission h2{
+    font-size: 40px;
+    font-family: 'Raleway', sans-serif;
+    padding-bottom: 15px;
+}
+.mission h6{
+    font-size: 15px;
+    font-family: 'Raleway', sans-serif;
+    padding-bottom: 15px;
+}
+.mission p{
+    font-size: 15px;
+    font-family: 'Raleway', sans-serif;
+    padding-bottom: 15px;
+    word-break: break-word;
+}
+.info {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+/* Style spécifique pour la description SEULEMENT */
+#description {
+    /* Solution moderne avec préfixes et standard */
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+    
+    -webkit-line-clamp: 3;
+    -moz-line-clamp: 3;
+    line-clamp: 3;
+    
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    box-orient: vertical;
+    
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
+    /* Fallback pour les navigateurs plus anciens */
+    max-height: 4.2em; /* 3 lignes × 1.4em de line-height */
+    line-height: 1.4em;
+  }
+  .boutons {
+    display: flex;          /* Active Flexbox */
+    gap: 15px;              /* Espace entre les boutons */
+    margin-top: 20px;  
+    margin-left: 30px;     /* Marge au-dessus des boutons */
+  }
+  
+  .boutons button {
+    padding: 10px 20px;     /* Rembourrage intérieur */
+    border: none;           /* Supprime la bordure par défaut */
+    border-radius: 5px;     /* Coins arrondis */
+    cursor: pointer;        /* Curseur en forme de main */
+    font-weight: bold;      /* Texte en gras */
+    transition: all 0.3s; 
+    color: white;
+    background-color: #003912; 
+    font-size: 15px;
+    font-family: 'Raleway', sans-serif; /* Animation fluide */
+    width: 150px;
+  }

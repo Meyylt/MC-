@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitrine Client</title>
+    <link rel="stylesheet" href="../css/mesmissions.css">
+    <link rel="stylesheet" href="../css/notif.css">
+    <link rel="stylesheet" href="../css/profil-pop-up.css">
+    <link rel="stylesheet" href="../css/header.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <span>SkillNet</span><span class="dot">●</span>
+        </div>
+        <div class="header-icons">
+           <button class="icon notif-icon"><img src="../images/bell 1.png" alt="Notification"></button>
+           <button class="icon"><img src="../images/mail 1.png" alt="Message"></button>
+           <button class="icon profil-pop-up"><img src="../images/user 1 (1).png" alt="Profil"></button>
+        </div>
+    </header>
+
+    <nav>
+        <a href="ajouterMission.html">Design</a>
+        <a href="#">Programmation</a>
+        <a href="#">Rédaction & Traduction</a>
+        <a href="#">Vidéo & animation</a>
+        <a href="#">Musique & Audio</a>
+    </nav>
+
+    <main>
+        <h2>Vos Missions </h2>
+
+        <div id="missions-container" class="missions">
+            <div class="mission">
+                  <h2>TITREs</h2>
+                  <div class="info"> 
+                    <h6>categorie :</h6>
+                   <p id="categorie">vvv</p>
+                  </div>
+                  <div class="info">
+                    <h6>description:</h6>
+                    <p id="description">jhdsvuyqvoudzvouvduazvoubzdaucbhouadbcouvcuov</p>
+                  </div>
+                  <div class="info">
+                    <h6>temp estimée</h6>
+                  <p id="temp"></p>
+                  </div>
+                  <div class="info">
+                    <h6>budget:</h6>
+                  <p id="budget"></p>
+                  </div>
+                  
+            </div>
+           
+
+
+        </div>
+
+
+
+
+
+
+
+    </main>
+    <div class="pop-up-nitif">
+        <div class="notification-container">
+            <img src="../images/bell 1.png" alt="Image">
+            <h2>NOTIFICATIONS</h2>
+        </div>
+        <div class="notifications">
+           <div class="notification">
+             <p>FARHI Louisa vous a envoyé une mission</p>
+           </div>
+        </div>
+        <div class="notifications">
+            <div class="notification">
+              <p>FARHI Louisa vous a envoyé une mission</p>
+            </div>
+         </div>
+         <div class="notifications">
+            <div class="notification">
+              <p>FARHI Louisa vous a envoyé une mission</p>
+            </div>
+         </div>
+    </div>
+    
+    <script src="../js/notif-pop-up.js"></script>
+    <div class="pop-up-profil">
+       <a href="profil-client.html">Mon compte</a>
+       <a href="ajouterMission.html">Poster une mission</a>
+        <a href="mesmissions.html">Mes mission</a>
+        <hr>
+        <a href="connexion.html">se deconnecté</a>
+    </div>
+    <script src="../js/profil-pop-up.js"></script>
+    
+
+
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+    // Vérification de l'authentification
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+        window.location.href = "connexion.html"; // Rediriger si non authentifié
+        return;
+    }
+    
+    // Charger les missions du client connecté
+    await loadMissions();
+});
+
+async function loadMissions() {
+    try {
+        const token = localStorage.getItem("authToken");
+        const response = await fetch("http://localhost:3001/missions/missions", {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error("Erreur de chargement des missions");
+        }
+
+        const missions = await response.json();
+        displayMissions(missions);
+    } catch (error) {
+        console.error("Erreur:", error);
+        document.getElementById("missions-container").innerHTML = `
+            <div class="error-message">
+                <p>${error.message}</p>
+                <button onclick="loadMissions()">Réessayer</button>
+            </div>
+        `;
+    }
+}
+
+function displayMissions(missions) {
+    const container = document.getElementById("missions-container");
+    container.innerHTML = ""; // Vider le conteneur
+
+    if (missions.length === 0) {
+        container.innerHTML = '<p class="no-missions">Aucune mission disponible pour le moment</p>';
+        return;
+    }
+
+    missions.forEach(mission => {
+        const missionElement = document.createElement("div");
+        missionElement.className = "mission";
+        missionElement.innerHTML = `
+            <h2>${mission.titre}</h2>
+            <div class="info">
+                <h6>Catégorie :</h6>
+                <p>${mission.categorie}</p>
+            </div>
+            <div class="info">
+                <h6>Description :</h6>
+                <p>${mission.description}</p>
+            </div>
+            <div class="info">
+                <h6>Temps estimé :</h6>
+                <p>${mission.dureEstime} jours</p>
+            </div>
+            <div class="info">
+                <h6>Budget :</h6>
+                <p>${mission.budget} DA</p>
+            </div>
+            <div class="boutons">
+                        <button  >MODIFIER</button>
+                        <button  >SUPPRIMER</button>
+                    </div>
+        `;
+        container.appendChild(missionElement);
+    });
+}
+
+    </script>
+
+
+    
+    
+</body>
+</html>

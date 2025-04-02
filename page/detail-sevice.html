@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail d'un service</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/detail-service-freelancer.css">
+    <link rel="stylesheet" href="../css/notif.css">
+    <link rel="stylesheet" href="../css/profil-pop-up.css">
+</head>
+<body>
+   
+    
+    <header >
+        <div class="logo">
+            <span>SkillNet</span><span class="dot">●</span>
+        </div>
+        <input type="text" placeholder="Que cherchez-vous ? exemple: Développement web" >
+       
+        <div class="header-icons">
+           <button class="icon notif-icon"> <img src="../images/bell 1.png" alt="Image" ></button>
+           <button class="icon"> <img src="../images/mail 1.png" alt="Image" ></button>
+           <button class="icon profil-pop-up" > <img src="../images/user 1 (1).png" alt="Image" > </button>
+        </div>
+    </header>
+   
+    <nav>
+        <a href="#">Design</a>
+        <a href="#">Programmation</a>
+        <a href="#">Rédaction & Traduction</a>
+        <a href="#">Vidéo & animation</a>
+        <a href="#">Musique & Audio</a>
+    </nav>
+
+    
+    <main>
+        <div id="container" class="container">
+
+            
+           
+            
+        </div>
+        
+
+
+    </main>
+    <div class="pop-up-nitif">
+        <div class="notification-container">
+            <img src="../images/bell 1.png" alt="Image" >
+            <h2>NOTIFICATIONS</h2>
+        </div>
+        <div class="notifications">
+           <div class="notification">
+             <p>FARHI Louisa vous a envoyé une mission</p>
+           </div>
+        </div>
+        <div class="notifications">
+            <div class="notification">
+              <p>FARHI Louisa vous a envoyé une mission</p>
+            </div>
+         </div>
+         <div class="notifications">
+            <div class="notification">
+              <p>FARHI Louisa vous a envoyé une mission</p>
+            </div>
+         </div>
+        
+
+    </div>
+    
+    
+    <script src="../js/notif-pop-up.js"></script>
+
+    <script src="../js/notif-pop-up.js"></script>
+    <div class="pop-up-profil">
+       <a href="profil-client.html">Mon compte</a>
+       <a href="ajouterMission.html">Poster une mission</a>
+        <a href="mesmissions.html">Mes mission</a>
+        <hr>
+        <a href="connexion.html">se deconnecté</a>
+    </div>
+    <script src="../js/profil-pop-up.js"></script>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            // Vérification de l'authentification
+            const token = localStorage.getItem("authToken");
+            if (!token) {
+                window.location.href = "connexion.html";
+                return;
+            }
+
+            // Récupérer l'ID du service depuis l'URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const serviceId = urlParams.get('id');
+
+            if (!serviceId) {
+                document.getElementById("container").innerHTML = `
+                    <div class="error-message">
+                        <p>Aucune service sélectionnée</p>
+                        <a href="vitrine-freelancer.html">Retour aux missions</a>
+                    </div>
+                `;
+                return;
+            }
+
+            // Charger les détails de la mission
+            await loadMissionDetails(serviceId);
+        });
+
+        async function loadMissionDetails(serviceId) {
+            try {
+                const token = localStorage.getItem("authToken");
+                const response = await fetch(`http://localhost:3001/services/${serviceId}`, {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error("Erreur de chargement des détails du service");
+                }
+
+                const service = await response.json();
+                displayMissionDetails(service);
+
+            } catch (error) {
+                console.error("Erreur:", error);
+                document.getElementById("container").innerHTML = `
+                    <div class="error-message">
+                        <p>${error.message}</p>
+                        <button onclick="loadMissionDetails(${serviceId})">Réessayer</button>
+                    </div>
+                `;
+            }
+        }
+
+        function displayMissionDetails(service) {
+            const container = document.getElementById("container");
+            
+
+            container.innerHTML = `
+             
+                <div>
+                <div class="freelancer-info">
+                    <img src="../images/user 1 (1).png" alt="Image">
+                    <div>
+                        <p>${service.freelancerPrenom} ${service.freelancerNom}</p>
+                    </div>
+                </div>
+                
+                <div class="free">
+                    <h3>Description du service</h3>
+                    <p>${service.description}</p>
+                </div>
+                </div>
+
+                <div class="informations">
+                    <h2>${service.titre}</h2>
+                    <p>${service.categorie}</p>
+                    <div class="information">
+                        <img src="../images/Time Machine.png" alt="Image">
+                        <p>${service.dureEstime} jours</p>
+                        <img src="../images/Dollar Coin.png" alt="Image">
+                        <p>${service.prix} DA</p>
+                    </div>
+                    <button id="apply-btn">POSTULER</button>
+                </div>
+                </div>
+                
+            `;
+            
+            
+        }
+
+      
+     </script>
+</body>
+</html>

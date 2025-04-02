@@ -1,0 +1,29 @@
+
+.pop-up-profil{
+    display: none;
+    width: 200px;
+    height: 250px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    position: absolute;
+    top: 55px; 
+    right: 40px; 
+    border-radius: 10px;
+    padding: 10px;
+    z-index: 10;
+}.pop-up-profil a{
+    font-family: 'Raleway', sans-serif;
+    padding-top: 20px;
+    font-size: 18px;
+    text-decoration: none;
+    
+    display: inline-block; 
+    color: rgb(92, 91, 91);
+}
+.pop-up-profil a:hover{
+    color: green;
+}
+.pop-up-profil hr{
+    margin-top: 20px;
+}
+

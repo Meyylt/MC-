@@ -1,0 +1,30 @@
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    background: #fff;
+    height: 70px;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: bold;
+    padding: 3px 10px; 
+    display: inline-block; 
+}
+
+.logo .dot {
+    color: green;
+    font-size: 30px;
+}
+
+
+.header-icons {
+    display: flex;
+    gap: 0px;
+}
+.header-icons img {
+    width: 30px;
+    height: 30px;
+}

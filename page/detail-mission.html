@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détail d'une mission</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/detail-mission.css">
+    <link rel="stylesheet" href="../css/notif.css">
+    <link rel="stylesheet" href="../css/profil-pop-up.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <span>SkillNet</span><span class="dot">●</span>
+        </div>
+        <input type="text" placeholder="Que cherchez-vous ? exemple: Développement web">
+        <div class="header-icons">
+           <button class="icon notif-icon"> <img src="../images/bell 1.png" alt="Image"></button>
+           <button class="icon"> <img src="../images/mail 1.png" alt="Image"></button>
+           <button class="icon profil-pop-up"> <img src="../images/user 1 (1).png" alt="Image"> </button>
+        </div>
+    </header>
+   
+    <nav>
+        <a href="#">Design</a>
+        <a href="#">Programmation</a>
+        <a href="#">Rédaction & Traduction</a>
+        <a href="#">Vidéo & animation</a>
+        <a href="#">Musique & Audio</a>
+    </nav>
+
+    <main>
+        <div id="container" class="container">
+            
+        </div>
+    </main>
+
+    <div class="pop-up-nitif">
+        <div class="notification-container">
+            <img src="../images/bell 1.png" alt="Image">
+            <h2>NOTIFICATIONS</h2>
+        </div>
+        <div class="notifications">
+           <div class="notification">
+             <p>FARHI Louisa vous a envoyé une mission</p>
+           </div>
+        </div>
+    </div>
+    
+    <div class="pop-up-profil">
+        <a href="profil-freelancer.html">Mon compte</a>
+        <a href="ajouter-service.html">Poster un service</a>
+        <a href="#">Mes service</a>
+        <hr>
+        <a href="connexion.html">se deconnecté</a>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            // Vérification de l'authentification
+            const token = localStorage.getItem("authToken");
+            if (!token) {
+                window.location.href = "connexion.html";
+                return;
+            }
+
+            // Récupérer l'ID de la mission depuis l'URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const missionId = urlParams.get('id');
+
+            if (!missionId) {
+                document.getElementById("container").innerHTML = `
+                    <div class="error-message">
+                        <p>Aucune mission sélectionnée</p>
+                        <a href="vitrine-freelancer.html">Retour aux missions</a>
+                    </div>
+                `;
+                return;
+            }
+
+            // Charger les détails de la mission
+            await loadMissionDetails(missionId);
+        });
+
+        async function loadMissionDetails(missionId) {
+            try {
+                const token = localStorage.getItem("authToken");
+                const response = await fetch(`http://localhost:3001/missions/${missionId}`, {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error("Erreur de chargement des détails de la mission");
+                }
+
+                const mission = await response.json();
+                displayMissionDetails(mission);
+
+            } catch (error) {
+                console.error("Erreur:", error);
+                document.getElementById("container").innerHTML = `
+                    <div class="error-message">
+                        <p>${error.message}</p>
+                        <button onclick="loadMissionDetails(${missionId})">Réessayer</button>
+                    </div>
+                `;
+            }
+        }
+
+        function displayMissionDetails(mission) {
+            const container = document.getElementById("container");
+            
+
+            container.innerHTML = `
+             
+                <div>
+                <div class="freelancer-info">
+                    <img src="../images/user 1 (1).png" alt="Image">
+                    <div>
+                        <p>${mission.clientPrenom} ${mission.clientNom}</p>
+                    </div>
+                </div>
+                
+                <div class="free">
+                    <h3>Description de la mission</h3>
+                    <p>${mission.description}</p>
+                </div>
+                </div>
+
+                <div class="informations">
+                    <h2>${mission.titre}</h2>
+                    <p>${mission.categorie}</p>
+                    <div class="information">
+                        <img src="../images/Time Machine.png" alt="Image">
+                        <p>${mission.dureEstime} jours</p>
+                        <img src="../images/Dollar Coin.png" alt="Image">
+                        <p>${mission.budget} DA</p>
+                    </div>
+                    <button id="apply-btn">POSTULER</button>
+                </div>
+                </div>
+                
+            `;
+            document.getElementById("apply-btn").addEventListener("click", () => {
+        applyToMission(mission.id);
+    });
+            
+        }
+
+        async function applyToMission(missionId) {
+    try {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+            throw new Error("Vous devez être connecté pour postuler");
+        }
+
+        // Vérifier le rôle de l'utilisateur
+        const userData = JSON.parse(localStorage.getItem("userData"));
+        if (userData.role !== "freelancer") {
+            throw new Error("Seuls les freelancers peuvent postuler aux missions");
+        }
+
+        const response = await fetch(`http://localhost:3001/missions/${missionId}/apply`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Erreur lors de la postulation");
+        }
+
+        const result = await response.json();
+        alert("Votre candidature a été envoyée avec succès !");
+        
+        // Désactiver le bouton après postulation
+        const btn = document.getElementById("apply-btn");
+        btn.disabled = true;
+        btn.textContent = "Candidature envoyée";
+        btn.style.backgroundColor = "#cccccc";
+        
+    } catch (error) {
+        console.error("Erreur:", error);
+        alert(`Erreur: ${error.message}`);
+    }
+}
+
+     </script>
+    <script src="../js/notif-pop-up.js"></script>
+    <script src="../js/profil-pop-up.js"></script>
+</body>
+</html>

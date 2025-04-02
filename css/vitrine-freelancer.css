@@ -1,0 +1,280 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: poppins;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    font-family: 'Poppins', serif;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.dot {
+    color: #003912;
+}
+
+header input {
+    width: 400px;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+}
+
+.header-icons {
+    display: flex;
+    gap: 20px;
+}
+
+.icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.icon img {
+    width: 24px;
+    height: 24px;
+}
+
+/* Navigation */
+nav {
+    display: flex;
+    justify-content: center;
+    padding: 15px 0;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+nav a {
+    margin: 0 20px;
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #003912;
+}
+
+/* Contenu principal */
+main {
+    padding: 30px 50px;
+}
+
+.container {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+
+
+.add-service-container {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.add-service-btn {
+    background-color: #003912;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.add-service-btn:hover {
+    background-color: #003912;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.add-service-btn span {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+
+
+
+.missions-en-cours {
+    flex: 2;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.missions-en-cours h2 {
+    margin-top: 0;
+    font-size: 18px;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.mission {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.mission p {
+    margin: 0;
+    font-weight: 500;
+}
+
+.mission span {
+    background-color: #e8f5e9;
+    color: #003912;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+}
+
+/* Suggestions de missions */
+.encour {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.missions{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+    
+}
+.missionsug{
+    flex-grow: 0;
+    flex-shrink: 0;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    padding-top: 15px;
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    height: 300px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    overflow: hidden; 
+    background-color: white;
+}
+.missionsug:hover {
+    transform: scale(1.02); /* Légère augmentation de taille */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée */
+    cursor: pointer; /* Change le curseur en main */
+}
+.missionsug a {
+    color: inherit;  /* Hérite de la couleur du texte par défaut */
+    text-decoration: none;  /* Enlever le soulignement */
+}
+.missionsug h2{
+    font-size: 40px;
+    font-family: 'Raleway', sans-serif;
+    padding-bottom: 15px;
+}
+.missionsug h6{
+    font-size: 15px;
+    font-family: 'Raleway', sans-serif;
+    padding-bottom: 15px;
+}
+.missionsug p{
+    font-size: 15px;
+    font-family: 'Raleway', sans-serif;
+    padding-bottom: 15px;
+    word-break: break-word;
+}
+.info {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+/* Style spécifique pour la description SEULEMENT */
+#description {
+    /* Solution moderne avec préfixes et standard */
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+    
+    -webkit-line-clamp: 3;
+    -moz-line-clamp: 3;
+    line-clamp: 3;
+    
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    box-orient: vertical;
+    
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
+    /* Fallback pour les navigateurs plus anciens */
+    max-height: 4.2em; /* 3 lignes × 1.4em de line-height */
+    line-height: 1.4em;
+  }
+
+
+
+
+
+
+/* Responsive */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        padding: 15px;
+    }
+    
+    header input {
+        width: 100%;
+        margin: 15px 0;
+    }
+    
+    .container {
+        flex-direction: column;
+    }
+    
+    nav {
+        flex-wrap: wrap;
+    }
+    
+    nav a {
+        margin: 5px 10px;
+    }
+}

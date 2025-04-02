@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - SkillNet</title>
+    <link rel="stylesheet" href="../css/inscription.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Poppins:wght@100;400;700&display=swap" rel="stylesheet">
+    <style>
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo">
+        <span>SkillNet</span><span class="dot">●</span>
+    </div>
+    <nav>
+        <a href="#">Devenir freelanceur</a>
+        <a href="../page/connexion.html"><strong>Se connecter</strong></a>
+        <a href="../page/inscription.html" class="btn-outline">S'inscrire</a>
+    </nav>
+</header>
+
+<main class="login-container">
+    <div class="image-section">
+        <img src="../images/typing_pic 12.png" alt="Votre talent, notre vitrine">
+        <h2 class="overlay-text">Votre talent, notre vitrine.</h2>
+    </div>
+
+    <div class="login-form">
+        <h2>Inscription</h2>
+        <div class="radio-group">
+            <label><input type="radio" name="choix" value="client" checked> Client</label>
+            <label><input type="radio" name="choix" value="freelancer"> Freelancer</label>
+        </div>
+        <input type="text" placeholder="Nom Utilisateure" id="nomutilisateure">
+        <p class="error-message" id="error-nomutilisateure"></p>
+
+        <input type="text" placeholder="Nom" id="nom">
+        <p class="error-message" id="error-nom"></p>
+
+        <input type="text" placeholder="Prénom" id="prenom">
+        <p class="error-message" id="error-prenom"></p>
+
+        <input type="date" placeholder="Date de naissance" id="daten">
+        <p class="error-message" id="error-daten"></p>
+
+        <input type="text" placeholder="Numéro de telephone" id="tel">
+        <p class="error-message" id="error-tel"></p>
+
+        <input type="email" placeholder="E-mail" id="email">
+        <p class="error-message" id="error-email"></p>
+
+        <input type="password" placeholder="Mot de passe" id="password">
+        <p class="error-message" id="error-password"></p>
+
+        <button class="signin-btn" id="sinscrire">S'inscrire</button>
+
+        <div id="popup" class="popup-overlay">
+            <div class="popup-content">
+                <span class="close" onclick="fermerPopup()">&times;</span>
+                <h1>Votre compte a été créé avec succès !</h1>
+                <h2 class="subtitle">Qu'est-ce que vous voulez faire chez SkillNet ?</h2>
+                <p class="description">Nous voulons en savoir plus pour rendre votre expérience plus agréable</p>
+
+                <div class="options">
+                    <div class="option">
+                        <a href="vitrine-client.html"><img src="../images/paiement 1.png" alt="Acheter des services"></a>
+                        <p>Acheter des services</p>
+                    </div>
+                    <div class="option">
+                        <a href="vitrine-freelancer.html"><img src="../images/commerce 1.png" alt="Vendre des services"></a>
+                        <p>Vendre des services</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    function ouvrirPopup() {
+        document.getElementById("popup").classList.add("active");
+    }
+
+    function fermerPopup() {
+        document.getElementById("popup").classList.remove("active");
+    }
+
+    window.onclick = function(event) {
+        var popup = document.getElementById("popup");
+        if (event.target === popup) {
+            fermerPopup();
+        }
+    };
+
+    document.getElementById("sinscrire").addEventListener("click", function(event){
+        event.preventDefault(); 
+        
+        const nomutilisateure = document.getElementById("nomutilisateure").value.trim();
+        const nom = document.getElementById("nom").value.trim();
+        const prenom = document.getElementById("prenom").value.trim();
+        const daten = document.getElementById("daten").value;
+        const tel = document.getElementById("tel").value.trim();
+        const adresse_mail = document.getElementById("email").value.trim();
+        const mot_de_passe = document.getElementById("password").value.trim();
+        const choix = document.querySelector('input[name="choix"]:checked');
+        
+        const errorNomutilisateure = document.getElementById("error-nomutilisateure");
+        const errorNom = document.getElementById("error-nom");
+        const errorPrenom = document.getElementById("error-prenom");
+        const errorDaten = document.getElementById("error-daten");
+        const errorTel = document.getElementById("error-tel");
+        const errorEmail = document.getElementById("error-email");
+        const errorPassword = document.getElementById("error-password");
+        
+        errorNomutilisateure.textContent = "";
+        errorNom.textContent = "";
+        errorPrenom.textContent = "";
+        errorDaten.textContent = "";
+        errorTel.textContent = "";
+        errorEmail.textContent = "";
+        errorPassword.textContent = "";
+
+        let isValid = true;
+
+        // Validation des champs (votre code existant)
+        const regexNomPrenom = /^[A-Za-zÀ-ÖØ-öø-ÿ\s-]+$/;
+        if (!nom) {
+            errorNom.textContent = "⚠️ Le nom est requis.";
+            isValid = false;
+        } else if (!regexNomPrenom.test(nom)) {
+            errorNom.textContent = "⚠️ Le nom ne doit contenir que des lettres.";
+            isValid = false;
+        }
+
+        if (!prenom) {
+            errorPrenom.textContent = "⚠️ Le prénom est requis.";
+            isValid = false;
+        } else if (!regexNomPrenom.test(prenom)) {
+            errorPrenom.textContent = "⚠️ Le prénom ne doit contenir que des lettres.";
+            isValid = false;
+        }
+         function calculerAge(dateNaissance) {
+           const aujourdHui = new Date();
+            const naissance = new Date(dateNaissance);
+    
+           let age = aujourdHui.getFullYear() - naissance.getFullYear();
+           const mois = aujourdHui.getMonth() - naissance.getMonth();
+    
+             if (mois < 0 || (mois === 0 && aujourdHui.getDate() < naissance.getDate())) {
+              age--;
+           }
+    
+              return age;
+          }
+        if (!daten) {
+        errorDaten.textContent = "⚠️ La date de naissance est requise.";
+        isValid = false;
+        } else {
+        const age = calculerAge(daten);
+        if (age < 18) {
+            errorDaten.textContent = "⚠️ Vous devez avoir au moins 18 ans pour vous inscrire.";
+            isValid = false;
+        }
+        }
+        const regexTel = /^(05|06|07)[0-9]{8}$/; 
+        if (!tel) {
+           errorTel.textContent = "⚠️ Le numéro de téléphone est requis.";
+            isValid = false;
+        } else if (!regexTel.test(tel)) {
+            errorTel.textContent = "⚠️ Le numéro doit commencer par 05, 06 ou 07 et faire 10 chiffres.";
+           isValid = false;
+        }
+
+        const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!adresse_mail) {
+            errorEmail.textContent = "⚠️ L'adresse e-mail est requise.";
+            isValid = false;
+        } else if (!regexEmail.test(adresse_mail)) {
+            errorEmail.textContent = "⚠️ L'adresse e-mail n'est pas valide.";
+            isValid = false;
+        }
+
+        if (!mot_de_passe) {
+            errorPassword.textContent = "⚠️ Le mot de passe est requis.";
+            isValid = false;
+        }
+
+        if (!isValid) return;
+
+        const endpoint = choix.value === "client" 
+            ? "http://localhost:3001/clients/add" 
+            : "http://localhost:3001/freelancers/add";
+
+            fetch(endpoint, {
+               method: "POST",
+               headers: {
+                "Content-Type": "application/json"
+            },
+             body: JSON.stringify({ 
+                nomutilisateure,
+                  nom, 
+               prenom, 
+             daten,
+                 tel,
+                adresse_mail, 
+             mot_de_passe
+               })
+          })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw err; });
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.message && data.message.includes("succès")) {
+                // Stockage temporaire pour la redirection
+                localStorage.setItem("tempAuth", JSON.stringify({
+                    email: adresse_mail,
+                    role: choix.value
+                }));
+                
+                if (choix.value === "client") {
+                    window.location.href = "vitrine-client.html";
+                } else {
+                    window.location.href = "vitrine-freelancer.html";
+                }
+            } else {
+                throw new Error(data.message || "Erreur lors de l'inscription");
+            }
+        })
+        .catch(error => {
+            console.error("Erreur:", error);
+            errorEmail.textContent = error.message || "❌ Erreur de connexion au serveur";
+        });
+    });
+</script>
+
+</body>
+</html>

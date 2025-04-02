@@ -1,0 +1,44 @@
+
+.pop-up-nitif {
+    display: none;
+    width: 300px;
+    height: 400px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    position: absolute;
+    top: 55px; 
+    right: 140px; 
+    border-radius: 10px;
+    padding: 10px;
+    z-index: 10;
+}
+.notifications{
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+.notification {
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    color: rgb(0, 0, 0);
+    position: relative;
+    height: 50px;
+    
+}
+.notification:hover {
+    background-color: #F3F4F6;
+}
+.notification p{
+    font-family: 'Raleway', sans-serif;
+    
+    font-size: 15px;
+}
+
+.notification-container {
+    display: flex; 
+    align-items: center;
+    gap: 10px; 
+}

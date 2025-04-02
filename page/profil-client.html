@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>profile client</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/profil-client.css">
+    <link rel="stylesheet" href="../css/notif.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/profil-pop-up.css">
+    <link rel="stylesheet" href="../css/modifierprofil.css">
+    <style>
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+   
+    
+   <header>
+        <div class="logo">
+            <span>SkillNet</span><span class="dot">●</span>
+        </div>
+        <div class="header-icons">
+           <button class="icon notif-icon"><img src="../images/bell 1.png" alt="Notification"></button>
+           <button class="icon"><img src="../images/mail 1.png" alt="Message"></button>
+           <button class="icon profil-pop-up"><img src="../images/user 1 (1).png" alt="Profil"></button>
+        </div>
+    </header>
+    <nav>
+        <a href="#">Design</a>
+        <a href="#">Programmation</a>
+        <a href="#">Rédaction & Traduction</a>
+        <a href="#">Vidéo & animation</a>
+        <a href="#">Musique & Audio</a>
+    </nav>
+    
+
+    
+    <main>
+        <div class="container">
+            <div class="profile">
+                <div>
+                    <img src="../images/user 1 (1).png" alt="Image" > 
+                </div>
+                <h1 id="client-username">...</h1>
+                <div class="information">
+                    <p id="client-nom">...</p>
+                    <p id="client-date-naissance">...</p>
+                    <p id="client-email">...</p>
+
+                </div>
+                
+                <button type="submit" id="modifier">Modifier le profil</button>
+                
+            </div>
+        <div>
+
+
+    </main>
+
+    <div id="modifierPopup" class="popup-overlay">
+        <div class="popup-content">
+          <img id="closePopup" src="../images/fermer.png" alt="Fermer" class="close-btn" />
+          <p>Entrer les modification a effectuer</p>
+          <div class="formamodifier">
+            <input type="text" placeholder="Nom Utilisateure" id="nomutilisateure">
+        <p class="error-message" id="error-nomutilisateure"></p>
+
+        <input type="text" placeholder="Nom" id="nom">
+        <p class="error-message" id="error-nom"></p>
+
+        <input type="text" placeholder="Prénom" id="prenom">
+        <p class="error-message" id="error-prenom"></p>
+
+        <input type="date" placeholder="Date de naissance" id="daten">
+        <p class="error-message" id="error-daten"></p>
+
+        <input type="email" placeholder="E-mail" id="email">
+        <p class="error-message" id="error-email"></p>
+
+
+        <button class="modif" id="modifierpopup">modifier</button>
+        </div>
+        
+        </div>
+      </div>
+      <script src="../js/modifierprofil.js"></script>
+
+    <div class="pop-up-profil">
+        <a href="profil-client.html">Mon compte</a>
+        <a href="ajouterMission.html">Poster une mission</a>
+         <a href="#">Mes mission</a>
+         <hr>
+         <a href="connexion.html">se deconnecté</a>
+     </div>
+     <script src="../js/profil-pop-up.js"></script>
+ 
+    <div class="pop-up-nitif">
+        <div class="notification-container">
+            <img src="../images/bell 1.png" alt="Image" >
+            <h2>NOTIFICATIONS</h2>
+        </div>
+        <div class="notifications">
+           <div class="notification">
+             <p>FARHI Louisa vous a envoyé une mission</p>
+           </div>
+        </div>
+        <div class="notifications">
+            <div class="notification">
+              <p>FARHI Louisa vous a envoyé une mission</p>
+            </div>
+         </div>
+         <div class="notifications">
+            <div class="notification">
+              <p>FARHI Louisa vous a envoyé une mission</p>
+            </div>
+         </div>
+        
+
+    </div>
+    
+
+   <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+    try {
+        // 1. Récupérer le token JWT stocké
+        const token = localStorage.getItem('authToken');
+        
+        if (!token) {
+            window.location.href = 'connexion.html';
+            return;
+        }
+
+        // 2. Requête pour obtenir les infos du client
+        const response = await fetch('http://localhost:3001/clients/mon-profil', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Erreur de récupération du profil');
+        }
+
+        const clientData = await response.json();
+        
+        function formatDate(dateString) {
+            const options = { 
+                day: 'numeric', 
+                month: 'long', 
+                year: 'numeric' 
+            };
+            return new Date(dateString).toLocaleDateString('fr-FR', options);
+        }
+        
+        const formattedDate = formatDate(clientData.dateNaissance);
+        
+        // 1. Séparer le nom complet en nom et prénom
+        const nomComplet = clientData.nomComplet || "";
+        const [prenom, ...nomParts] = nomComplet.split(" ");
+        const nom = nomParts.join(" ");
+
+        // 2. Afficher les données dans la page
+        document.getElementById('client-nom').textContent = nomComplet || 'Non spécifié';
+        document.getElementById('client-date-naissance').textContent = formattedDate;
+        document.getElementById('client-email').textContent = clientData.email;
+        document.getElementById('client-username').textContent = `@${clientData.nomUtilisateur}`;
+        
+        // 3. Pré-remplir le formulaire dans le pop-up
+        document.getElementById('nomutilisateure').value = clientData.nomUtilisateur || '';
+        document.getElementById('nom').value = nom || "";
+        document.getElementById('prenom').value = prenom || "";
+
+        // Formater la date pour l'input date (format YYYY-MM-DD)
+        if (clientData.dateNaissance) {
+            const dateObj = new Date(clientData.dateNaissance);
+            const formattedDateInput = dateObj.toISOString().split('T')[0];
+            document.getElementById('daten').value = formattedDateInput;
+        }
+        
+        document.getElementById('email').value = clientData.email || '';
+        
+        // 4. Gestion de l'affichage du pop-up
+        document.getElementById('modifier').addEventListener('click', function() {
+            document.getElementById('modifierPopup').style.display = 'flex';
+        });
+        
+        document.getElementById('closePopup').addEventListener('click', function() {
+            document.getElementById('modifierPopup').style.display = 'none';
+        });
+           
+    } catch (error) {
+        console.error('Erreur:', error);
+        alert('Impossible de charger les informations du profil');
+    }
+});
+
+document.getElementById('modifierpopup').addEventListener('click', async function(e) {
+    e.preventDefault(); // Empêche le rechargement si le bouton est dans un formulaire
+    
+    try {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            window.location.href = 'connexion.html';
+            return;
+        }
+
+        // Récupération des valeurs
+        const formData = {
+            nomutilisateure: document.getElementById('nomutilisateure').value.trim(),
+            nom: document.getElementById('nom').value.trim(),
+            prenom: document.getElementById('prenom').value.trim(),
+            daten: document.getElementById('daten').value,
+            email: document.getElementById('email').value.trim()
+        };
+
+        // Réinitialisation des erreurs
+        document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+
+        // Validation
+        const errors = validateForm(formData);
+        if (Object.keys(errors).length > 0) {
+            displayErrors(errors);
+            return;
+        }
+
+        // Envoi des données
+        const response = await fetch('http://localhost:3001/clients/modifier-profil', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(formData)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Erreur lors de la modification");
+        }
+
+        const data = await response.json();
+        showSuccessMessage(data.message);
+        
+    } catch (error) {
+        console.error("Erreur:", error);
+        showErrorMessage(error.message);
+    }
+});
+
+// Fonctions utilitaires
+function validateForm(data) {
+    const errors = {};
+    const regexNomPrenom = /^[A-Za-zÀ-ÖØ-öø-ÿ\s-]+$/;
+    
+    if (!data.nomutilisateure) errors.nomutilisateure = "Le nom d'utilisateur est requis";
+    if (!data.nom) errors.nom = "Le nom est requis";
+    else if (!regexNomPrenom.test(data.nom)) errors.nom = "Le nom ne doit contenir que des lettres";
+    
+    if (!data.prenom) errors.prenom = "Le prénom est requis";
+    else if (!regexNomPrenom.test(data.prenom)) errors.prenom = "Le prénom ne doit contenir que des lettres";
+    
+    if (!data.daten) errors.daten = "La date de naissance est requise";
+    else if (calculerAge(data.daten) < 18) errors.daten = "Vous devez avoir au moins 18 ans";
+    
+    if (!data.email) errors.email = "L'email est requis";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) errors.email = "L'email n'est pas valide";
+    
+    return errors;
+}
+
+function displayErrors(errors) {
+    for (const [field, message] of Object.entries(errors)) {
+        const errorElement = document.getElementById(`error-${field}`);
+        if (errorElement) errorElement.textContent = message;
+    }
+}
+
+function showSuccessMessage(message) {
+    // Vous pouvez remplacer l'alert par un beau popup
+    alert(message);
+    window.location.reload();
+}
+
+function showErrorMessage(message) {
+    // Afficher l'erreur de manière plus élégante
+    alert(`Erreur: ${message}`);
+}
+
+function calculerAge(dateNaissance) {
+    const diff = Date.now() - new Date(dateNaissance).getTime();
+    return Math.abs(new Date(diff).getUTCFullYear() - 1970);
+}
+   </script>
+    
+    <script src="../js/notif-pop-up.js"></script>
+    
+</body>
+</html>

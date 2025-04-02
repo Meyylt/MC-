@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitrine freelanceure</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/vitrine-freelancer.css">
+    <link rel="stylesheet" href="../css/notif.css">
+    <link rel="stylesheet" href="../css/profil-pop-up.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <span>SkillNet</span><span class="dot">●</span>
+        </div>
+        <input type="text" placeholder="Que cherchez-vous ? exemple: Développement web">
+        <div class="header-icons">
+           <button class="icon notif-icon"> <img src="../images/bell 1.png" alt="Image"></button>
+           <a href="messagerie.html"><button class="icon"> <img src="../images/mail 1.png" alt="Image"></button></a>
+           <button class="icon profil-pop-up"> <img src="../images/user 1 (1).png" alt="Image"> </button>
+        </div>
+    </header>
+    <nav>
+        <a href="#">Design</a>
+        <a href="#">Programmation</a>
+        <a href="#">Rédaction & Traduction</a>
+        <a href="#">Vidéo & animation</a>
+        <a href="#">Musique & Audio</a>
+    </nav>
+
+    <main>
+        <div class="container">
+            <div class="add-service-container">
+                <a href="ajouter-service.html"><button class="add-service-btn">
+                    <span>+</span> Ajouter un service
+                </button></a>
+            </div>
+            <div class="missions-en-cours">
+                <h2>Vos missions en cours</h2>
+                <div class="mission"><p>Rédaction & Traduction</p> <span>En cours</span></div>
+                <div class="mission"><p>Vidéo & Animation</p> <span>En cours</span></div>
+                <div class="mission"><p>Musique & Audio</p> <span>En cours</span></div>
+                <div class="mission"><p>Rédaction & Traduction</p> <span>En cours</span></div>
+            </div>
+        </div>
+        
+        <div class="container-suggestions">
+            <h2 class="encour">Suggestion de missions</h2>
+            <!-- Conteneur pour les missions dynamiques -->
+            <div id="missions-container" class="missions">
+                <!-- Les missions seront ajoutées ici dynamiquement -->
+            </div>
+        </div>
+    </main>
+
+    <div class="pop-up-nitif">
+        <div class="notification-container">
+            <img src="../images/bell 1.png" alt="Image">
+            <h2>NOTIFICATIONS</h2>
+        </div>
+        <div class="notifications">
+           <div class="notification">
+             <p>FARHI Louisa vous a envoyé une mission</p>
+           </div>
+        </div>
+        <div class="notifications">
+            <div class="notification">
+              <p>FARHI Louisa vous a envoyé une mission</p>
+            </div>
+         </div>
+         <div class="notifications">
+            <div class="notification">
+              <p>FARHI Louisa vous a envoyé une mission</p>
+            </div>
+         </div>
+    </div>
+    
+    <script src="../js/notif-pop-up.js"></script>
+    <div class="pop-up-profil">
+        <a href="profil-freelancer.html">Mon compte</a>
+        <a href="ajouter-service.html">Poster un service</a>
+         <a href="messervices.html">Mes service</a>
+         <hr>
+         <a href="connexion.html">se deconnecté</a>
+     </div>
+     <script src="../js/profil-pop-up.js"></script>
+
+    
+     <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            // Vérification de l'authentification
+            const token = localStorage.getItem("authToken");
+            if (!token) {
+                window.location.href = "connexion.html";
+                return;
+            }
+        
+            // Charger les missions
+            await loadMissions();
+        });
+        
+        async function loadMissions() {
+            try {
+                const token = localStorage.getItem("authToken");
+                const response = await fetch("http://localhost:3001/missions", {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+        
+                if (!response.ok) {
+                    throw new Error("Erreur de chargement des missions");
+                }
+        
+                const missions = await response.json();
+                displayMissions(missions);
+        
+            } catch (error) {
+                console.error("Erreur:", error);
+                document.getElementById("missions-container").innerHTML = `
+                    <div class="error-message">
+                        <p>${error.message}</p>
+                        <button onclick="loadMissions()">Réessayer</button>
+                    </div>
+                `;
+            }
+        }
+        
+        function displayMissions(missions) {
+    const container = document.getElementById("missions-container");
+    container.innerHTML = ""; // Vider le conteneur
+
+    if (missions.length === 0) {
+        container.innerHTML = '<p class="no-missions">Aucune mission disponible pour le moment</p>';
+        return;
+    }
+
+    missions.forEach(mission => {
+        const missionElement = document.createElement("div");
+        missionElement.className = "missionsug";
+
+        // Créer un lien autour de la mission
+        const missionLink = document.createElement("a");
+        missionLink.href = `detail-mission.html?id=${mission.id}`; // Lien vers la page de détails avec l'ID de la mission
+        missionLink.innerHTML = `
+            <h2>${mission.titre}</h2>
+            <div class="info">
+                <h6>Catégorie :</h6>
+                <p>${mission.categorie}</p>
+            </div>
+            <div class="info">
+                <h6>Description :</h6>
+                <p>${mission.description}</p>
+            </div>
+            <div class="info">
+                <h6>Temps estimé :</h6>
+                <p>${mission.dureEstime} jours</p>
+            </div>
+            <div class="info">
+                <h6>Budget :</h6>
+                <p>${mission.budget} DA</p>
+            </div>
+            <div class="info">
+                <h6>Client :</h6>
+                <p>${mission.clientPrenom} ${mission.clientNom}</p>
+            </div>
+        `;
+        
+        // Ajouter le lien au conteneur de la mission
+        missionElement.appendChild(missionLink);
+        container.appendChild(missionElement);
+    });
+}
+
+        
+              
+        
+        </script>
+   
+</body>
+</html>

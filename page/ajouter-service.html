@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter un service</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/ajouter-service.css">
+    <link rel="stylesheet" href="../css/profil-pop-up.css">
+    <link rel="stylesheet" href="../css/notif.css">
+</head>
+<body>
+    <header>
+        <div class="logo">SkillNet<span class="dot">●</span></div>
+        <div class="icons">
+            <img src="../images/bell 1.png" alt="Notification" class="icon notif-icon">
+            <img src="../images/mail 1.png" alt="Message" class="icon">
+            
+            <img src="../images/user 1 (1).png" alt="Profil" class="icon profile-icon profil-pop-up">
+            <img src="../images/user 1 (1).png" alt="Profil" class="icon profile-icon">
+        </div>
+    </header>
+
+    <main>
+        <h4>Ajoutez les informations correspondantes à votre service !</h4>
+        <form id="serviceForm">
+            <input type="text" id="titre" name="titre" placeholder="Titre" required>
+            <select id="categorie" name="categorie">
+                <option>Musique & Audio</option>
+                <option>Graphisme & Design</option>
+                <option>Développement Web</option>
+                <option>Rédaction & Traduction</option>
+            </select>
+            <textarea id="description" name="description" placeholder="Description" required rows="4"></textarea>
+            <div class="price-delivery">
+                <input type="text" id="prix" name="prix" placeholder="Prix (DA)" required>
+                <input type="text" id="delais" name="delais" placeholder="Délai (ex: 3 jours)" required>
+            </div>
+            <button type="submit" id="poster">Poster</button>
+        </form>
+    </main>
+    <!-- Boîte de confirmation (POP-UP) -->
+    <div id="confirmationPopup" class="popup-overlay">
+        <div class="popup-content">
+          <img id="closePopup" src="../images/fermer.png" alt="Fermer" class="close-btn" />
+          <p>Votre mission a été postée avec succès.</p>
+        </div>
+      </div>
+    <script src="../js/ajouterService.js"></script>
+    <div class="pop-up-profil">
+        <a href="profil-freelancer.html">Mon compte</a>
+        <a href="ajouter-service.html">Poster un service</a>
+        <a href="#">Mes service</a>
+        <hr>
+        <a href="connexion.html">se deconnecté</a>
+    </div>
+    
+    <script src="../js/profil-pop-up.js"></script>
+    <div class="pop-up-nitif">
+        <div class="notification-container">
+            <img src="../images/bell 1.png" alt="Image">
+            <h2>NOTIFICATIONS</h2>
+        </div>
+        <div class="notifications">
+           <div class="notification">
+             <p>FARHI Louisa vous a envoyé une mission</p>
+           </div>
+        </div>
+    </div>
+    <script src="../js/notif-pop-up.js"></script>
+
+    <script>
+        document.getElementById('serviceForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    // Récupération des valeurs du formulaire
+    const titre = document.getElementById('titre').value;
+    const categorie = document.getElementById('categorie').value;
+    const description = document.getElementById('description').value;
+    const prix = document.getElementById('prix').value;
+    const delais = document.getElementById('delais').value;
+    
+    // Récupération du token depuis le localStorage
+    const token = localStorage.getItem('authToken');
+    
+    try {
+        const response = await fetch('http://localhost:3001/freelancers/ajouter-service', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                titre,
+                categorie,
+                description,
+                prix,
+                delais
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            // Afficher le popup de confirmation
+            document.getElementById('confirmationPopup').style.display = 'flex';
+            
+            // Optionnel: Rediriger après un délai
+            setTimeout(() => {
+                window.location.href = 'vitrine-freelancer.html';
+            }, 2000);
+        } else {
+            alert('Erreur: ' + (data.message || 'Erreur inconnue'));
+        }
+    } catch (error) {
+        console.error('Erreur:', error);
+        alert('Une erreur est survenue lors de l\'ajout du service');
+    }
+});
+
+// Fermer le popup
+document.getElementById('closePopup').addEventListener('click', function() {
+    document.getElementById('confirmationPopup').style.display = 'none';
+});
+// Fermer le popup
+document.getElementById('closePopup').addEventListener('click', function() {
+    document.getElementById('confirmationPopup').style.display = 'none';
+    // Optionnel: rediriger vers une autre page
+    // window.location.href = '/mes-services.html';
+});
+    </script>
+</body>
+</html>

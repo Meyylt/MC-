@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MES SERVICE</title>
+    <link rel="stylesheet" href="../css/messervices.css">
+    <link rel="stylesheet" href="../css/notif.css">
+    <link rel="stylesheet" href="../css/profil-pop-up.css">
+    <link rel="stylesheet" href="../css/header.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <span>SkillNet</span><span class="dot">●</span>
+        </div>
+        <div class="header-icons">
+           <button class="icon notif-icon"><img src="../images/bell 1.png" alt="Notification"></button>
+           <button class="icon"><img src="../images/mail 1.png" alt="Message"></button>
+           <button class="icon profil-pop-up"><img src="../images/user 1 (1).png" alt="Profil"></button>
+        </div>
+    </header>
+
+    <nav>
+        <a href="ajouterMission.html">Design</a>
+        <a href="#">Programmation</a>
+        <a href="#">Rédaction & Traduction</a>
+        <a href="#">Vidéo & animation</a>
+        <a href="#">Musique & Audio</a>
+    </nav>
+
+    <main>
+        <h2>Vos Missions </h2>
+
+        <div id="services-container" class="services">
+            <div class="service">
+                  <h2>TITREs</h2>
+                  <div class="info"> 
+                    <h6>categorie :</h6>
+                   <p id="categorie">vvv</p>
+                  </div>
+                  <div class="info">
+                    <h6>description:</h6>
+                    <p id="description">jhdsvuyqvoudzvouvduazvoubzdaucbhouadbcouvcuov</p>
+                  </div>
+                  <div class="info">
+                    <h6>temp estimée</h6>
+                  <p id="temp"></p>
+                  </div>
+                  <div class="info">
+                    <h6>prix:</h6>
+                  <p id="prix"></p>
+                  </div>
+                  
+            </div>
+           
+
+
+        </div>
+
+
+
+
+
+
+
+    </main>
+    <div class="pop-up-nitif">
+        <div class="notification-container">
+            <img src="../images/bell 1.png" alt="Image">
+            <h2>NOTIFICATIONS</h2>
+        </div>
+        <div class="notifications">
+           <div class="notification">
+             <p>FARHI Louisa vous a envoyé une mission</p>
+           </div>
+        </div>
+        <div class="notifications">
+            <div class="notification">
+              <p>FARHI Louisa vous a envoyé une mission</p>
+            </div>
+         </div>
+         <div class="notifications">
+            <div class="notification">
+              <p>FARHI Louisa vous a envoyé une mission</p>
+            </div>
+         </div>
+    </div>
+    
+    <script src="../js/notif-pop-up.js"></script>
+    <div class="pop-up-profil">
+       <a href="profil-freelancer.html">Mon compte</a>
+       <a href="ajouter-service.html">Poster une mission</a>
+        <a href="messervices.html">Mes mission</a>
+        <hr>
+        <a href="connexion.html">se deconnecté</a>
+    </div>
+    <script src="../js/profil-pop-up.js"></script>
+    
+
+
+    
+<script>
+     document.addEventListener("DOMContentLoaded", async () => {
+            // Vérification de l'authentification
+            const token = localStorage.getItem("authToken");
+            if (!token) {
+                window.location.href = "connexion.html";
+                return;
+            }
+            
+            // Charger les services du freelancer connecté
+            await loadServices();
+        });
+
+        async function loadServices() {
+            try {
+                const token = localStorage.getItem("authToken");
+                const response = await fetch("http://localhost:3001/messervices/mes-services", {
+                                              
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+                console.log("Response status:", response.status);
+                
+                if (!response.ok) {
+                    throw new Error("Erreur de chargement des services");
+                }
+
+                const services = await response.json();
+                console.log("Services reçus:", services); // Pour débogage
+                displayServices(services);
+            } catch (error) {
+                console.error("Erreur:", error);
+                document.getElementById("services-container").innerHTML = `
+                    <div class="error-message">
+                        <p>${error.message}</p>
+                        <button onclick="loadServices()">Réessayer</button>
+                    </div>
+                `;
+            }
+        }
+
+        function displayServices(services) {
+            const container = document.getElementById("services-container");
+            container.innerHTML = "";
+
+            if (!services || services.length === 0) {
+                container.innerHTML = '<p class="no-services">Aucun service disponible pour le moment</p>';
+                return;
+            }
+
+            services.forEach(service => {
+                const serviceElement = document.createElement("div");
+                serviceElement.className = "service";
+                serviceElement.innerHTML = `
+                    <h2>${service.titre}</h2>
+                    <div class="info">
+                        <h6>Catégorie :</h6>
+                        <p>${service.categorie}</p>
+                    </div>
+                    <div class="info">
+                        <h6>Description :</h6>
+                        <p>${service.description}</p>
+                    </div>
+                    <div class="info">
+                        <h6>Temps estimé :</h6>
+                        <p>${service.dureEstime} jours</p>
+                    </div>
+                    <div class="info">
+                        <h6>Prix :</h6>
+                        <p>${service.prix} DA</p>
+                    </div>
+                    <div class="boutons">
+                        <button  >MODIFIER</button>
+                        <button  >SUPPRIMER</button>
+                    </div>
+                    
+                `;
+                container.appendChild(serviceElement);
+            });}
+</script>
+    
+    
+</body>
+</html>

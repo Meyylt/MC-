@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>profile freelancer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/profil-freelancer.css">
+    <link rel="stylesheet" href="../css/notif.css">
+    <link rel="stylesheet" href="../css/modifierprofil.css">
+    <link rel="stylesheet" href="../css/profil-pop-up.css">
+    <style>
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+   
+    
+    <header >
+        <div class="logo">
+            <span>SkillNet</span><span class="dot">●</span>
+        </div>
+        <input type="text" placeholder="Que cherchez-vous ? exemple: Développement web" >
+       
+        <div class="header-icons">
+           <button class="icon notif-icon"> <img src="../images/bell 1.png" alt="Image" ></button>
+           <button class="icon"> <img src="../images/mail 1.png" alt="Image" ></button>
+           <button class="icon profil-pop-up"> <img src="../images/user 1 (1).png" alt="Image" > </button>
+        </div>
+    </header>
+    <nav>
+        <a href="#">Design</a>
+        <a href="#">Programmation</a>
+        <a href="#">Rédaction & Traduction</a>
+        <a href="#">Vidéo & animation</a>
+        <a href="#">Musique & Audio</a>
+    </nav>
+    
+
+    
+    <main>
+        <div class="container">
+            <div class="profile">
+                <div>
+                    <img src="../images/user 1 (1).png" alt="Image" > 
+                </div>
+                <h1 id="client-username">...</h1>
+                <div class="information">
+                    <p id="client-nom">...</p>
+                    <p id="client-date-naissance">...</p>
+                    <p id="client-email">...</p>
+
+                </div>
+                
+                <button type="submit" id="modifier">Modifier le profil</button>
+                
+            </div>
+            <div class="porfolio">
+                <h2>Portfolio</h2>
+            <p>Vous pourrez ajouter ci-dessous les projets que vous avez effectué au cours de votre carrière</p>
+            <div class="projets">
+                <div class="projet">
+                    <img src="../images/vitrine-freelancer.png" alt="Projet MC">
+                    <p>Projet MC</p>
+                </div>
+                <div class="projet">
+                    <img src="../images/page-principale.png" alt="Projet AIE">
+                    <p>Projet AIE</p>
+                </div>
+                    
+                <div class="projet">
+                    <img src="../images/vitrine-pharmacie.png" alt="Projet pharmacie">
+                    <p>Projet Pharmacie</p>
+                </div>
+                
+            </div>
+            <div class="portfolio-add">+</div>
+            </div>
+        </div>
+        <div>
+
+
+    </main>
+
+
+    <div id="modifierPopup" class="popup-overlay">
+        <div class="popup-content">
+          <img id="closePopup" src="../images/fermer.png" alt="Fermer" class="close-btn" />
+          <p>Entrer les modification a effectuer</p>
+          <div class="formamodifier">
+            <input type="text" placeholder="Nom Utilisateure" id="nomutilisateure">
+        <p class="error-message" id="error-nomutilisateure"></p>
+
+        <input type="text" placeholder="Nom" id="nom">
+        <p class="error-message" id="error-nom"></p>
+
+        <input type="text" placeholder="Prénom" id="prenom">
+        <p class="error-message" id="error-prenom"></p>
+
+        <input type="date" placeholder="Date de naissance" id="daten">
+        <p class="error-message" id="error-daten"></p>
+
+        <input type="email" placeholder="E-mail" id="email">
+        <p class="error-message" id="error-email"></p>
+
+
+        <button class="modif" id="modifierpopup">modifier</button>
+        </div>
+        
+        </div>
+      </div>
+      <script src="../js/modifierprofil.js"></script>
+
+    <div class="pop-up-profil">
+        <a href="profil-freelancer.html">Mon compte</a>
+        <a href="ajouter-service.html">Poster un service</a>
+         <a href="messervices.html">Mes service</a>
+         <hr>
+         <a href="connexion.html">se deconnecté</a>
+     </div>
+     <script src="../js/profil-pop-up.js"></script>
+
+    <div class="pop-up-nitif">
+        <div class="notification-container">
+            <img src="../images/bell 1.png" alt="Image" >
+            <h2>NOTIFICATIONS</h2>
+        </div>
+        <div class="notifications">
+           <div class="notification">
+             <p>FARHI Louisa vous a envoyé une mission</p>
+           </div>
+        </div>
+        <div class="notifications">
+            <div class="notification">
+              <p>FARHI Louisa vous a envoyé une mission</p>
+            </div>
+         </div>
+         <div class="notifications">
+            <div class="notification">
+              <p>FARHI Louisa vous a envoyé une mission</p>
+            </div>
+         </div>
+        
+
+    </div>
+    
+    
+    <script src="../js/notif-pop-up.js"></script>
+
+   <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+    try {
+        // 1. Récupérer le token JWT stocké
+        const token = localStorage.getItem('authToken');
+        
+        if (!token) {
+            window.location.href = 'connexion.html';
+            return;
+        }
+
+        // 2. Requête pour obtenir les infos du client
+        const response = await fetch('http://localhost:3001/freelancers/mon-profil', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Erreur de récupération du profil');
+        }
+
+        const freelancerData = await response.json();
+        
+        function formatDate(dateString) {
+            const options = { 
+                day: 'numeric', 
+                month: 'long', 
+                year: 'numeric' 
+            };
+            return new Date(dateString).toLocaleDateString('fr-FR', options);
+        }
+        
+        const formattedDate = formatDate(freelancerData.dateNaissance);
+        // 1. Séparer le nom complet en nom et prénom (au premier espace)
+const nomComplet = freelancerData.nomComplet || "";
+const [prenom, ...nomParts] = nomComplet.split(" "); // Séparation au premier espace
+const nom = nomParts.join(" ");
+
+        // 3. Afficher les données dans la page
+        document.getElementById('client-nom').textContent = nomComplet || 'Non spécifié';
+        document.getElementById('client-date-naissance').textContent = formattedDate;
+        document.getElementById('client-email').textContent = freelancerData.email;
+        document.getElementById('client-username').textContent = `@${freelancerData.nomUtilisateur}`;
+        
+        // 4. Pré-remplir le formulaire dans le pop-up
+        document.getElementById('nomutilisateure').value = freelancerData.nomUtilisateur || '';
+        document.getElementById('nom').value = nom || "";
+document.getElementById('prenom').value = prenom || "";
+        
+        // Formater la date pour l'input date (format YYYY-MM-DD)
+        if (freelancerData.dateNaissance) {
+            const dateObj = new Date(freelancerData.dateNaissance);
+            const formattedDateInput = dateObj.toISOString().split('T')[0];
+            document.getElementById('daten').value = formattedDateInput;
+        }
+        
+        document.getElementById('email').value = freelancerData.email || '';
+        
+        // 5. Gestion de l'affichage du pop-up
+        document.getElementById('modifier').addEventListener('click', function() {
+            document.getElementById('modifierPopup').style.display = 'flex';
+        });
+        
+        document.getElementById('closePopup').addEventListener('click', function() {
+            document.getElementById('modifierPopup').style.display = 'none';
+        });
+           
+    } catch (error) {
+        console.error('Erreur:', error);
+        alert('Impossible de charger les informations du profil');
+    }
+});
+
+document.getElementById('modifierpopup').addEventListener('click', async function() {
+    try {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            window.location.href = 'connexion.html';
+            return;
+        }
+
+        // Récupérer les valeurs du formulaire
+        const nomutilisateure = document.getElementById('nomutilisateure').value;
+        const nom = document.getElementById('nom').value;
+        const prenom = document.getElementById('prenom').value;
+        const daten = document.getElementById('daten').value;
+        const email = document.getElementById('email').value;
+
+        // Réinitialiser les messages d'erreur
+        document.querySelectorAll('.error-message').forEach(el => {
+            el.textContent = '';
+        });
+
+        let isValid = true;
+        const regexNomPrenom = /^[A-Za-zÀ-ÖØ-öø-ÿ\s-]+$/;
+        const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        // Validation des champs
+        if (!nomutilisateure) {
+            document.getElementById('error-nomutilisateure').textContent = "Le nom d'utilisateur est requis";
+            isValid = false;
+        }
+
+        if (!nom) {
+            document.getElementById('error-nom').textContent = "Le nom est requis";
+            isValid = false;
+        } else if (!regexNomPrenom.test(nom)) {
+            document.getElementById('error-nom').textContent = "Le nom ne doit contenir que des lettres";
+            isValid = false;
+        }
+
+        if (!prenom) {
+            document.getElementById('error-prenom').textContent = "Le prénom est requis";
+            isValid = false;
+        } else if (!regexNomPrenom.test(prenom)) {
+            document.getElementById('error-prenom').textContent = "Le prénom ne doit contenir que des lettres";
+            isValid = false;
+        }
+
+        if (!daten) {
+            document.getElementById('error-daten').textContent = "La date de naissance est requise";
+            isValid = false;
+        } else {
+            const age = calculerAge(daten);
+            if (age < 18) {
+                document.getElementById('error-daten').textContent = "Vous devez avoir au moins 18 ans";
+                isValid = false;
+            }
+        }
+
+        if (!email) {
+            document.getElementById('error-email').textContent = "L'email est requis";
+            isValid = false;
+        } else if (!regexEmail.test(email)) {
+            document.getElementById('error-email').textContent = "L'email n'est pas valide";
+            isValid = false;
+        }
+
+        if (!isValid) return;
+
+        const response = await fetch('http://localhost:3001/freelancers/modifier-profil', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                nomutilisateure,
+                nom,
+                prenom,
+                daten,
+                email
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || "Erreur lors de la modification");
+        }
+
+        alert(data.message);
+        window.location.reload();
+
+    } catch (error) {
+        console.error("Erreur:", error);
+        alert(error.message);
+    }
+});
+
+// Fonction pour calculer l'âge
+function calculerAge(dateNaissance) {
+    const aujourdHui = new Date();
+    const naissance = new Date(dateNaissance);
+    let age = aujourdHui.getFullYear() - naissance.getFullYear();
+    const mois = aujourdHui.getMonth() - naissance.getMonth();
+    
+    if (mois < 0 || (mois === 0 && aujourdHui.getDate() < naissance.getDate())) {
+        age--;
+    }
+    
+    return age;
+}
+   </script>
+</body>
+</html>
