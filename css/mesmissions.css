@@ -48,6 +48,20 @@ nav a:hover{
     text-decoration: none;
    
 }
+
+.miss {
+    display: flex; /* Utilise le modèle Flexbox */
+    align-items: center; /* Centre les éléments verticalement */
+    gap: 1rem; /* Espace entre les éléments */
+}
+.miss select {
+    padding: 0.5rem; /* Espace interne du sélecteur */
+    border: 1px solid #ccc; /* Bordure grise pour le sélecteur */
+    border-radius: 0.375rem; /* Coins arrondis pour le sélecteur */
+    width: 150px;
+}
+
+
 main h2{
     font-size: 40px;
     font-family: 'Raleway', sans-serif;
@@ -143,4 +157,7 @@ main h2{
     font-size: 15px;
     font-family: 'Raleway', sans-serif; /* Animation fluide */
     width: 150px;
-  }
+}
+
+
+  

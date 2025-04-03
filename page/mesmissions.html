@@ -32,8 +32,17 @@
     </nav>
 
     <main>
-        <h2>Vos Missions </h2>
+        <div class="miss">
+            <h2>Vos Missions </h2>
+             <select id="stat" name="stat" onchange="filterMissions()">
+            <option>Toutes</option>
+            <option>En attente</option>
+            <option>En cours</option>
+            <option>Terminé</option>
+            </select>
 
+        </div>
+        
         <div id="missions-container" class="missions">
             <div class="mission">
                   <h2>TITREs</h2>
@@ -133,7 +142,8 @@
 
 
   <script>
-    document.addEventListener("DOMContentLoaded", async () => {
+    // Modifiez l'écouteur d'événements DOMContentLoaded
+document.addEventListener("DOMContentLoaded", async () => {
     // Initialisation
     const token = localStorage.getItem("authToken");
     if (!token) {
@@ -144,6 +154,18 @@
     await loadMissions();
     setupEventListeners();
 });
+// Ajoutez cette fonction pour filtrer les missions
+async function filterMissions() {
+    const statut = document.getElementById("stat").value;
+    const missions = await fetchMissions();
+    
+    if (statut === "Toutes") {
+        displayMissions(missions);
+    } else {
+        const filteredMissions = missions.filter(mission => mission.statut === statut);
+        displayMissions(filteredMissions);
+    }
+}
 
 // Configuration des écouteurs d'événements
 function setupEventListeners() {
@@ -269,20 +291,10 @@ async function handleEditSubmit() {
 }
 
 // Chargement des missions
+// Modifiez la fonction loadMissions pour simplement charger les missions
 async function loadMissions() {
     try {
-        const response = await fetch("http://localhost:3001/missions/missions", {
-            headers: {
-                "Authorization": `Bearer ${localStorage.getItem("authToken")}`,
-                "Content-Type": "application/json"
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(await response.text());
-        }
-
-        const missions = await response.json();
+        const missions = await fetchMissions();
         displayMissions(missions);
     } catch (error) {
         console.error("Erreur de chargement:", error);
@@ -290,6 +302,21 @@ async function loadMissions() {
     }
 }
 
+// Nouvelle fonction pour récupérer les missions depuis l'API
+async function fetchMissions() {
+    const response = await fetch("http://localhost:3001/missions/missions", {
+        headers: {
+            "Authorization": `Bearer ${localStorage.getItem("authToken")}`,
+            "Content-Type": "application/json"
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error(await response.text());
+    }
+
+    return await response.json();
+}
 // Affichage des missions
 function displayMissions(missions) {
     const container = document.getElementById("missions-container");
