@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="../css/notif.css">
     <link rel="stylesheet" href="../css/profil-pop-up.css">
     <link rel="stylesheet" href="../css/header.css">
+    
+    <link rel="stylesheet" href="../css/modifiermission.css">
 </head>
 <body>
     <header>
@@ -51,6 +53,9 @@
                     <h6>budget:</h6>
                   <p id="budget"></p>
                   </div>
+                  <div class="boutons">
+                    <button id="modifier"  >MODIFIER</button>
+                </div>
                   
             </div>
            
@@ -65,6 +70,32 @@
 
 
     </main>
+    <div id="modifierPopup" class="popup-overlay">
+        <div class="popup-content">
+          <img id="closePopup" src="../images/fermer.png" alt="Fermer" class="close-btn" />
+          <p>Entrer les modification a effectuer sur votre mission</p>
+          <div class="formamodifier">
+            <input type="text" id="titre" name="titre" placeholder="Titre" >
+            <select id="categorie" name="categorie">
+                <option>Musique & Audio</option>
+                <option>Graphisme & Design</option>
+                <option>Développement Web</option>
+                <option>Rédaction & Traduction</option>
+            </select>
+
+            <textarea id="description" name="description" placeholder="Description"  rows="4"></textarea>
+       
+            <input type="text" id="prix" name="prix" placeholder="Prix (DA)" >
+            <input type="text" id="delais" name="delais" placeholder="Délai (ex: 3 jours)" >
+
+        <button class="modif" id="modifierpopup">modifier</button>
+        </div>
+        
+        </div>
+      </div>
+      <script src="../js/modifierprofil.js"></script>
+
+
     <div class="pop-up-nitif">
         <div class="notification-container">
             <img src="../images/bell 1.png" alt="Image">
@@ -96,61 +127,184 @@
         <a href="connexion.html">se deconnecté</a>
     </div>
     <script src="../js/profil-pop-up.js"></script>
+
+    
     
 
 
-    <script>
-      document.addEventListener("DOMContentLoaded", async () => {
-    // Vérification de l'authentification
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+    // Initialisation
     const token = localStorage.getItem("authToken");
     if (!token) {
-        window.location.href = "connexion.html"; // Rediriger si non authentifié
+        window.location.href = "connexion.html";
         return;
     }
-    
-    // Charger les missions du client connecté
+
     await loadMissions();
+    setupEventListeners();
 });
 
+// Configuration des écouteurs d'événements
+function setupEventListeners() {
+    // Gestion du clic sur Modifier
+    document.addEventListener("click", async (e) => {
+        if (e.target.id === "modifier") {
+            const missionElement = e.target.closest(".mission");
+            if (missionElement) {
+                openEditPopup(missionElement);
+            }
+        }
+        
+        // Gestion de la suppression
+        if (e.target.id === "supprimer") {
+            const missionElement = e.target.closest(".mission");
+            if (missionElement) {
+                if (confirm("Voulez-vous vraiment supprimer cette mission ?")) {
+                    await deleteMission(missionElement.dataset.missionId);
+                    await loadMissions();
+                }
+            }
+        }
+    });
+
+    // Validation de la modification
+    document.getElementById("modifierpopup")?.addEventListener("click", handleEditSubmit);
+    
+    // Fermeture du popup
+    document.getElementById("closePopup")?.addEventListener("click", () => {
+        document.getElementById("modifierPopup").style.display = "none";
+    });
+};
+
+// Fonction pour ouvrir le popup de modification
+function openEditPopup(missionElement) {
+    currentMissionId = missionElement.dataset.missionId;
+    
+    const missionData = {
+        titre: missionElement.querySelector("h2").textContent,
+        categorie: missionElement.querySelector(".info:nth-child(2) p").textContent,
+        description: missionElement.querySelector(".info:nth-child(3) p").textContent,
+        dureEstime: missionElement.querySelector(".info:nth-child(4) p").textContent.replace(" jours", ""),
+        budget: missionElement.querySelector(".info:nth-child(5) p").textContent.replace(" DA", ""),
+        statut: missionElement.querySelector(".info:nth-child(6) p").textContent
+    };
+
+    // Remplissage du formulaire
+    document.getElementById("titre").value = missionData.titre;
+    document.getElementById("categorie").value = missionData.categorie;
+    document.getElementById("description").value = missionData.description;
+    document.getElementById("prix").value = missionData.budget;
+    document.getElementById("delais").value = missionData.dureEstime;
+
+    // Désactiver la modification si mission terminée
+    if (missionData.statut === "Terminé") {
+        document.querySelectorAll("#modifierPopup input, #modifierPopup select, #modifierPopup textarea").forEach(el => {
+            el.disabled = true;
+        });
+        document.getElementById("modifierpopup").disabled = true;
+        alert("Les missions terminées ne peuvent pas être modifiées");
+    } else {
+        document.querySelectorAll("#modifierPopup input, #modifierPopup select, #modifierPopup textarea").forEach(el => {
+            el.disabled = false;
+        });
+        document.getElementById("modifierpopup").disabled = false;
+    }
+
+    document.getElementById("modifierPopup").style.display = "flex";
+}
+
+// Soumission du formulaire de modification
+async function handleEditSubmit() {
+    const formData = {
+        titre: document.getElementById("titre").value.trim(),
+        categorie: document.getElementById("categorie").value,
+        description: document.getElementById("description").value.trim(),
+        dureEstime: document.getElementById("delais").value.trim(),
+        budget: document.getElementById("prix").value.trim()
+    };
+
+    // Validation
+    const errors = [];
+    if (!formData.titre) errors.push("Le titre est requis");
+    if (!formData.categorie) errors.push("La catégorie est requise");
+    if (!formData.description) errors.push("La description est requise");
+    if (!formData.dureEstime || isNaN(formData.dureEstime)) errors.push("La durée doit être un nombre valide");
+    if (!formData.budget || isNaN(formData.budget)) errors.push("Le budget doit être un nombre valide");
+
+    if (errors.length > 0) {
+        alert("Erreurs :\n" + errors.join("\n"));
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:3001/missions/${currentMissionId}`, {
+            method: "PUT",
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("authToken")}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                titre: formData.titre,
+                categorie: formData.categorie,
+                description: formData.description,
+                dureEstime: parseInt(formData.dureEstime),
+                budget: parseFloat(formData.budget)
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || "Erreur lors de la modification");
+        }
+
+        alert("Mission modifiée avec succès !");
+        document.getElementById("modifierPopup").style.display = "none";
+        await loadMissions();
+    } catch (error) {
+        console.error("Erreur:", error);
+        alert(`Erreur: ${error.message}`);
+    }
+}
+
+// Chargement des missions
 async function loadMissions() {
     try {
-        const token = localStorage.getItem("authToken");
         const response = await fetch("http://localhost:3001/missions/missions", {
             headers: {
-                "Authorization": `Bearer ${token}`,
+                "Authorization": `Bearer ${localStorage.getItem("authToken")}`,
                 "Content-Type": "application/json"
             }
         });
-        
+
         if (!response.ok) {
-            throw new Error("Erreur de chargement des missions");
+            throw new Error(await response.text());
         }
 
         const missions = await response.json();
         displayMissions(missions);
     } catch (error) {
-        console.error("Erreur:", error);
-        document.getElementById("missions-container").innerHTML = `
-            <div class="error-message">
-                <p>${error.message}</p>
-                <button onclick="loadMissions()">Réessayer</button>
-            </div>
-        `;
+        console.error("Erreur de chargement:", error);
+        showError("Erreur de chargement des missions");
     }
 }
 
+// Affichage des missions
 function displayMissions(missions) {
     const container = document.getElementById("missions-container");
-    container.innerHTML = ""; // Vider le conteneur
+    container.innerHTML = "";
 
     if (missions.length === 0) {
-        container.innerHTML = '<p class="no-missions">Aucune mission disponible pour le moment</p>';
+        container.innerHTML = '<p class="no-missions">Aucune mission disponible</p>';
         return;
     }
 
     missions.forEach(mission => {
         const missionElement = document.createElement("div");
         missionElement.className = "mission";
+        missionElement.dataset.missionId = mission.id;
+        
         missionElement.innerHTML = `
             <h2>${mission.titre}</h2>
             <div class="info">
@@ -169,16 +323,32 @@ function displayMissions(missions) {
                 <h6>Budget :</h6>
                 <p>${mission.budget} DA</p>
             </div>
+            <div class="info">
+                <h6>Statut :</h6>
+                <p>${mission.statut}</p>
+            </div>
             <div class="boutons">
-                        <button  >MODIFIER</button>
-                        <button  >SUPPRIMER</button>
-                    </div>
+                <button id="modifier">MODIFIER</button>
+            </div>
         `;
         container.appendChild(missionElement);
     });
 }
 
-    </script>
+// Affichage des erreurs
+function showError(message) {
+    const container = document.getElementById("missions-container");
+    container.innerHTML = `
+        <div class="error-message">
+            <p>${message}</p>
+            <button onclick="loadMissions()">Réessayer</button>
+        </div>
+    `;
+}
+
+// Variable globale
+let currentMissionId = null;
+  </script>
 
 
     

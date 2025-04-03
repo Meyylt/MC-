@@ -1,0 +1,84 @@
+.popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+  }
+  .popup-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 700px; 
+    height: 500px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+  }
+  .popup-content p{
+    font-size: 30px;
+  }
+  .close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.icon-success {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+}
+.form {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  border-bottom: 2px solid #e0e0e0;
+  font-size: 1rem;
+  background: transparent;
+  outline: none;
+  transition: all 0.3s;
+  font-family: "Poppins", sans-serif;
+  margin-top: 20px;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-bottom: 2px solid #043b1d;
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+.modif {
+  width: 200px;
+  padding: 12px;
+  background-color: #003912;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: 'Raleway', sans-serif;
+  font-size: 20px;
+  margin-top: 10px;
+ 
+}

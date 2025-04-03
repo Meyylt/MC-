@@ -63,21 +63,18 @@ router.get("/", (req, res) => {
 router.get("/missions", authMiddleware, (req, res) => {
     const idClient = req.user.idClient; // Récupérer l'idClient de l'utilisateur connecté
     const sql = `
-        SELECT 
-            m.idMission as id,
-            m.titre,
-            m.categorie,
-            m.description,
-            m.dureEstime,
-            m.budget,
-            m.statut,
-            u.nom as clientNom,
-            u.prenom as clientPrenom
-        FROM mission m
-        JOIN Client c ON m.idClient = c.idClient
-        JOIN Utilisateur u ON c.idUtilisateur = u.idUtilisateur
-        ORDER BY m.idMission DESC
-    `;
+    SELECT 
+        m.idMission as id,
+        m.titre,
+        m.categorie,
+        m.description,
+        m.dureEstime,
+        m.budget,
+        m.statut
+    FROM mission m
+    WHERE m.idClient = ?
+    ORDER BY m.idMission DESC
+`;
     
     
     bd.query(sql, [idClient], (err, results) => {
@@ -172,6 +169,128 @@ router.post("/:id/apply", authMiddleware, async (req, res) => {
     }
 });
 
+router.put("/:id", authMiddleware, (req, res) => {
+    const missionId = req.params.id;
+    const { titre, categorie, description, dureEstime, budget } = req.body;
+    const idClient = req.user.idClient;
+
+    console.log(`Tentative modification mission ID: ${missionId} par client ID: ${idClient}`);
+
+    // Validation améliorée
+    const errors = [];
+    if (!titre) errors.push("Le titre est requis");
+    if (!categorie) errors.push("La catégorie est requise");
+    if (!description) errors.push("La description est requise");
+    if (!dureEstime || isNaN(dureEstime)) errors.push("La durée estimée doit être un nombre");
+    if (!budget || isNaN(budget)) errors.push("Le budget doit être un nombre");
+
+    if (errors.length > 0) {
+        return res.status(400).json({
+            success: false,
+            message: "Erreur de validation",
+            errors
+        });
+    }
+
+    // Vérification propriétaire + existence mission
+    const checkQuery = `
+        SELECT idClient, statut 
+        FROM mission 
+        WHERE idMission = ? 
+        FOR UPDATE`; // Verrouillage pour éviter les conflits
+
+    bd.query(checkQuery, [missionId], (err, results) => {
+        if (err) {
+            console.error("Erreur vérification mission:", err);
+            return res.status(500).json({
+                success: false,
+                message: "Erreur base de données",
+                error: err.message
+            });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Mission introuvable"
+            });
+        }
+
+        const mission = results[0];
+
+        if (mission.idClient !== idClient) {
+            return res.status(403).json({
+                success: false,
+                message: "Non autorisé: vous n'êtes pas le propriétaire"
+            });
+        }
+
+        if (mission.statut === 'Terminé') {
+            return res.status(400).json({
+                success: false,
+                message: "Impossible de modifier une mission terminée"
+            });
+        }
+
+        // Mise à jour avec contrôle des types
+        const updateQuery = `
+            UPDATE mission 
+            SET 
+                titre = ?,
+                categorie = ?,
+                description = ?,
+                dureEstime = ?,
+                budget = ?
+            WHERE idMission = ? AND idClient = ?`;
+
+        const values = [
+            titre,
+            categorie,
+            description,
+            parseInt(dureEstime),
+            parseFloat(budget),
+            missionId,
+            idClient
+        ];
+
+        bd.query(updateQuery, values, (err, result) => {
+            if (err) {
+                console.error("Erreur mise à jour:", err);
+                return res.status(500).json({
+                    success: false,
+                    message: "Échec de la mise à jour",
+                    sqlError: err.sqlMessage
+                });
+            }
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Aucune modification effectuée"
+                });
+            }
+
+            // Récupération de la mission mise à jour
+            const getUpdatedQuery = "SELECT * FROM mission WHERE idMission = ?";
+            bd.query(getUpdatedQuery, [missionId], (err, updatedResults) => {
+                if (err || updatedResults.length === 0) {
+                    console.error("Erreur récupération mission:", err);
+                    return res.status(200).json({
+                        success: true,
+                        message: "Mission mise à jour mais erreur de récupération",
+                        missionId
+                    });
+                }
+
+                res.status(200).json({
+                    success: true,
+                    message: "Mission mise à jour avec succès",
+                    mission: updatedResults[0]
+                });
+            });
+        });
+    });
+});
 
 
 module.exports = router;

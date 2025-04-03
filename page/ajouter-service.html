@@ -34,7 +34,7 @@
             <textarea id="description" name="description" placeholder="Description" required rows="4"></textarea>
             <div class="price-delivery">
                 <input type="text" id="prix" name="prix" placeholder="Prix (DA)" required>
-                <input type="text" id="delais" name="delais" placeholder="Délai (ex: 3 jours)" required>
+                <input type="text" id="dureEstime" name="delais" placeholder="Délai (ex: 3 jours)" required>
             </div>
             <button type="submit" id="poster">Poster</button>
         </form>
@@ -43,7 +43,8 @@
     <div id="confirmationPopup" class="popup-overlay">
         <div class="popup-content">
           <img id="closePopup" src="../images/fermer.png" alt="Fermer" class="close-btn" />
-          <p>Votre mission a été postée avec succès.</p>
+          <p>Votre service a été postée avec succès.</p>
+          <button id="okButton">OK</button>
         </div>
       </div>
     <script src="../js/ajouterService.js"></script>
@@ -70,64 +71,77 @@
     <script src="../js/notif-pop-up.js"></script>
 
     <script>
-        document.getElementById('serviceForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    // Récupération des valeurs du formulaire
-    const titre = document.getElementById('titre').value;
-    const categorie = document.getElementById('categorie').value;
-    const description = document.getElementById('description').value;
-    const prix = document.getElementById('prix').value;
-    const delais = document.getElementById('delais').value;
-    
-    // Récupération du token depuis le localStorage
-    const token = localStorage.getItem('authToken');
-    
-    try {
-        const response = await fetch('http://localhost:3001/freelancers/ajouter-service', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
+         document.getElementById("serviceForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            // Récupération des valeurs du formulaire
+            const titre = document.getElementById("titre").value.trim();
+            const description = document.getElementById("description").value.trim();
+            const dureEstime = document.getElementById("dureEstime").value.trim();
+            const prix = document.getElementById("prix").value.trim();
+            const categorie = document.getElementById("categorie").value;
+
+            if (!titre || !description || !dureEstime|| !prix) {
+                alert("Veuillez remplir tous les champs obligatoires");
+                return;
+            }
+
+            if (isNaN(prix) || isNaN(dureEstime)) {
+                alert("Le prix et le délai doivent être des nombres valides");
+                return;
+            }
+
+            // Récupération du token JWT
+            const token = localStorage.getItem("authToken"); 
+            if (!token) {
+                alert("Vous devez être connecté pour ajouter un service");
+                window.location.href = "connexion.html";
+                return;
+            }
+
+            const serviceData = {
                 titre,
                 categorie,
                 description,
-                prix,
-                delais
-            })
-        });
-        
-        const data = await response.json();
-        
-        if (response.ok) {
-            // Afficher le popup de confirmation
-            document.getElementById('confirmationPopup').style.display = 'flex';
-            
-            // Optionnel: Rediriger après un délai
-            setTimeout(() => {
-                window.location.href = 'vitrine-freelancer.html';
-            }, 2000);
-        } else {
-            alert('Erreur: ' + (data.message || 'Erreur inconnue'));
-        }
-    } catch (error) {
-        console.error('Erreur:', error);
-        alert('Une erreur est survenue lors de l\'ajout du service');
-    }
-});
+                dureEstime: parseInt(dureEstime),
+                prix: parseFloat(prix)
+            };
 
-// Fermer le popup
-document.getElementById('closePopup').addEventListener('click', function() {
-    document.getElementById('confirmationPopup').style.display = 'none';
-});
-// Fermer le popup
-document.getElementById('closePopup').addEventListener('click', function() {
-    document.getElementById('confirmationPopup').style.display = 'none';
-    // Optionnel: rediriger vers une autre page
-    // window.location.href = '/mes-services.html';
-});
-    </script>
+            try {
+                const response = await fetch("http://localhost:3001/messervices/add", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify(serviceData),
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.message || "Erreur lors de la création du service");
+                }
+
+                document.getElementById("confirmationPopup").style.display = "flex";
+                document.getElementById("serviceForm").reset();
+                
+
+            } catch (error) {
+                console.error("Erreur :", error);
+                alert(`Erreur: ${error.message}`);
+            }
+        });
+      
+// Charger les services lors de la première ouverture de la page
+document.addEventListener("DOMContentLoaded", loadServices);
+
+        // Fermer le popup
+        document.getElementById("closePopup").addEventListener("click", () => {
+            document.getElementById("confirmationPopup").style.display = "none";
+        });
+     </script>
+
+    
 </body>
 </html>
