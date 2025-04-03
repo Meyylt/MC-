@@ -73,36 +73,116 @@ router.get("/mes-services", authMiddleware, (req, res) => {
     });
 });
 
-// Route pour modifier un service
-router.put("/messervices/modifier/:id", (req, res) => {
-    const { id } = req.params;
+// Route pour modifier un service (avec authentification)
+router.put("/modifier/:id", authMiddleware, (req, res) => {
+    const serviceId = req.params.id;
     const { titre, categorie, description, prix, dureEstime } = req.body;
+    const idFreelancer = req.user.idFreelancer; // Récupéré du middleware
 
     if (!titre || !categorie || !description || !prix || !dureEstime) {
-        return res.status(400).json({ message: "Tous les champs sont obligatoires." });
+        return res.status(400).json({ success: false, message: "Tous les champs sont obligatoires." });
+    }
+       // Validation améliorée
+    const errors = [];
+    if (!titre) errors.push("Le titre est requis");
+    if (!categorie) errors.push("La catégorie est requise");
+    if (!description) errors.push("La description est requise");
+    if (!dureEstime || isNaN(dureEstime)) errors.push("La durée estimée doit être un nombre");
+    if (!prix || isNaN(prix)) errors.push("Le prix doit être un nombre");
+
+    if (errors.length > 0) {
+        return res.status(400).json({
+            success: false,
+            message: "Erreur de validation",
+            errors
+        });
     }
 
-    // Mettre à jour le service dans la base de données
-    const query = `
-        UPDATE service 
-        SET Titre = ?, categorie = ?, description = ?, prix = ?, dureEstime = ?
-        WHERE idService = ?
-    `;
-    const values = [titre, categorie, description, prix, dureEstime, id];
 
-    bd.query(query, values)
-        .then(result => {
-            if (result.affectedRows > 0) {
-                res.json({ message: "Service modifié avec succès." });
-            } else {
-                res.status(404).json({ message: "Service non trouvé." });
+
+
+
+    // Vérifier d'abord que le service appartient bien au freelancer
+    const checkQuery = "SELECT idFreelancer FROM service WHERE idService = ?";
+    
+    bd.query(checkQuery, [serviceId], (err, results) => {
+        if (err) {
+            console.error("Erreur vérification service:", err);
+            return res.status(500).json({
+                success: false,
+                message: "Erreur base de données",
+                error: err.message
+            });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "service introuvable"
+            });
+           
+        }
+        const service= results[0];
+        if (service.idFreelancer !== idFreelancer) {
+            return res.status(403).json({
+                success: false,
+                message: "Non autorisé: vous n'êtes pas le propriétaire"
+            });
+        }
+
+
+        // Mettre à jour le service
+        const updateQuery = `
+            UPDATE service 
+            SET Titre = ?, categorie = ?, description = ?, prix = ?, dureEstime = ?
+            WHERE idService = ?
+        `;
+        const values = [
+            titre,
+            categorie,
+            description,
+            parseFloat(prix),
+            parseInt(dureEstime),
+            serviceId,
+            idFreelancer
+        ];
+
+        bd.query(updateQuery, values,(err, result) => {
+            if (err) {
+                console.error("Erreur mise à jour:", err);
+                return res.status(500).json({
+                    success: false,
+                    message: "Échec de la mise à jour",
+                    sqlError: err.sqlMessage
+                });
             }
-        })
-        .catch(error => {
-            console.error("Erreur lors de la modification du service:", error);
-            res.status(500).json({ message: "Une erreur est survenue lors de la modification du service." });
-        });
-});
+            if (result.affectedRows === 0) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Aucune modification effectuée"
+                });
+            }
+            const getUpdatedQuery = "SELECT * FROM service WHERE idService = ?";
+            bd.query(getUpdatedQuery, [serviceId], (err, updatedResults) => {
+                if (err || updatedResults.length === 0) {
+                    console.error("Erreur récupération service:", err);
+                    return res.status(200).json({
+                        success: true,
+                        message: "Mission mise à jour mais erreur de récupération",
+                        serviceId
+                    });
+                }
 
+                res.status(200).json({
+                    success: true,
+                    message: "Mission mise à jour avec succès",
+                    mission: updatedResults[0]
+                });
+            });
+
+            
+        });
+    });
+});
 
 module.exports = router;

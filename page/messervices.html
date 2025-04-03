@@ -130,152 +130,202 @@
 
 
     
-   <script>
-    let selectedServiceId = null; // Stocke l'ID du service à modifier
-
-document.addEventListener("DOMContentLoaded", function() {
-    const token = localStorage.getItem("authToken");
-    if (!token) {
-        window.location.href = "connexion.html";
-        return;
-    }
-    
-    loadServices(); // Charge les services existants
-});
-
-function loadServices() {
-    const token = localStorage.getItem("authToken");
-    
-    fetch("http://localhost:3001/messervices/mes-services", {
-        headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+        // Initialisation
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+            window.location.href = "connexion.html";
+            return;
         }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error("Erreur de chargement des services");
-        }
-        return response.json();
-    })
-    .then(services => {
-        displayServices(services);
-    })
-    .catch(error => {
-        console.error("Erreur:", error);
-        document.getElementById("services-container").innerHTML = `
-            <div class="error-message">
-                <p>${error.message}</p>
-                <button onclick="loadServices()">Réessayer</button>
-            </div>
-        `;
+    
+        await loadMissions();
+        setupEventListeners();
     });
-}
-
-function displayServices(services) {
-    const container = document.getElementById("services-container");
-    container.innerHTML = "";
-
-    if (!services || services.length === 0) {
-        container.innerHTML = '<p class="no-services">Aucun service disponible pour le moment</p>';
-        return;
-    }
-
-    services.forEach(service => {
-        const serviceElement = document.createElement("div");
-        serviceElement.className = "service";
-        serviceElement.innerHTML = `
-            <h2>${service.titre}</h2>
-            <div class="info">
-                <h6>Catégorie :</h6>
-                <p>${service.categorie}</p>
-            </div>
-            <div class="info">
-                <h6>Description :</h6>
-                <p>${service.description}</p>
-            </div>
-            <div class="info">
-                <h6>Temps estimé :</h6>
-                <p>${service.dureEstime} jours</p>
-            </div>
-            <div class="info">
-                <h6>Prix :</h6>
-                <p>${service.prix} DA</p>
-            </div>
-            <div class="boutons">
-                <button class="modifier-btn" data-id="${service.idService}" data-titre="${service.titre}"
-                    data-categorie="${service.categorie}" data-description="${service.description}"
-                    data-prix="${service.prix}" data-dureEstime="${service.dureEstime}">
-                    MODIFIER
-                </button>
-            </div>
-        `;
-        container.appendChild(serviceElement);
-    });
-
-    // Ajouter des écouteurs d'événements aux boutons "Modifier"
-    document.querySelectorAll(".modifier-btn").forEach(button => {
-        button.addEventListener("click", function () {
-            openModifierPopup(this);
+    
+    // Configuration des écouteurs d'événements
+    function setupEventListeners() {
+        // Gestion du clic sur Modifier
+        document.addEventListener("click", async (e) => {
+            if (e.target.id === "modifier") {
+                const serviceElement = e.target.closest(".service");
+                if (serviceElement) {
+                    openEditPopup(serviceElement);
+                }
+            }
+            
+          
         });
-    });
-}
-
-function openModifierPopup(button) {
-    selectedServiceId = button.getAttribute("data-id");
     
-    document.getElementById("titre").value = button.getAttribute("data-titre");
-    document.getElementById("categorie").value = button.getAttribute("data-categorie");
-    document.getElementById("description").value = button.getAttribute("data-description");
-    document.getElementById("prix").value = button.getAttribute("data-prix");
-    document.getElementById("dureEstime").value = button.getAttribute("data-dureEstime");
-
-    document.getElementById("modifierPopup").style.display = "flex";
-}
-
-document.getElementById("modifierpopup").addEventListener("click", function() {
-    const titre = document.getElementById("titre").value;
-    const categorie = document.getElementById("categorie").value;
-    const description = document.getElementById("description").value;
-    const prix = document.getElementById("prix").value;
-    const dureEstime = document.getElementById("dureEstime").value;
-
-    if (!titre || !categorie || !description || !prix || !dureEstime) {
-        alert("Veuillez remplir tous les champs !");
-        return;
-    }
-
-    const token = localStorage.getItem("authToken");
-
-    fetch(`http://localhost:3001/messervices/modifier/${selectedServiceId}`, {
-        method: "PUT",
-        headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ titre, categorie, description, prix, dureEstime })
-    })
-    .then(response => response.json())
-    .then(result => {
-        if (result.success) {
-            alert(result.message);
+        // Validation de la modification
+        document.getElementById("modifierpopup")?.addEventListener("click", handleEditSubmit);
+        
+        // Fermeture du popup
+        document.getElementById("closePopup")?.addEventListener("click", () => {
             document.getElementById("modifierPopup").style.display = "none";
-            loadServices(); // Recharge les services après la modification
-        } else {
-            alert(result.message);
+        });
+    };
+    
+    // Fonction pour ouvrir le popup de modification
+    function openEditPopup(serviceElement) {
+        currentServiceId = serviceElement.dataset.serviceId;
+        
+        const serviceData = {
+            titre: serviceElement.querySelector("h2").textContent,
+            categorie: serviceElement.querySelector(".info:nth-child(2) p").textContent,
+            description: serviceElement.querySelector(".info:nth-child(3) p").textContent,
+            prix: serviceElement.querySelector(".info:nth-child(5) p").textContent.replace(" DA", ""),
+            dureEstime: serviceElement.querySelector(".info:nth-child(4) p").textContent.replace(" jours", "")
+        };
+    
+        // Remplissage du formulaire
+        document.getElementById("titre").value = serviceData.titre;
+        document.getElementById("categorie").value = serviceData.categorie;
+        document.getElementById("description").value = serviceData.description;
+        document.getElementById("prix").value = serviceData.prix;
+        document.getElementById("dureEstime").value = serviceData.dureEstime;
+    
+        
+            document.querySelectorAll("#modifierPopup input, #modifierPopup select, #modifierPopup textarea").forEach(el => {
+                el.disabled = false;
+            });
+            document.getElementById("modifierpopup").disabled = false;
+        
+    
+        document.getElementById("modifierPopup").style.display = "flex";
+    }
+    
+    // Soumission du formulaire de modification
+    async function handleEditSubmit() {
+        const formData = {
+            titre: document.getElementById("titre").value.trim(),
+            categorie: document.getElementById("categorie").value,
+            description: document.getElementById("description").value.trim(),
+            dureEstime: document.getElementById("dureEstime").value.trim(),
+            prix: document.getElementById("prix").value.trim()
+        };
+    
+        // Validation
+        const errors = [];
+        if (!formData.titre) errors.push("Le titre est requis");
+        if (!formData.categorie) errors.push("La catégorie est requise");
+        if (!formData.description) errors.push("La description est requise");
+        if (!formData.dureEstime || isNaN(formData.dureEstime)) errors.push("La durée doit être un nombre valide");
+        if (!formData.prix || isNaN(formData.prix)) errors.push("Le budget doit être un nombre valide");
+    
+        if (errors.length > 0) {
+            alert("Erreurs :\n" + errors.join("\n"));
+            return;
         }
-    })
-    .catch(error => {
-        console.error("Erreur de modification:", error);
-        alert("Une erreur s'est produite.");
-    });
-});
-
-document.getElementById("closePopup").addEventListener("click", function() {
-    document.getElementById("modifierPopup").style.display = "none";
-});
-
-   </script>
+    
+        try {
+            const response = await fetch(`http://localhost:3001/messervices/modifier/${currentServiceId}`, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("authToken")}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    titre: formData.titre,
+                    categorie: formData.categorie,
+                    description: formData.description,
+                    prix: parseFloat(formData.prix),
+                    dureEstime: parseInt(formData.dureEstime)
+                })
+            });
+    
+            const data = await response.json();
+    
+            if (!response.ok) {
+                throw new Error(data.message || "Erreur lors de la modification");
+            }
+    
+            alert("service modifiée avec succès !");
+            document.getElementById("modifierPopup").style.display = "none";
+            await loadMissions();
+        } catch (error) {
+            console.error("Erreur:", error);
+            alert(`Erreur: ${error.message}`);
+        }
+    }
+    
+    // Chargement des missions
+    async function loadMissions() {
+        try {
+            const response = await fetch("http://localhost:3001/messervices/mes-services", {
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("authToken")}`,
+                    "Content-Type": "application/json"
+                }
+            });
+    
+            if (!response.ok) {
+                throw new Error(await response.text());
+            }
+    
+            const services = await response.json();
+            displayMissions(services);
+        } catch (error) {
+            console.error("Erreur de chargement:", error);
+            showError("Erreur de chargement des missions");
+        }
+    }
+    
+    // Affichage des missions
+    function displayMissions(services) {
+        const container = document.getElementById("services-container");
+        container.innerHTML = "";
+    
+        if (services.length === 0) {
+            container.innerHTML = '<p class="no-missions">Aucun service disponible</p>';
+            return;
+        }
+    
+        services.forEach(service => {
+            const serviceElement = document.createElement("div");
+            serviceElement.className = "service";
+            serviceElement.dataset.serviceId = service.id;
+            
+            serviceElement.innerHTML = `
+                <h2>${service.titre}</h2>
+                <div class="info">
+                    <h6>Catégorie :</h6>
+                    <p>${service.categorie}</p>
+                </div>
+                <div class="info">
+                    <h6>Description :</h6>
+                    <p>${service.description}</p>
+                </div>
+                <div class="info">
+                    <h6>Temps estimé :</h6>
+                    <p>${service.dureEstime} jours</p>
+                </div>
+                <div class="info">
+                    <h6>Budget :</h6>
+                    <p>${service.prix} DA</p>
+                </div>
+                <div class="boutons">
+                    <button id="modifier">MODIFIER</button>
+                </div>
+            `;
+            container.appendChild(serviceElement);
+        });
+    }
+    
+    // Affichage des erreurs
+    function showError(message) {
+        const container = document.getElementById("services-container");
+        container.innerHTML = `
+            <div class="error-message">
+                <p>${message}</p>
+                <button onclick="loadMissions()">Réessayer</button>
+            </div>
+        `;
+    }
+    
+    // Variable globale
+    let currentServiceId = null;
+      </script>
     
     
 </body>
