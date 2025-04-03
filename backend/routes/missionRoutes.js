@@ -16,7 +16,7 @@ router.post("/add", authMiddleware, (req, res) => {
     }
 
     const query = `INSERT INTO mission (titre, categorie, description, dureEstime, budget, statut, idClient) 
-                   VALUES (?, ?, ?, ?, ?, 'En cours', ?)`;
+                   VALUES (?, ?, ?, ?, ?, 'En attente', ?)`;
 
     bd.query(query, [titre, categorie, description, dureEstime, budget, idClient], (err, result) => {
         if (err) {
@@ -47,6 +47,7 @@ router.get("/", (req, res) => {
         FROM mission m
         JOIN Client c ON m.idClient = c.idClient
         JOIN Utilisateur u ON c.idUtilisateur = u.idUtilisateur
+        WHERE m.statut = 'En attente'
         ORDER BY m.idMission DESC
     `;
     
