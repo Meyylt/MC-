@@ -147,53 +147,52 @@
                 </div>
                 
             `;
-            document.getElementById("apply-btn").addEventListener("click", () => {
-        applyToMission(mission.id);
-    });
             
         }
-
-        async function applyToMission(missionId) {
-    try {
-        const token = localStorage.getItem("authToken");
-        if (!token) {
-            throw new Error("Vous devez être connecté pour postuler");
+        // Gestion de la postulation
+document.addEventListener("click", async (e) => {
+    if (e.target.id === "apply-btn") {
+        e.preventDefault();
+        
+        // Récupérer l'ID de la mission depuis l'URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const missionId = urlParams.get('id');
+        
+        if (!missionId) {
+            alert("Erreur: Impossible de trouver l'ID de la mission");
+            return;
         }
 
-        // Vérifier le rôle de l'utilisateur
-        const userData = JSON.parse(localStorage.getItem("userData"));
-        if (userData.role !== "freelancer") {
-            throw new Error("Seuls les freelancers peuvent postuler aux missions");
-        }
+        try {
+            const token = localStorage.getItem("authToken");
+            const response = await fetch("http://localhost:3001/candidateures/postuler", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ idMission: missionId })
+            });
 
-        const response = await fetch(`http://localhost:3001/missions/${missionId}/apply`, {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Erreur lors de la postulation");
             }
-        });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || "Erreur lors de la postulation");
+            alert(data.message);
+            // Optionnel: Désactiver le bouton après postulation
+            e.target.disabled = true;
+            e.target.textContent = "Postulation envoyée";
+
+        } catch (error) {
+            console.error("Erreur:", error);
+            alert(error.message);
         }
-
-        const result = await response.json();
-        alert("Votre candidature a été envoyée avec succès !");
-        
-        // Désactiver le bouton après postulation
-        const btn = document.getElementById("apply-btn");
-        btn.disabled = true;
-        btn.textContent = "Candidature envoyée";
-        btn.style.backgroundColor = "#cccccc";
-        
-    } catch (error) {
-        console.error("Erreur:", error);
-        alert(`Erreur: ${error.message}`);
     }
-}
+});
 
+       
      </script>
     <script src="../js/notif-pop-up.js"></script>
     <script src="../js/profil-pop-up.js"></script>

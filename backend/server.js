@@ -31,6 +31,8 @@ const transactionRoutes = require("./routes/transactionRoutes");
 app.use("/transactions", transactionRoutes);
 const messerviceRoutes = require("./routes/messervice");
 app.use("/messervices", messerviceRoutes);
+const candidateureRoutes = require("./routes/candidateureRoutes");
+app.use("/candidateures", candidateureRoutes);
 
 // 🌍 Route d'accueil
 app.get("/", (req, res) => {

@@ -122,53 +122,7 @@ router.get("/:id", (req, res) => {
     });
 });
 
-// Ajoutez cette route à votre fichier de routes missions
-router.post("/:id/apply", authMiddleware, async (req, res) => {
-    const missionId = req.params.id;
-    const freelancerId = req.user.idFreelancer; // Assurez-vous que le middleware fournit idFreelancer
 
-    if (!freelancerId) {
-        return res.status(403).json({ message: "Seuls les freelancers peuvent postuler" });
-    }
-
-    try {
-        // 1. Vérifier si le freelancer a déjà postulé
-        const checkSql = `SELECT * FROM candidateure WHERE idMission = ? AND idFreelancer = ?`;
-        const [existing] = await bd.query(checkSql, [missionId, freelancerId]);
-
-        if (existing.length > 0) {
-            return res.status(400).json({ message: "Vous avez déjà postulé à cette mission" });
-        }
-
-        // 2. Récupérer l'idClient associé à la mission
-        const missionSql = `SELECT idClient FROM mission WHERE idMission = ?`;
-        const [mission] = await bd.query(missionSql, [missionId]);
-
-        if (mission.length === 0) {
-            return res.status(404).json({ message: "Mission non trouvée" });
-        }
-
-        const idClient = mission[0].idClient;
-
-        // 3. Insérer la candidature
-        const insertSql = `INSERT INTO candidateure (statut, idClient, idFreelancer, idMission) VALUES (?, ?, ?, ?)`;
-        const [result] = await bd.query(insertSql, [
-            'En attente',
-            idClient,
-            freelancerId,
-            missionId
-        ]);
-
-        res.status(201).json({
-            message: "Candidature envoyée avec succès",
-            candidateureId: result.insertId
-        });
-
-    } catch (err) {
-        console.error("Erreur MySQL:", err);
-        res.status(500).json({ message: "Erreur serveur" });
-    }
-});
 
 router.put("/:id", authMiddleware, (req, res) => {
     const missionId = req.params.id;
