@@ -31,6 +31,140 @@ router.get("/", (req, res) => {
         res.status(200).json(results);
     });
 });
+router.get("/musique", (req, res) => {
+    const sql = `
+        SELECT 
+            s.idService as id,
+            s.Titre,
+            s.categorie,
+            s.description,
+            s.prix,
+            s.dureEstime,
+            u.nom as freelancerNom,
+            u.prenom as freelancerPrenom
+        FROM service s
+        JOIN Freelancer f ON s.idFreelancer = f.idFreelancer
+        JOIN Utilisateur u ON f.idUtilisateur = u.idUtilisateur
+        WHERE s.categorie = 'Musique & Audio'
+        ORDER BY s.idService DESC
+    `;
+    
+    bd.query(sql, (err, results) => {
+        if(err) {
+            console.error("Erreur MySQL:", err);
+            return res.status(500).json({ error: "Erreur serveur" });
+        }
+        res.status(200).json(results);
+    });
+});
+router.get("/video", (req, res) => {
+    const sql = `
+        SELECT 
+            s.idService as id,
+            s.Titre,
+            s.categorie,
+            s.description,
+            s.prix,
+            s.dureEstime,
+            u.nom as freelancerNom,
+            u.prenom as freelancerPrenom
+        FROM service s
+        JOIN Freelancer f ON s.idFreelancer = f.idFreelancer
+        JOIN Utilisateur u ON f.idUtilisateur = u.idUtilisateur
+        WHERE s.categorie = 'Vidéo & animation'
+        ORDER BY s.idService DESC
+    `;
+    
+    bd.query(sql, (err, results) => {
+        if(err) {
+            console.error("Erreur MySQL:", err);
+            return res.status(500).json({ error: "Erreur serveur" });
+        }
+        res.status(200).json(results);
+    });
+});
+
+router.get("/redaction", (req, res) => {
+    const sql = `
+        SELECT 
+            s.idService as id,
+            s.Titre,
+            s.categorie,
+            s.description,
+            s.prix,
+            s.dureEstime,
+            u.nom as freelancerNom,
+            u.prenom as freelancerPrenom
+        FROM service s
+        JOIN Freelancer f ON s.idFreelancer = f.idFreelancer
+        JOIN Utilisateur u ON f.idUtilisateur = u.idUtilisateur
+        WHERE s.categorie = 'Rédaction & Traduction'
+        ORDER BY s.idService DESC
+    `;
+    
+    bd.query(sql, (err, results) => {
+        if(err) {
+            console.error("Erreur MySQL:", err);
+            return res.status(500).json({ error: "Erreur serveur" });
+        }
+        res.status(200).json(results);
+    });
+});
+
+router.get("/developpement", (req, res) => {
+    const sql = `
+        SELECT 
+            s.idService as id,
+            s.Titre,
+            s.categorie,
+            s.description,
+            s.prix,
+            s.dureEstime,
+            u.nom as freelancerNom,
+            u.prenom as freelancerPrenom
+        FROM service s
+        JOIN Freelancer f ON s.idFreelancer = f.idFreelancer
+        JOIN Utilisateur u ON f.idUtilisateur = u.idUtilisateur
+        WHERE s.categorie = 'Développement Web'
+        ORDER BY s.idService DESC
+    `;
+    
+    bd.query(sql, (err, results) => {
+        if(err) {
+            console.error("Erreur MySQL:", err);
+            return res.status(500).json({ error: "Erreur serveur" });
+        }
+        res.status(200).json(results);
+    });
+});
+
+router.get("/graphisme", (req, res) => {
+    const sql = `
+        SELECT 
+            s.idService as id,
+            s.Titre,
+            s.categorie,
+            s.description,
+            s.prix,
+            s.dureEstime,
+            u.nom as freelancerNom,
+            u.prenom as freelancerPrenom
+        FROM service s
+        JOIN Freelancer f ON s.idFreelancer = f.idFreelancer
+        JOIN Utilisateur u ON f.idUtilisateur = u.idUtilisateur
+        WHERE s.categorie = 'Graphisme & Design'
+        ORDER BY s.idService DESC
+    `;
+    
+    bd.query(sql, (err, results) => {
+        if(err) {
+            console.error("Erreur MySQL:", err);
+            return res.status(500).json({ error: "Erreur serveur" });
+        }
+        res.status(200).json(results);
+    });
+});
+
 // Récupérer un service spécifique par ID
 router.get("/:id", (req, res) => {
     const serviceId = req.params.id;
@@ -99,5 +233,7 @@ router.get("/mes-services", authMiddleware, (req, res) => {
         res.status(200).json(results);
     });
 });
+
+
 
 module.exports = router;
