@@ -25,19 +25,20 @@
         <input type="text" id="titre" name="titre" placeholder="Titre" required />
         <select id="categorie" name="categorie">
           <option>Musique & Audio</option>
-          <option>Graphisme & Design</option>
-          <option>Développement Web</option>
-          <option>Rédaction & Traduction</option>
-          <option>Vidéo & animation</option>
+                <option>Graphisme & Design</option>
+                <option>Développement Web</option>
+                <option>Rédaction & Traduction</option>
+                <option>Vidéo & animation</option>
         </select>
-        <textarea id="description" name="description" placeholder="Description" required rows="4"></textarea>
-            <div class="price-delivery">
-                <input type="text" id="prix" name="prix" placeholder="Prix (DA)" required>
-                <input type="text" id="dureEstime" name="delais" placeholder="Délai (ex: 3 jours)" required>
-            </div>
-            <button type="submit" id="poster">Poster</button>
+        <input type="text" id="description" name="description" placeholder="Description" required />
+        <input type="text" id="prix" name="prix" placeholder="DA" required />
+        <input type="text" id="delais" name="delais" placeholder="Nombres de jours" required />
+        <button type="submit" id="poster">Poster</button>
       </form>
-   
+    </div>
+      <!-- Conteneur pour afficher les missions -->
+      <div id="missionsContainer" class="missions-container"></div>
+    </main>
       
     <div class="pop-up-profil">
       <a href="#">Mon compte</a>
@@ -148,7 +149,44 @@
 });
 
     // Fonction pour charger et afficher les missions
-   
+    async function loadMissions() {
+      const container = document.getElementById("missionsContainer");
+      
+      try {
+        container.innerHTML = "<p>Chargement des missions...</p>";
+        
+        const response = await fetch("http://localhost:3001/missions");
+        const missions = await response.json();
+
+        if (missions.length === 0) {
+            container.innerHTML = "<p>Aucune mission disponible pour le moment</p>";
+            return;
+        }
+
+        container.innerHTML = ""; // Vider le conteneur
+
+        missions.forEach(mission => {
+          const missionElement = `
+            <div class="mission-card">
+              <h3>${mission.titre}</h3>
+              <p><strong>Catégorie:</strong> ${mission.categorie }</p>
+              <p>${mission.description}</p>
+              <p><strong>Budget:</strong> ${mission.budget} DA</p>
+              <p><strong>Durée:</strong> ${mission.dureEstime} jours</p>
+              <p><strong>Statut:</strong> ${mission.statut}</p>
+            </div>
+          `;
+          container.insertAdjacentHTML("beforeend", missionElement);
+        });
+      } catch(error) {
+        console.error("Erreur: ", error);
+        container.innerHTML = "<p>Impossible de charger les missions. Veuillez réessayer.</p>";
+      }
+    }
+
+    // Charger les missions au démarrage
+    document.addEventListener("DOMContentLoaded", loadMissions);
+    
     // Fermer le popup
     document.getElementById("closePopup").addEventListener("click", () => {
         document.getElementById("confirmationPopup").style.display = "none";

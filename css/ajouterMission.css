@@ -6,7 +6,6 @@ body {
   align-items: center;
   background-color: #f8f8f8;
   margin-top: 10px;
-  min-height: 100vh;
 }
 .form-g{
 margin-top: 40px;
@@ -33,6 +32,7 @@ h4 {
 form {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 15px;
   width: 100%;
 }
@@ -41,47 +41,40 @@ form {
 input,
 select,
 textarea {
-  width: 100%;
-  padding: 0.8rem;
+  width: 40%; /* Prend toute la largeur du formulaire */
+  max-width: 350px;
+  padding: 8px;
   border: none;
-  border-bottom: 2px solid #e0e0e0;
-  font-size: 1rem;
+  border-bottom: 1px solid green;
+  font-size: 16px;
   background: transparent;
   outline: none;
-  transition: all 0.3s;
-  font-family: "Poppins", sans-serif;
+  text-align: center;
+  transition: border-color 0.3s ease-in-out;
 }
 
 input:focus,
 select:focus,
 textarea:focus {
-  border-bottom: 2px solid #043b1d;
+  border-bottom: 2px solid darkgreen;
 }
-
-textarea {
-  min-height: 100px;
-  resize: vertical;
-}
-
 
 /* Bouton */
-button[type="submit"] {
+button {
   background-color: #043b1d;
   color: white;
-  padding: 0.8rem;
+  padding: 12px 20px;
   border: none;
-  border-radius: 30px;
+  border-radius: 25px;
   cursor: pointer;
-  font-size: 1rem;
-  font-weight: 500;
-  transition: all 0.3s;
-  margin-top: 0.5rem;
+  font-size: 16px;
+  width: 80%;
+  max-width: 200px;
+  transition: background 0.3s;
 }
 
-button[type="submit"]:hover {
+button:hover {
   background-color: #035b2a;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* En-tête (navbar) */
