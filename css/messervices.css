@@ -21,6 +21,11 @@ nav{
     padding-left: 40px;
     
 }
+a{
+    
+    text-decoration: none;
+    color: black;
+}
 nav a {
     margin: 0 10px;
     text-decoration: none;

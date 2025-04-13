@@ -51,7 +51,11 @@ header input{
     cursor: pointer;
     margin: 10px;
 }
-
+a{
+    
+    text-decoration: none;
+    color: black;
+}
 nav{
     background-color: #003912;
     height: 100px;
