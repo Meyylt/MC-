@@ -11,6 +11,7 @@
     border-radius: 10px;
     padding: 10px;
     z-index: 10;
+    overflow-y: auto;
 }
 .notifications{
     margin-top: 20px;

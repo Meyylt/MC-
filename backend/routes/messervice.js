@@ -4,10 +4,24 @@ const router = express.Router();
 const bd = require("../bd");
 
 const authMiddleware = require("../middleware/auth");
+const multer = require("multer");
+const path = require("path");
+
+// 📸 Config stockage image (copiée ici aussi, ou à centraliser si tu veux)
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // dossier de destination
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+const upload = multer({ storage });
 
 // Ajouter un service (protégé)
-router.post("/add", authMiddleware, (req, res) => {
+router.post("/add", authMiddleware, upload.single("image"), (req, res) => {
     const { titre, categorie, description, dureEstime, prix } = req.body;
+    const image = req.file ? req.file.filename : null;
     const idFreelancer = req.user.idFreelancer; // Assure-toi que `idFreelancer` est bien récupéré
 
     console.log("Données reçues :", req.body);
@@ -22,10 +36,10 @@ router.post("/add", authMiddleware, (req, res) => {
         return res.status(400).json({ message: "Duree estimée et prix doivent être des nombres" });
     }
 
-    const query = `INSERT INTO service (Titre, categorie, description, dureEstime, prix, idFreelancer) 
-                   VALUES (?, ?, ?, ?, ?, ?)`;
+    const query = `INSERT INTO service (Titre, categorie, description, dureEstime, prix, idFreelancer,image) 
+                   VALUES (?, ?, ?, ?, ?, ?,?)`;
 
-    bd.query(query, [titre, categorie, description, dureEstime, prix, idFreelancer], (err, result) => {
+    bd.query(query, [titre, categorie, description, dureEstime, prix, idFreelancer,image], (err, result) => {
         if (err) {
             console.error("❌ Erreur lors de l'ajout du service :", err);
             return res.status(500).json({ message: "Erreur serveur" });
@@ -54,6 +68,7 @@ router.get("/mes-services", authMiddleware, (req, res) => {
             s.description,
             s.prix,
             s.dureEstime,
+            s.image,
             u.nom as freelancerNom,
             u.prenom as freelancerPrenom,
             u.idUtilisateur as freelancerId
@@ -74,115 +89,65 @@ router.get("/mes-services", authMiddleware, (req, res) => {
 });
 
 // Route pour modifier un service (avec authentification)
-router.put("/modifier/:id", authMiddleware, (req, res) => {
-    const serviceId = req.params.id;
-    const { titre, categorie, description, prix, dureEstime } = req.body;
-    const idFreelancer = req.user.idFreelancer; // Récupéré du middleware
 
-    if (!titre || !categorie || !description || !prix || !dureEstime) {
-        return res.status(400).json({ success: false, message: "Tous les champs sont obligatoires." });
-    }
-       // Validation améliorée
-    const errors = [];
-    if (!titre) errors.push("Le titre est requis");
-    if (!categorie) errors.push("La catégorie est requise");
-    if (!description) errors.push("La description est requise");
-    if (!dureEstime || isNaN(dureEstime)) errors.push("La durée estimée doit être un nombre");
-    if (!prix || isNaN(prix)) errors.push("Le prix doit être un nombre");
+router.put("/modifier/:id", authMiddleware, upload.single("image"), (req, res) => {
+    const idService = req.params.id;
+    const { titre, categorie, description, dureEstime, prix } = req.body;
+    const nouvelleImage = req.file ? req.file.filename : null;
 
-    if (errors.length > 0) {
-        return res.status(400).json({
-            success: false,
-            message: "Erreur de validation",
-            errors
-        });
-    }
+    // Vérification de l'appartenance du service au freelancer connecté
+    const idFreelancer = req.user.idFreelancer;
 
-
-
-
-
-    // Vérifier d'abord que le service appartient bien au freelancer
-    const checkQuery = "SELECT idFreelancer FROM service WHERE idService = ?";
-    
-    bd.query(checkQuery, [serviceId], (err, results) => {
+    // Récupérer d'abord l'image actuelle si aucune n'est fournie
+    const getImageQuery = "SELECT image FROM service WHERE idService = ? AND idFreelancer = ?";
+    bd.query(getImageQuery, [idService, idFreelancer], (err, rows) => {
         if (err) {
-            console.error("Erreur vérification service:", err);
-            return res.status(500).json({
-                success: false,
-                message: "Erreur base de données",
-                error: err.message
-            });
+            console.error("Erreur lors de la récupération de l'image :", err);
+            return res.status(500).json({ message: "Erreur serveur" });
         }
 
-        if (results.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: "service introuvable"
-            });
-           
-        }
-        const service= results[0];
-        if (service.idFreelancer !== idFreelancer) {
-            return res.status(403).json({
-                success: false,
-                message: "Non autorisé: vous n'êtes pas le propriétaire"
-            });
+        if (rows.length === 0) {
+            return res.status(404).json({ message: "Service non trouvé ou non autorisé" });
         }
 
+        const imageFinale = nouvelleImage || rows[0].image;
 
-        // Mettre à jour le service
         const updateQuery = `
             UPDATE service 
-            SET Titre = ?, categorie = ?, description = ?, prix = ?, dureEstime = ?
-            WHERE idService = ?
+            SET titre = ?, categorie = ?, description = ?, dureEstime = ?, prix = ?, image = ?
+            WHERE idService = ? AND idFreelancer = ?
         `;
-        const values = [
-            titre,
-            categorie,
-            description,
-            parseFloat(prix),
-            parseInt(dureEstime),
-            serviceId,
-            idFreelancer
-        ];
-
-        bd.query(updateQuery, values,(err, result) => {
+        bd.query(updateQuery, [titre, categorie, description, dureEstime, prix, imageFinale, idService, idFreelancer], (err, result) => {
             if (err) {
-                console.error("Erreur mise à jour:", err);
-                return res.status(500).json({
-                    success: false,
-                    message: "Échec de la mise à jour",
-                    sqlError: err.sqlMessage
-                });
+                console.error("Erreur lors de la mise à jour :", err);
+                return res.status(500).json({ message: "Erreur lors de la mise à jour" });
             }
-            if (result.affectedRows === 0) {
-                return res.status(404).json({
-                    success: false,
-                    message: "Aucune modification effectuée"
-                });
-            }
-            const getUpdatedQuery = "SELECT * FROM service WHERE idService = ?";
-            bd.query(getUpdatedQuery, [serviceId], (err, updatedResults) => {
-                if (err || updatedResults.length === 0) {
-                    console.error("Erreur récupération service:", err);
-                    return res.status(200).json({
-                        success: true,
-                        message: "Mission mise à jour mais erreur de récupération",
-                        serviceId
-                    });
-                }
 
-                res.status(200).json({
-                    success: true,
-                    message: "Mission mise à jour avec succès",
-                    mission: updatedResults[0]
-                });
-            });
-
-            
+            res.json({ message: "✅ Service modifié avec succès !" });
         });
     });
 });
+
+router.delete("/supprimer/:id", authMiddleware, async (req, res) => {
+    const idService = req.params.id;
+    
+  const sql = "DELETE FROM service WHERE idService = ?";
+  bd.query(sql, [idService], (err, result) => {
+    if (err) {
+        console.error("Erreur lors de la suppression du service:", err);
+        return res.status(500).json({ message: "Erreur serveur" });
+    }
+
+    if (result.affectedRows === 0) {
+        return res.status(404).json({ message: "service non trouvé" });
+    }
+
+    res.status(200).json({ message: "service supprimé avec succès" });
+});
+
+    
+});
+
+    
 
 module.exports = router;

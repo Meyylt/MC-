@@ -48,7 +48,7 @@
         <div class="container">
             <div class="profile">
                 <div>
-                    <img src="../images/user 1 (1).png" alt="Image" > 
+                    <img id="client-profil" src="../images/user 1 (1).png" alt="Image" > 
                 </div>
                 <h1 id="client-username">...</h1>
                 <div class="information">
@@ -70,6 +70,7 @@
         <div class="popup-content">
           <img id="closePopup" src="../images/fermer.png" alt="Fermer" class="close-btn" />
           <p>Entrer les modification a effectuer</p>
+          <div class="jsp">
           <div class="formamodifier">
             <input type="text" placeholder="Nom Utilisateure" id="nomutilisateure">
         <p class="error-message" id="error-nomutilisateure"></p>
@@ -88,9 +89,23 @@
 
 
         <button class="modif" id="modifierpopup">modifier</button>
+        
+        </div>
+        <div class="form-group full-width">
+            <label for="profilImages">Images du profil</label>
+            <div class="file-upload">
+                <input type="file" id="profilImages" multiple accept="image/*">
+                <label for="profilImages" class="upload-btn">
+                    <i class="fas fa-cloud-upload-alt"></i> Choisir des images
+                </label>
+                <span id="file-count">0 fichier(s) sélectionné(s)</span>
+            </div>
+            <div id="imagePreview" class="image-preview"></div>
+            <small>Format recommandé : JPEG ou PNG (max 2MB par image)</small>
         </div>
         
         </div>
+    </div>
       </div>
       <script src="../js/modifierprofil.js"></script>
 
@@ -129,6 +144,41 @@
     
 
    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+            // Gestion de l'upload d'images
+            const fileInput = document.getElementById('profilImages');
+            const fileCount = document.getElementById('file-count');
+            const imagePreview = document.getElementById('imagePreview');
+            
+            fileInput.addEventListener('change', function(e) {
+                const files = e.target.files;
+                fileCount.textContent = `${files.length} fichier(s) sélectionné(s)`;
+                
+                imagePreview.innerHTML = '';
+                
+                if (files) {
+                    Array.from(files).forEach(file => {
+                        if (file.type.startsWith('image/')) {
+                            const reader = new FileReader();
+                            
+                            reader.onload = function(event) {
+                                const img = document.createElement('img');
+                                img.src = event.target.result;
+                                imagePreview.appendChild(img);
+                            }
+                            
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                }
+            });
+            
+            
+           
+           
+           
+        });
+
     document.addEventListener('DOMContentLoaded', async function() {
     try {
         // 1. Récupérer le token JWT stocké
@@ -174,6 +224,10 @@
         document.getElementById('client-date-naissance').textContent = formattedDate;
         document.getElementById('client-email').textContent = clientData.email;
         document.getElementById('client-username').textContent = `@${clientData.nomUtilisateur}`;
+        // 3. Affichage de l'image de profil
+        document.getElementById('client-profil').src = `../backend/uploads/${clientData.image}`;
+        
+        
         
         // 3. Pré-remplir le formulaire dans le pop-up
         document.getElementById('nomutilisateure').value = clientData.nomUtilisateur || '';
@@ -213,15 +267,26 @@ document.getElementById('modifierpopup').addEventListener('click', async functio
             window.location.href = 'connexion.html';
             return;
         }
+        const form = new FormData();
 
-        // Récupération des valeurs
-        const formData = {
-            nomutilisateure: document.getElementById('nomutilisateure').value.trim(),
-            nom: document.getElementById('nom').value.trim(),
-            prenom: document.getElementById('prenom').value.trim(),
-            daten: document.getElementById('daten').value,
-            email: document.getElementById('email').value.trim()
-        };
+            form.append("nomutilisateure", document.getElementById('nomutilisateure').value.trim());
+            form.append("nom", document.getElementById('nom').value.trim());
+            form.append("prenom", document.getElementById('prenom').value.trim());
+            form.append("daten", document.getElementById('daten').value);
+            form.append("email", document.getElementById('email').value.trim());
+            const fileInput = document.getElementById("profilImages");
+    if (fileInput.files.length > 0) {
+        // Envoi seulement du premier fichier (compatible avec upload.single)
+        form.append("image", fileInput.files[0]);
+    }
+
+    const formData = {
+    nomutilisateure: document.getElementById('nomutilisateure').value.trim(),
+    nom: document.getElementById('nom').value.trim(),
+    prenom: document.getElementById('prenom').value.trim(),
+    daten: document.getElementById('daten').value,
+    email: document.getElementById('email').value.trim(),
+};
 
         // Réinitialisation des erreurs
         document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
@@ -237,10 +302,9 @@ document.getElementById('modifierpopup').addEventListener('click', async functio
         const response = await fetch('http://localhost:3001/clients/modifier-profil', {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify(formData)
+            body: form
         });
 
         if (!response.ok) {

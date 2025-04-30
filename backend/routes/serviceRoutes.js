@@ -16,7 +16,9 @@ router.get("/", (req, res) => {
             s.prix,
             s.dureEstime,
             u.nom as freelancerNom,
-            u.prenom as freelancerPrenom
+            s.image,
+            u.nomutilisateure ,
+            u.image as imagefree
         FROM service s
         JOIN Freelancer f ON s.idFreelancer = f.idFreelancer
         JOIN Utilisateur u ON f.idUtilisateur = u.idUtilisateur
@@ -41,7 +43,9 @@ router.get("/musique", (req, res) => {
             s.prix,
             s.dureEstime,
             u.nom as freelancerNom,
-            u.prenom as freelancerPrenom
+            s.image,
+            u.nomutilisateure ,
+            u.image as imagefree
         FROM service s
         JOIN Freelancer f ON s.idFreelancer = f.idFreelancer
         JOIN Utilisateur u ON f.idUtilisateur = u.idUtilisateur
@@ -67,7 +71,9 @@ router.get("/video", (req, res) => {
             s.prix,
             s.dureEstime,
             u.nom as freelancerNom,
-            u.prenom as freelancerPrenom
+            s.image,
+            u.nomutilisateure ,
+            u.image as imagefree
         FROM service s
         JOIN Freelancer f ON s.idFreelancer = f.idFreelancer
         JOIN Utilisateur u ON f.idUtilisateur = u.idUtilisateur
@@ -94,7 +100,9 @@ router.get("/redaction", (req, res) => {
             s.prix,
             s.dureEstime,
             u.nom as freelancerNom,
-            u.prenom as freelancerPrenom
+            s.image,
+            u.nomutilisateure ,
+            u.image as imagefree
         FROM service s
         JOIN Freelancer f ON s.idFreelancer = f.idFreelancer
         JOIN Utilisateur u ON f.idUtilisateur = u.idUtilisateur
@@ -121,7 +129,9 @@ router.get("/developpement", (req, res) => {
             s.prix,
             s.dureEstime,
             u.nom as freelancerNom,
-            u.prenom as freelancerPrenom
+            s.image,
+            u.nomutilisateure ,
+            u.image as imagefree
         FROM service s
         JOIN Freelancer f ON s.idFreelancer = f.idFreelancer
         JOIN Utilisateur u ON f.idUtilisateur = u.idUtilisateur
@@ -148,7 +158,9 @@ router.get("/graphisme", (req, res) => {
             s.prix,
             s.dureEstime,
             u.nom as freelancerNom,
-            u.prenom as freelancerPrenom
+            s.image,
+            u.nomutilisateure ,
+            u.image as imagefree
         FROM service s
         JOIN Freelancer f ON s.idFreelancer = f.idFreelancer
         JOIN Utilisateur u ON f.idUtilisateur = u.idUtilisateur
@@ -171,14 +183,17 @@ router.get("/:id", (req, res) => {
     
     const sql = `
         SELECT 
-            s.idService as id ,
-            s.titre,
-            s.categorie,
+            s.idService as id,
+            s.Titre,
             s.description,
+            s.categorie,
             s.prix,
             s.dureEstime,
             u.nom as freelancerNom,
-            u.prenom as freelancerPrenom
+            s.image,
+            u.nomutilisateure ,
+            u.image as imagefree,
+            f.idFreelancer
         FROM service s
         JOIN Freelancer f ON s.idFreelancer = f.idFreelancer
         JOIN Utilisateur u ON f.idUtilisateur = u.idUtilisateur
@@ -233,6 +248,69 @@ router.get("/mes-services", authMiddleware, (req, res) => {
         res.status(200).json(results);
     });
 });
+// Express route dans services.js
+router.get("/freelancer/:id", authMiddleware, (req, res) => {
+    const freelancerId = req.params.id;
+    const sql = `
+    SELECT 
+        s.idService as id,
+        s.Titre,
+        s.categorie,
+        s.description,
+        s.prix,
+        s.dureEstime,
+        u.nom as freelancerNom,
+        s.image,
+        u.nomutilisateure ,
+        u.image as imagefree
+    FROM service s
+    JOIN Freelancer f ON s.idFreelancer = f.idFreelancer
+    JOIN Utilisateur u ON f.idUtilisateur = u.idUtilisateur
+    WHERE s.idFreelancer = ?
+    ORDER BY s.idService DESC
+`;
+
+    bd.query(sql, [freelancerId], (err, results) => {
+        if (err) {
+            console.error("Erreur lors de la récupération des services :", err);
+            return res.status(500).json({ error: "Erreur serveur" });
+        }
+
+        res.json(results);
+    });
+});
+
+router.get("/categorie/:categorie", authMiddleware, (req, res) => {
+    const { categorie } = req.params;
+
+    const sql = `
+        SELECT 
+            s.idService as id,
+            s.Titre,
+            s.categorie,
+            s.description,
+            s.prix,
+            s.dureEstime,
+            u.nom as freelancerNom,
+            s.image,
+            u.nomutilisateure,
+            u.image as imagefree
+        FROM service s
+        JOIN Freelancer f ON s.idFreelancer = f.idFreelancer
+        JOIN Utilisateur u ON f.idUtilisateur = u.idUtilisateur
+        WHERE s.categorie = ?
+        ORDER BY s.idService DESC
+    `;
+
+    bd.query(sql, [categorie], (err, results) => {
+        if (err) {
+            return res.status(500).json({ message: "Erreur serveur", error: err });
+        }
+
+        res.json(results);
+    });
+});
+
 
 
 

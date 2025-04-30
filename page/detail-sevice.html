@@ -44,6 +44,20 @@
            
             
         </div>
+        <h2 class="plus">Plus de ce Freelancer</h2>
+        <div class="container-suggestions">
+            
+            
+            <div id="missions-container" class="missions">
+            </div>
+        </div>
+        <h2 class="plus">Service qui pourrez vous interessé</h2>
+        <div class="intereser">
+            
+            
+            <div id="services-container" class="services">
+            </div>
+        </div>
         
 
 
@@ -71,11 +85,67 @@
         
 
     </div>
-    
-    
-    <script src="../js/notif-pop-up.js"></script>
+     <script src="../js/notif-pop-up.js"></script>
 
-    <script src="../js/notif-pop-up.js"></script>
+    <div id="soummetrePopup" class="popup-overlay">
+        <div class="popup-content">
+          <img id="closePopup" src="../images/fermer.png" alt="Fermer" class="close-btn" />
+          <h6>Choisissez la mission a soummetre </h6>
+          <button class="conf">confirmer</button>
+          <div id="missionssou-container" class="missionssou">
+            <div class="missionsou">
+                  <h2>TITREs</h2>
+                  <div class="infosou">
+                    <h6>description:</h6>
+                    <p id="description">jhdsvuyqvoudzvouvduazvoubzdaucbhouadbcouvcuov</p>
+                  </div>
+                  <div class="infosou">
+                    <h6>temp estimée</h6>
+                  <p id="temp"></p>
+                  </div>
+                  <div class="infosou">
+                    <h6>prix:</h6>
+                  <p id="prix"></p>
+                  </div>
+            </div>
+            <div class="missionsou">
+                <h2>TITREs</h2>
+                <div class="infosou">
+                  <h6>description:</h6>
+                  <p id="description">jhdsvuyqvoudzvouvduazvoubzdaucbhouadbcouvcuov</p>
+                </div>
+                <div class="infosou">
+                  <h6>temp estimée</h6>
+                <p id="temp"></p>
+                </div>
+                <div class="infosou">
+                  <h6>prix:</h6>
+                <p id="prix"></p>
+                </div>
+          </div>
+          <div class="missionsou">
+            <h2>TITREs</h2>
+            <div class="infosou">
+              <h6>description:</h6>
+              <p id="description">jhdsvuyqvoudzvouvduazvoubzdaucbhouadbcouvcuov</p>
+            </div>
+            <div class="infosou">
+              <h6>temp estimée</h6>
+            <p id="temp"></p>
+            </div>
+            <div class="infosou">
+              <h6>prix:</h6>
+            <p id="prix"></p>
+            </div>
+      </div>
+        </div>
+            
+
+        </div>
+
+      </div>
+      
+
     <div class="pop-up-profil">
        <a href="profil-client.html">Mon compte</a>
        <a href="ajouterMission.html">Poster une mission</a>
@@ -109,10 +179,11 @@
             }
 
             // Charger les détails de la mission
-            await loadMissionDetails(serviceId);
+            await loadServiceDetails(serviceId);
+            await loadClientPendingMissions();
         });
 
-        async function loadMissionDetails(serviceId) {
+        async function loadServiceDetails(serviceId) {
             try {
                 const token = localStorage.getItem("authToken");
                 const response = await fetch(`http://localhost:3001/services/${serviceId}`, {
@@ -127,7 +198,9 @@
                 }
 
                 const service = await response.json();
-                displayMissionDetails(service);
+                displayServiceDetails(service);
+                await loadFreelancerServices(service.idFreelancer, service.id);
+                await loadSimilarServices(service.categorie, service.id);
 
             } catch (error) {
                 console.error("Erreur:", error);
@@ -140,7 +213,7 @@
             }
         }
 
-        function displayMissionDetails(service) {
+        function displayServiceDetails(service) {
             const container = document.getElementById("container");
             
 
@@ -148,37 +221,281 @@
              
                 <div>
                 <div class="freelancer-info">
-                    <img src="../images/user 1 (1).png" alt="Image">
-                    <div>
-                        <p>${service.freelancerPrenom} ${service.freelancerNom}</p>
-                    </div>
+                    <img class="imagefreee" src="../backend/uploads/${service.imagefree}" alt="Image">
+                   
+                        <p>@${service.nomutilisateure}</p>
+                    
                 </div>
                 
                 <div class="free">
                     <h3>Description du service</h3>
-                    <p>${service.description}</p>
+                    
+                    <img class="imagess" src="../backend/uploads/${service.image}" alt="Image">
                 </div>
                 </div>
 
                 <div class="informations">
-                    <h2>${service.titre}</h2>
-                    <p>${service.categorie}</p>
+                    <h2>${service.Titre}</h2>
+                    <p>${service.description}</p>
                     <div class="information">
                         <img src="../images/Time Machine.png" alt="Image">
                         <p>${service.dureEstime} jours</p>
                         <img src="../images/Dollar Coin.png" alt="Image">
                         <p>${service.prix} DA</p>
                     </div>
-                    <button id="apply-btn" >DEMANDER UNE MISSION</button>
+                    <button id="soummetre" class="soummetre" >Soummetre une mission</button>
                 </div>
                 </div>
                 
             `;
-            
-            
+            const boutonAvis = document.querySelector(".soummetre");
+    const popup = document.getElementById("soummetrePopup");
+    const closeBtn = document.getElementById("closePopup");
+
+    // Affiche le popup quand on clique sur "Écrire un avis"
+    boutonAvis.addEventListener("click", function () {
+        popup.style.display = "flex";
+    });
+
+    // Ferme le popup quand on clique sur l'image de fermeture
+    closeBtn.addEventListener("click", function () {
+        popup.style.display = "none";
+    });
+
+    // (Optionnel) Ferme le popup si on clique en dehors de la boîte
+    popup.addEventListener("click", function (e) {
+        if (e.target === popup) {
+            popup.style.display = "none";
         }
+    });
+            
+
+        }
+    async function loadFreelancerServices(freelancerId, currentServiceId) {
+    try {
+        const token = localStorage.getItem("authToken");
+        const response = await fetch(`http://localhost:3001/services/freelancer/${freelancerId}`, {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Erreur de chargement des services du freelancer");
+        }
+
+        const services = await response.json();
+        const container = document.getElementById("missions-container");
+        container.innerHTML = "";
+
+        const otherServices = services.filter(s => s.id !== currentServiceId);
+
+        if (otherServices.length === 0) {
+            container.innerHTML = "<p>Ce freelancer n'a pas d'autres services pour le moment.</p>";
+            return;
+        }
+
+        otherServices.forEach(service => {
+            const serviceElement = document.createElement("a");
+        serviceElement.className = "mission";
+        serviceElement.href = `detail-sevice.html?id=${service.id}`;
+
+        serviceElement.innerHTML = `
+            <img class="images" src="../backend/uploads/${service.image}">
+            <div class="info-free">
+                <img class="imagefree" src="../backend/uploads/${service.imagefree}">
+                <p>@${service.nomutilisateure}</p>
+            </div>
+            <h2>${service.Titre}</h2>
+            <div class="info">
+                <h6>Prix:</h6>
+                <p>${service.prix} DA</p>
+                <p>/</p>
+                <p>${service.dureEstime} jours</p>
+            </div>
+            <div class="infonote">
+                <img class="vert" src="../images/vert.png">
+                <h4>4.7</h4>
+                <p>(44)</p>
+            </div>
+        `;
+        container.appendChild(serviceElement);
+        });
+
+    } catch (error) {
+        console.error("Erreur lors du chargement des services du freelancer :", error);
+        document.getElementById("missions-container").innerHTML = "<p>Impossible de charger les autres services du freelancer.</p>";
+    }
+}
+
+async function loadSimilarServices(categorie, currentServiceId) {
+    try {
+        const token = localStorage.getItem("authToken");
+        const response = await fetch(`http://localhost:3001/services/categorie/${encodeURIComponent(categorie)}`, {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Erreur de chargement des services similaires");
+        }
+
+        const services = await response.json();
+        const filtered = services.filter(s => s.id !== currentServiceId);
+
+        const container = document.getElementById("services-container");
+        container.innerHTML = "";
+
+        if (filtered.length === 0) {
+            container.innerHTML = "<p>Aucun autre service dans cette catégorie pour le moment.</p>";
+            return;
+        }
+
+        filtered.forEach(service => {
+            const serviceElement = document.createElement("a");
+            serviceElement.className = "service";
+            serviceElement.href = `detail-sevice.html?id=${service.id}`;
+            serviceElement.innerHTML = `
+                <img class="images" src="../backend/uploads/${service.image}">
+                <div class="info-free">
+                    <img class="imagefree" src="../backend/uploads/${service.imagefree}">
+                    <p>@${service.nomutilisateure}</p>
+                </div>
+                <h2>${service.Titre}</h2>
+                <div class="info">
+                    <h6>Prix:</h6>
+                    <p>${service.prix} DA</p>
+                    <p>/</p>
+                    <p>${service.dureEstime} jours</p>
+                </div>
+                <div class="infonote">
+                    <img class="vert" src="../images/vert.png">
+                    <h4>4.7</h4>
+                    <p>(44)</p>
+                </div>
+            `;
+            container.appendChild(serviceElement);
+        });
+
+    } catch (error) {
+        console.error("Erreur lors du chargement des services similaires :", error);
+        document.getElementById("services-container").innerHTML = "<p>Erreur lors du chargement des services similaires.</p>";
+    }
+}
+async function loadClientPendingMissions() {
+    try {
+        const token = localStorage.getItem("authToken");
+        const response = await fetch("http://localhost:3001/missions/en-attente", {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Erreur de chargement des missions");
+        }
+
+        const missions = await response.json();
+        displayMissionsInPopup(missions);
+
+    } catch (error) {
+        console.error("Erreur:", error);
+        const container = document.getElementById("missionssou-container");
+        container.innerHTML = `
+            <div class="error-message">
+                <p>${error.message}</p>
+                <button onclick="loadClientPendingMissions()">Réessayer</button>
+            </div>
+        `;
+    }
+}
+let selectedMissionId = null;
+
+function displayMissionsInPopup(missions) {
+    const container = document.getElementById("missionssou-container");
+    container.innerHTML = "";
+
+    if (missions.length === 0) {
+        container.innerHTML = "<p>Aucune mission en attente disponible.</p>";
+        return;
+    }
+
+    missions.forEach(mission => {
+        const missionElement = document.createElement("div");
+        missionElement.className = "missionsou";
+        missionElement.innerHTML = `
+            <h2>${mission.titre}</h2>
+            <div class="infosou">
+                <h6>description:</h6>
+                <p>${mission.description}</p>
+            </div>
+            <div class="infosou">
+                <h6>temp estimée</h6>
+                <p>${mission.dureEstime} jours</p>
+            </div>
+            <div class="infosou">
+                <h6>prix:</h6>
+                <p>${mission.budget} DA</p>
+            </div>
+        `;
+        container.appendChild(missionElement);
+        missionElement.addEventListener('click', () => {
+            // Enlève la classe active de toutes les missions
+            document.querySelectorAll('.missionsou').forEach(m => {
+                m.classList.remove('active');
+            });
+            // Ajoute la classe active à la mission sélectionnée
+            missionElement.classList.add('active');
+            selectedMissionId = mission.id;
+        });
+    });
+
+}
+// Gestion du bouton Confirmer
+document.querySelector('.conf').addEventListener('click', async function() {
+    if (!selectedMissionId) {
+        alert("Veuillez sélectionner une mission");
+        return;
+    }
+
+    try {
+        const token = localStorage.getItem("authToken");
+        const urlParams = new URLSearchParams(window.location.search);
+        const serviceId = urlParams.get('id');
+
+        const response = await fetch("http://localhost:3001/demandes/add", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                idMission: selectedMissionId,
+                idService: serviceId
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error("Erreur lors de la création de la demande");
+        }
+
+        const result = await response.json();
+        alert("Demande envoyée avec succès !");
+        document.getElementById("soummetrePopup").style.display = "none";
+        
+    } catch (error) {
+        console.error("Erreur:", error);
+        alert(`Erreur: ${error.message}`);
+    }
+});
+
 
       
      </script>
+     <script src="../js/soummetre.js"></script>
 </body>
 </html>

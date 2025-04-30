@@ -106,7 +106,19 @@ router.post("/login", (req, res) => {
         });
     });
 });
+const multer = require("multer");
+const path = require("path");
 
+// 📸 Config stockage image (copiée ici aussi, ou à centraliser si tu veux)
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // dossier de destination
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+const upload = multer({ storage });
 
 router.get("/mon-profil", (req, res) => {
     // Vérification basique du token (à remplacer par votre authMiddleware si disponible)
@@ -129,7 +141,8 @@ router.get("/mon-profil", (req, res) => {
                 U.daten AS dateNaissance, 
                 U.adresse_mail AS email, 
                 U.nomutilisateure AS nomUtilisateur,
-                U.tel
+                U.tel,
+                U.image
             FROM Utilisateur U
             JOIN Freelancer F ON U.idUtilisateur = F.idUtilisateur
             WHERE F.idFreelancer = ?
@@ -152,7 +165,8 @@ router.get("/mon-profil", (req, res) => {
                 dateNaissance: freelancer.dateNaissance,
                 email: freelancer.email,
                 nomUtilisateur: freelancer.nomUtilisateur,
-                telephone: freelancer.tel
+                telephone: freelancer.tel,
+                image:freelancer.image
             };
 
             res.status(200).json(response);
@@ -164,7 +178,7 @@ router.get("/mon-profil", (req, res) => {
     }
 });
 
-router.put("/modifier-profil", (req, res) => {
+router.put("/modifier-profil",upload.single("image"), (req, res) => {
     const token = req.headers.authorization?.split(' ')[1];
     
     if (!token) {
@@ -174,6 +188,8 @@ router.put("/modifier-profil", (req, res) => {
     try {
         const decoded = jwt.verify(token, SECRET_KEY);
         const idFreelancer = decoded.idFreelancer;
+        
+    const image = req.file ? req.file.filename : req.body.existingImage;
 
         const { nomutilisateure, nom, prenom, daten, email } = req.body;
 
@@ -186,11 +202,12 @@ router.put("/modifier-profil", (req, res) => {
                 U.nom = ?,
                 U.prenom = ?,
                 U.daten = ?,
-                U.adresse_mail = ?
+                U.adresse_mail = ?,
+                U.image = ?
             WHERE F.idFreelancer = ?
         `;
 
-        bd.query(query, [nomutilisateure, nom, prenom, daten, email, idFreelancer], (err, result) => {
+        bd.query(query, [nomutilisateure, nom, prenom, daten, email,image, idFreelancer], (err, result) => {
             if (err) {
                 console.error("❌ Erreur lors de la modification :", err);
                 return res.status(500).json({ message: "Erreur serveur" });

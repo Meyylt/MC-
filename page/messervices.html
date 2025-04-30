@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../css/notif.css">
     <link rel="stylesheet" href="../css/profil-pop-up.css">
     <link rel="stylesheet" href="../css/header.css">
-    <link rel="stylesheet" href="../css/modifiermission.css">
+    <link rel="stylesheet" href="../css/modifierservice.css">
 </head>
 <body>
     <header>
@@ -23,11 +23,11 @@
     </header>
 
     <nav>
-        <a href="ajouterMission.html">Design</a>
-        <a href="#">Programmation</a>
-        <a href="#">Rédaction & Traduction</a>
-        <a href="#">Vidéo & animation</a>
-        <a href="#">Musique & Audio</a>
+        <a href="profil-freelancer.html">Profil</a>
+        <a href="ajouter-service.html">Ajouter un service</a>
+        <a href="messervices.html">Mes service</a>
+        <a href="">Demmande</a>
+        <a href="">Mes mession</a>
     </nav>
 
     <main>
@@ -53,7 +53,8 @@
                   <p id="prix"></p>
                   </div>
                   <div class="boutons">
-                    <button id="modifier"  >MODIFIER</button>
+                    <button id="modifier" class="modifier-btn"  >MODIFIER</button>
+                    <button class="supp-btn" >Supprimer</button>
                 </div>
                   
             </div>
@@ -77,16 +78,29 @@
           <div class="formamodifier">
             <input type="text" id="titre" name="titre" placeholder="Titre" >
             <select id="categorie" name="categorie">
-                <option>Musique & Audio</option>
                 <option>Graphisme & Design</option>
                 <option>Développement Web</option>
                 <option>Rédaction & Traduction</option>
+                <option>Vidéo & animation</option>
+                <option>Musique & Audio</option>
             </select>
 
             <textarea id="description" name="description" placeholder="Description"  rows="4"></textarea>
        
             <input type="text" id="prix" name="prix" placeholder="Prix (DA)" >
             <input type="text" id="dureEstime" name="dureEstime" placeholder="Délai (ex: 3 jours)" >
+            <div class="form-group full-width">
+                <label for="productImages">Images du Produit*</label>
+                <div class="file-upload">
+                    <input type="file" id="productImages" multiple accept="image/*">
+                    <label for="productImages" class="upload-btn">
+                        <i class="fas fa-cloud-upload-alt"></i> Choisir des images
+                    </label>
+                    <span id="file-count">0 fichier(s) sélectionné(s)</span>
+                </div>
+                <div id="imagePreview" class="image-preview"></div>
+                <small>Format recommandé : JPEG ou PNG (max 2MB par image)</small>
+            </div>
 
         <button class="modif" id="modifierpopup">modifier</button>
         </div>
@@ -120,7 +134,7 @@
     <script src="../js/notif-pop-up.js"></script>
     <div class="pop-up-profil">
        <a href="profil-freelancer.html">Mon compte</a>
-       <a href="ajouter-service.html">Poster une mission</a>
+       <a href="ajouter-service.html">Poster un service</a>
         <a href="messervices.html">Mes services</a>
         <hr>
         <a href="connexion.html">se deconnecté</a>
@@ -131,6 +145,36 @@
 
     
     <script>
+         document.addEventListener('DOMContentLoaded', function() {
+            // Gestion de l'upload d'images
+            const fileInput = document.getElementById('productImages');
+            const fileCount = document.getElementById('file-count');
+            const imagePreview = document.getElementById('imagePreview');
+            
+            fileInput.addEventListener('change', function(e) {
+                const files = e.target.files;
+                fileCount.textContent = `${files.length} fichier(s) sélectionné(s)`;
+                
+                imagePreview.innerHTML = '';
+                
+                if (files) {
+                    Array.from(files).forEach(file => {
+                        if (file.type.startsWith('image/')) {
+                            const reader = new FileReader();
+                            
+                            reader.onload = function(event) {
+                                const img = document.createElement('img');
+                                img.src = event.target.result;
+                                imagePreview.appendChild(img);
+                            }
+                            
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                }
+            });
+        });
+
         document.addEventListener("DOMContentLoaded", async () => {
         // Initialisation
         const token = localStorage.getItem("authToken");
@@ -147,7 +191,7 @@
     function setupEventListeners() {
         // Gestion du clic sur Modifier
         document.addEventListener("click", async (e) => {
-            if (e.target.id === "modifier") {
+            if (e.target.classList.contains("modifier-btn")) {
                 const serviceElement = e.target.closest(".service");
                 if (serviceElement) {
                     openEditPopup(serviceElement);
@@ -170,20 +214,25 @@
     function openEditPopup(serviceElement) {
         currentServiceId = serviceElement.dataset.serviceId;
         
-        const serviceData = {
-            titre: serviceElement.querySelector("h2").textContent,
-            categorie: serviceElement.querySelector(".info:nth-child(2) p").textContent,
-            description: serviceElement.querySelector(".info:nth-child(3) p").textContent,
-            prix: serviceElement.querySelector(".info:nth-child(5) p").textContent.replace(" DA", ""),
-            dureEstime: serviceElement.querySelector(".info:nth-child(4) p").textContent.replace(" jours", "")
-        };
-    
-        // Remplissage du formulaire
-        document.getElementById("titre").value = serviceData.titre;
-        document.getElementById("categorie").value = serviceData.categorie;
-        document.getElementById("description").value = serviceData.description;
-        document.getElementById("prix").value = serviceData.prix;
-        document.getElementById("dureEstime").value = serviceData.dureEstime;
+         
+    // Récupération depuis les data attributes
+    const serviceData = {
+        titre: serviceElement.querySelector("h2").textContent,
+        categorie: serviceElement.dataset.categorie,
+        description: serviceElement.dataset.description,
+        prix: serviceElement.dataset.prix,
+        dureEstime: serviceElement.dataset.dureEstime,
+    };
+
+    // Remplissage du formulaire popup
+    document.getElementById("titre").value = serviceData.titre;
+    document.getElementById("categorie").value = serviceData.categorie;
+    document.getElementById("description").value = serviceData.description;
+    document.getElementById("prix").value = serviceData.prix;
+    document.getElementById("dureEstime").value = serviceData.dureEstime;
+
+    document.getElementById("modifierPopup").style.display = "flex";
+
     
         
             document.querySelectorAll("#modifierPopup input, #modifierPopup select, #modifierPopup textarea").forEach(el => {
@@ -197,58 +246,52 @@
     
     // Soumission du formulaire de modification
     async function handleEditSubmit() {
-        const formData = {
-            titre: document.getElementById("titre").value.trim(),
-            categorie: document.getElementById("categorie").value,
-            description: document.getElementById("description").value.trim(),
-            dureEstime: document.getElementById("dureEstime").value.trim(),
-            prix: document.getElementById("prix").value.trim()
-        };
-    
-        // Validation
-        const errors = [];
-        if (!formData.titre) errors.push("Le titre est requis");
-        if (!formData.categorie) errors.push("La catégorie est requise");
-        if (!formData.description) errors.push("La description est requise");
-        if (!formData.dureEstime || isNaN(formData.dureEstime)) errors.push("La durée doit être un nombre valide");
-        if (!formData.prix || isNaN(formData.prix)) errors.push("Le budget doit être un nombre valide");
-    
-        if (errors.length > 0) {
-            alert("Erreurs :\n" + errors.join("\n"));
-            return;
-        }
-    
-        try {
-            const response = await fetch(`http://localhost:3001/messervices/modifier/${currentServiceId}`, {
-                method: "PUT",
-                headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("authToken")}`,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    titre: formData.titre,
-                    categorie: formData.categorie,
-                    description: formData.description,
-                    prix: parseFloat(formData.prix),
-                    dureEstime: parseInt(formData.dureEstime)
-                })
-            });
-    
-            const data = await response.json();
-    
-            if (!response.ok) {
-                throw new Error(data.message || "Erreur lors de la modification");
-            }
-    
-            alert("service modifiée avec succès !");
-            document.getElementById("modifierPopup").style.display = "none";
-            await loadMissions();
-        } catch (error) {
-            console.error("Erreur:", error);
-            alert(`Erreur: ${error.message}`);
-        }
+    const serviceId = currentServiceId;
+    const form = new FormData();
+
+    // Ajout des champs texte
+    form.append("titre", document.getElementById("titre").value.trim());
+    form.append("categorie", document.getElementById("categorie").value);
+    form.append("description", document.getElementById("description").value.trim());
+    form.append("prix", document.getElementById("prix").value.trim());
+    form.append("dureEstime", document.getElementById("dureEstime").value.trim());
+
+    // Gestion des fichiers
+    const fileInput = document.getElementById("productImages");
+    if (fileInput.files.length > 0) {
+        // Envoi seulement du premier fichier (compatible avec upload.single)
+        form.append("image", fileInput.files[0]);
     }
-    
+
+    try {
+        const response = await fetch(`http://localhost:3001/messervices/modifier/${currentServiceId}`, {
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("authToken")}`
+                // Pas de Content-Type! Il sera automatiquement défini avec le boundary
+            },
+            body: form
+        });
+
+        // Gestion améliorée des erreurs
+        if (!response.ok) {
+            const errorText = await response.text();
+            try {
+                const errorData = JSON.parse(errorText);
+                throw new Error(errorData.message || "Erreur serveur");
+            } catch {
+                throw new Error(errorText || "Erreur inconnue");
+            }
+        }
+
+        const result = await response.json();
+        alert("Service mis à jour avec succès !");
+        location.reload();
+    } catch (err) {
+        console.error("Erreur détaillée:", err);
+        alert(`Échec de la modification: ${err.message}`);
+    }
+}
     // Chargement des missions
     async function loadMissions() {
         try {
@@ -285,32 +328,50 @@
             const serviceElement = document.createElement("div");
             serviceElement.className = "service";
             serviceElement.dataset.serviceId = service.id;
-            
+            serviceElement.dataset.categorie = service.categorie; // Stockez en data attribute
+            serviceElement.dataset.description = service.description; 
+            serviceElement.dataset.prix = service.prix; // Stockez en data attribute
+            serviceElement.dataset.dureEstime = service.dureEstime; 
             serviceElement.innerHTML = `
+                <img class="images" src="../backend/uploads/${service.image}">
                 <h2>${service.titre}</h2>
+                
                 <div class="info">
-                    <h6>Catégorie :</h6>
-                    <p>${service.categorie}</p>
-                </div>
-                <div class="info">
-                    <h6>Description :</h6>
-                    <p>${service.description}</p>
-                </div>
-                <div class="info">
-                    <h6>Temps estimé :</h6>
+                    <h6>Prix:</h6>
+                    <p>${service.prix} DA</p>
+                    <p>/</p>
                     <p>${service.dureEstime} jours</p>
                 </div>
-                <div class="info">
-                    <h6>Budget :</h6>
-                    <p>${service.prix} DA</p>
-                </div>
                 <div class="boutons">
-                    <button id="modifier">MODIFIER</button>
+                    <button class="modifier-btn">MODIFIER</button>
+                    <button class="supp-btn" onclick="supprimerService(${service.id})">Supprimer</button>
                 </div>
             `;
             container.appendChild(serviceElement);
         });
     }
+    function supprimerService(serviceId) {
+    const token = localStorage.getItem("authToken");
+
+    if (!confirm("Voulez-vous vraiment supprimer ce service ?")) return;
+
+    fetch(`http://localhost:3001/messervices/supprimer/${serviceId}`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+        loadMissions(); // Recharge les services après suppression
+    })
+    .catch(error => {
+        console.error("Erreur lors de la suppression :", error);
+        alert("Échec de la suppression du service.");
+    });
+}
+
     
     // Affichage des erreurs
     function showError(message) {

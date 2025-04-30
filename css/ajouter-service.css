@@ -265,6 +265,50 @@ header {
   height: 20px;
   vertical-align: middle;
 }
+.file-upload {
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.upload-btn {
+  display: inline-block;
+  background-color: #2fa062;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-weight: 600;
+}
+
+.upload-btn:hover {
+  background-color: #043b1d;
+  color: white;
+}
+
+#file-count {
+  margin-left: 1rem;
+  color: #7f8c8d;
+}
+
+.image-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.image-preview img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
 
 /* Responsive */
 @media (max-width: 768px) {
@@ -272,6 +316,9 @@ header {
     padding: 1.5rem;
     margin-top: 80px;
   }
+  .form-group.full-width {
+    grid-column: span 1;
+}
   
   .price-delivery {
     flex-direction: column;

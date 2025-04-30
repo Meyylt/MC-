@@ -7,6 +7,8 @@ const app = express();
 
 const jwt = require("jsonwebtoken");
 
+const path = require("path");
+
 const SECRET_KEY = process.env.SECRET_KEY;
 
 console.log(process.env.SECRET_KEY);
@@ -15,6 +17,7 @@ console.log(process.env.SECRET_KEY);
 app.use(express.json()); // Permet de lire les données JSON
 app.use(express.urlencoded({ extended: true })); // Permet de lire les formulaires HTML
 app.use(cors()); // ✅ Active CORS pour éviter les erreurs de blocage
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // 🛠️ Importation des routes
 const clientRoutes = require("./routes/clientRoutes");
@@ -33,6 +36,8 @@ const messerviceRoutes = require("./routes/messervice");
 app.use("/messervices", messerviceRoutes);
 const candidateureRoutes = require("./routes/candidateureRoutes");
 app.use("/candidateures", candidateureRoutes);
+const demandesRoutes = require("./routes/demandesRoutes");
+app.use("/demandes", demandesRoutes);
 
 // 🌍 Route d'accueil
 app.get("/", (req, res) => {

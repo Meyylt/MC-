@@ -18,7 +18,7 @@ nav{
     background-color: #003912;
     height: 100px;
     padding-top: 30px;
-    padding-left: 40px;
+    padding-left: 200px;
     
 }
 a{
@@ -71,12 +71,10 @@ main h2{
     flex-shrink: 0;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
-    padding-top: 15px;
     display: flex;
     flex-direction: column;
     width: 400px;
-    height: 350px;
-    padding: 20px;
+    height: 390px;
     transition: all 0.3s ease;
     overflow: hidden; 
     background-color: white;
@@ -86,18 +84,23 @@ main h2{
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée */
     cursor: pointer; /* Change le curseur en main */
 }
+.images{
+  width: 400px;
+  height: 200px;
+}
 .service h2{
-    font-size: 40px;
+    font-size: 25px;
     font-family: 'Raleway', sans-serif;
     padding-bottom: 15px;
 }
 .service h6{
     font-size: 15px;
     font-family: 'Raleway', sans-serif;
-    padding-bottom: 15px;
+    padding-bottom: 5px;
+    margin-left: 30px;
 }
 .service p{
-    font-size: 15px;
+    font-size: 17px;
     font-family: 'Raleway', sans-serif;
     padding-bottom: 15px;
     word-break: break-word;
@@ -105,7 +108,7 @@ main h2{
 .info {
     display: flex;
     gap: 10px;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
   }
 
 /* Style spécifique pour la description SEULEMENT */
@@ -133,12 +136,12 @@ main h2{
   .boutons {
     display: flex;          /* Active Flexbox */
     gap: 15px;              /* Espace entre les boutons */
-    margin-top: 20px;  
-    margin-left: 30px;     /* Marge au-dessus des boutons */
+    margin-top: 5px;  
+    margin-left: 35px;     /* Marge au-dessus des boutons */
   }
   
   .boutons button {
-    padding: 10px 20px;     /* Rembourrage intérieur */
+    padding: 10px 10px;     /* Rembourrage intérieur */
     border: none;           /* Supprime la bordure par défaut */
     border-radius: 5px;     /* Coins arrondis */
     cursor: pointer;        /* Curseur en forme de main */
@@ -150,3 +153,60 @@ main h2{
     font-family: 'Raleway', sans-serif; /* Animation fluide */
     width: 150px;
   }
+  .file-upload {
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  
+  input[type="file"] {
+    display: none;
+  }
+  
+  .upload-btn {
+    display: inline-block;
+    background-color: #2fa062;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: 600;
+  }
+  
+  .upload-btn:hover {
+    background-color: #043b1d;
+    color: white;
+  }
+  
+  #file-count {
+    margin-left: 1rem;
+    color: #7f8c8d;
+  }
+  
+  .image-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .image-preview img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    
+    .form-group.full-width {
+      grid-column: span 1;
+  }
+    
+    
+    
+    
+  }
+  

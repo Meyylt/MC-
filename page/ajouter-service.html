@@ -38,6 +38,18 @@
                 <input type="text" id="prix" name="prix" placeholder="Prix (DA)" required>
                 <input type="text" id="dureEstime" name="delais" placeholder="Délai (ex: 3 jours)" required>
             </div>
+            <div class="form-group full-width">
+                <label for="productImages">Images du Produit*</label>
+                <div class="file-upload">
+                    <input type="file" id="productImages" multiple accept="image/*">
+                    <label for="productImages" class="upload-btn">
+                        <i class="fas fa-cloud-upload-alt"></i> Choisir des images
+                    </label>
+                    <span id="file-count">0 fichier(s) sélectionné(s)</span>
+                </div>
+                <div id="imagePreview" class="image-preview"></div>
+                <small>Format recommandé : JPEG ou PNG (max 2MB par image)</small>
+            </div>
             <button type="submit" id="poster">Poster</button>
         </form>
     </main>
@@ -73,70 +85,102 @@
     <script src="../js/notif-pop-up.js"></script>
 
     <script>
-         document.getElementById("serviceForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
-
-            // Récupération des valeurs du formulaire
-            const titre = document.getElementById("titre").value.trim();
-            const description = document.getElementById("description").value.trim();
-            const dureEstime = document.getElementById("dureEstime").value.trim();
-            const prix = document.getElementById("prix").value.trim();
-            const categorie = document.getElementById("categorie").value;
-
-            if (!titre || !description || !dureEstime|| !prix) {
-                alert("Veuillez remplir tous les champs obligatoires");
-                return;
-            }
-
-            if (isNaN(prix) || isNaN(dureEstime)) {
-                alert("Le prix et le délai doivent être des nombres valides");
-                return;
-            }
-
-            // Récupération du token JWT
-            const token = localStorage.getItem("authToken"); 
-            if (!token) {
-                alert("Vous devez être connecté pour ajouter un service");
-                window.location.href = "connexion.html";
-                return;
-            }
-
-            const serviceData = {
-                titre,
-                categorie,
-                description,
-                dureEstime: parseInt(dureEstime),
-                prix: parseFloat(prix)
-            };
-
-            try {
-                const response = await fetch("http://localhost:3001/messervices/add", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    },
-                    body: JSON.stringify(serviceData),
-                });
-
-                const result = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(result.message || "Erreur lors de la création du service");
-                }
-
-                document.getElementById("confirmationPopup").style.display = "flex";
-                document.getElementById("serviceForm").reset();
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gestion de l'upload d'images
+            const fileInput = document.getElementById('productImages');
+            const fileCount = document.getElementById('file-count');
+            const imagePreview = document.getElementById('imagePreview');
+            
+            fileInput.addEventListener('change', function(e) {
+                const files = e.target.files;
+                fileCount.textContent = `${files.length} fichier(s) sélectionné(s)`;
                 
-
-            } catch (error) {
-                console.error("Erreur :", error);
-                alert(`Erreur: ${error.message}`);
-            }
+                imagePreview.innerHTML = '';
+                
+                if (files) {
+                    Array.from(files).forEach(file => {
+                        if (file.type.startsWith('image/')) {
+                            const reader = new FileReader();
+                            
+                            reader.onload = function(event) {
+                                const img = document.createElement('img');
+                                img.src = event.target.result;
+                                imagePreview.appendChild(img);
+                            }
+                            
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                }
+            });
+            
+            
+           
+           
+           
         });
-      
-// Charger les services lors de la première ouverture de la page
-document.addEventListener("DOMContentLoaded", loadServices);
+
+        document.getElementById("serviceForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const titre = document.getElementById("titre").value.trim();
+    const description = document.getElementById("description").value.trim();
+    const dureEstime = document.getElementById("dureEstime").value.trim();
+    const prix = document.getElementById("prix").value.trim();
+    const categorie = document.getElementById("categorie").value;
+    const image = document.getElementById('productImages').files[0];
+
+    if (!titre || !description || !dureEstime || !prix) {
+        alert("Veuillez remplir tous les champs obligatoires");
+        return;
+    }
+
+    if (isNaN(prix) || isNaN(dureEstime)) {
+        alert("Le prix et le délai doivent être des nombres valides");
+        return;
+    }
+
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+        alert("Vous devez être connecté");
+        window.location.href = "connexion.html";
+        return;
+    }
+
+    // 🔁 Créer un FormData pour envoi avec image
+    const formData = new FormData();
+    formData.append("titre", titre);
+    formData.append("categorie", categorie);
+    formData.append("description", description);
+    formData.append("dureEstime", dureEstime);
+    formData.append("prix", prix);
+    if (image) {
+        formData.append("image", image); // DOIT correspondre à req.file côté backend
+    }
+
+    try {
+        const response = await fetch("http://localhost:3001/messervices/add", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`
+                // ❌ Ne pas mettre "Content-Type", le navigateur le gère avec FormData
+            },
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) throw new Error(result.message || "Erreur ajout service");
+
+        document.getElementById("confirmationPopup").style.display = "flex";
+        document.getElementById("serviceForm").reset();
+
+    } catch (error) {
+        console.error("Erreur:", error);
+        alert("Erreur: " + error.message);
+    }
+});
+
 
         // Fermer le popup
         document.getElementById("closePopup").addEventListener("click", () => {

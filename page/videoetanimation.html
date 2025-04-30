@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vidéo & animation</title>
-    <link rel="stylesheet" href="../css/accueil-client.css">
+    <link rel="stylesheet" href="../css/categorie.css">
     <link rel="stylesheet" href="../css/notif.css">
     <link rel="stylesheet" href="../css/profil-pop-up.css">
     <link rel="stylesheet" href="../css/header.css">
@@ -132,27 +132,25 @@
                 serviceElement.href = `detail-sevice.html?id=${service.id}`; // Lien vers la page de détail
                 
                 serviceElement.innerHTML = `
+                   
+                    
+                   <img class="images" src="../backend/uploads/${service.image}">
+                    <div class="info-free">
+                        <img class="imagefree" src="../backend/uploads/${service.imagefree}">
+                        <p>@${service.nomutilisateure}</p>
+                    </div>
                     <h2>${service.Titre}</h2>
                     <div class="info">
-                        <h6>Catégorie:</h6>
-                        <p>${service.categorie}</p>
-                    </div>
-                    <div class="info">
-                        <h6>Description:</h6>
-                        <p class="service-description">${service.description}</p>
-                    </div>
-                    <div class="info">
-                        <h6>Durée:</h6>
-                        <p>${service.dureEstime} jours</p>
-                    </div>
-                    <div class="info">
-                        <h6>Prix:</h6>
-                        <p>${service.prix} DA</p>
-                    </div>
-                    <div class="info">
-                        <h6>Freelancer:</h6>
-                        <p>${service.freelancerPrenom} ${service.freelancerNom}</p>
-                    </div>
+                    <h6>Prix:</h6>
+                    <p>${service.prix} DA</p>
+                    <p>/</p>
+                    <p>${service.dureEstime} jours</p>
+                </div>
+                <div class="infonote">
+                    <img class="vert" src="../images/vert.png">
+                    <h4>4.7</h4>
+                    <p>(44)</p>
+                </div>
                 `;
                 container.appendChild(serviceElement);
             });

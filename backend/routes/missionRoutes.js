@@ -59,6 +59,169 @@ router.get("/", (req, res) => {
         res.status(200).json(results);
     });
 });
+router.get("/en-attente", authMiddleware, (req, res) => {
+    const idClient = req.user.idClient;
+    
+    const sql = `
+        SELECT 
+            m.idMission as id,
+            m.titre,
+            m.description,
+            m.dureEstime,
+            m.budget
+        FROM mission m
+        WHERE m.idClient = ? AND m.statut = 'En attente'
+        ORDER BY m.idMission DESC
+    `;
+    
+    bd.query(sql, [idClient], (err, results) => {
+        if (err) {
+            console.error("❌ Erreur MySQL: ", err);
+            return res.status(500).json({ error: "Erreur serveur" });
+        }
+        res.status(200).json(results);
+    });
+});
+router.get("/musique", (req, res) => {
+    const sql = `
+        SELECT 
+            m.idMission as id,
+            m.titre,
+            m.categorie,
+            m.description,
+            m.dureEstime,
+            m.budget,
+            m.statut,
+            u.nom as clientNom,
+            u.prenom as clientPrenom
+        FROM mission m
+        JOIN Client c ON m.idClient = c.idClient
+        JOIN Utilisateur u ON c.idUtilisateur = u.idUtilisateur
+        WHERE m.statut = 'En attente' and m.categorie='Musique & Audio'
+        ORDER BY m.idMission DESC
+    `;
+    
+    bd.query(sql, (err, results) => {
+        if(err){
+            console.error("❌ Erreur MySQL: ", err);
+            return res.status(500).json({ error: "Erreur serveur" });
+        }
+        res.status(200).json(results);
+    });
+});
+router.get("/devlo", (req, res) => {
+    const sql = `
+        SELECT 
+            m.idMission as id,
+            m.titre,
+            m.categorie,
+            m.description,
+            m.dureEstime,
+            m.budget,
+            m.statut,
+            u.nom as clientNom,
+            u.prenom as clientPrenom
+        FROM mission m
+        JOIN Client c ON m.idClient = c.idClient
+        JOIN Utilisateur u ON c.idUtilisateur = u.idUtilisateur
+        WHERE m.statut = 'En attente' and m.categorie='Développement Web'
+        ORDER BY m.idMission DESC
+    `;
+    
+    bd.query(sql, (err, results) => {
+        if(err){
+            console.error("❌ Erreur MySQL: ", err);
+            return res.status(500).json({ error: "Erreur serveur" });
+        }
+        res.status(200).json(results);
+    });
+});
+router.get("/graph", (req, res) => {
+    const sql = `
+        SELECT 
+            m.idMission as id,
+            m.titre,
+            m.categorie,
+            m.description,
+            m.dureEstime,
+            m.budget,
+            m.statut,
+            u.nom as clientNom,
+            u.prenom as clientPrenom
+        FROM mission m
+        JOIN Client c ON m.idClient = c.idClient
+        JOIN Utilisateur u ON c.idUtilisateur = u.idUtilisateur
+        WHERE m.statut = 'En attente' and m.categorie='Graphisme & Design'
+        ORDER BY m.idMission DESC
+    `;
+    
+    bd.query(sql, (err, results) => {
+        if(err){
+            console.error("❌ Erreur MySQL: ", err);
+            return res.status(500).json({ error: "Erreur serveur" });
+        }
+        res.status(200).json(results);
+    });
+});
+router.get("/redac", (req, res) => {
+    const sql = `
+        SELECT 
+            m.idMission as id,
+            m.titre,
+            m.categorie,
+            m.description,
+            m.dureEstime,
+            m.budget,
+            m.statut,
+            u.nom as clientNom,
+            u.prenom as clientPrenom
+        FROM mission m
+        JOIN Client c ON m.idClient = c.idClient
+        JOIN Utilisateur u ON c.idUtilisateur = u.idUtilisateur
+        WHERE m.statut = 'En attente' and m.categorie='Rédaction & Traduction'
+        ORDER BY m.idMission DESC
+    `;
+    
+    bd.query(sql, (err, results) => {
+        if(err){
+            console.error("❌ Erreur MySQL: ", err);
+            return res.status(500).json({ error: "Erreur serveur" });
+        }
+        res.status(200).json(results);
+    });
+});
+router.get("/vedio", (req, res) => {
+    const sql = `
+        SELECT 
+            m.idMission as id,
+            m.titre,
+            m.categorie,
+            m.description,
+            m.dureEstime,
+            m.budget,
+            m.statut,
+            u.nom as clientNom,
+            u.prenom as clientPrenom
+        FROM mission m
+        JOIN Client c ON m.idClient = c.idClient
+        JOIN Utilisateur u ON c.idUtilisateur = u.idUtilisateur
+        WHERE m.statut = 'En attente' and m.categorie='Vidéo & animation'
+        ORDER BY m.idMission DESC
+    `;
+    
+    bd.query(sql, (err, results) => {
+        if(err){
+            console.error("❌ Erreur MySQL: ", err);
+            return res.status(500).json({ error: "Erreur serveur" });
+        }
+        res.status(200).json(results);
+    });
+});
+
+
+
+
+
 // Récupérer les missions de l'utilisateur connecté
 // Récupérer les missions du client connecté
 router.get("/missions", authMiddleware, (req, res) => {
@@ -246,6 +409,8 @@ router.put("/:id", authMiddleware, (req, res) => {
         });
     });
 });
+// Récupérer les missions en attente du client connecté
+
 
 
 module.exports = router;

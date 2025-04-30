@@ -159,11 +159,11 @@ main h2{
     font-family: 'poppins';
 }
 main h2{
-    margin-top: 20px;
+    margin-top: 30px;
     padding-left: 30px;
     font-family: 'Raleway', sans-serif;
     font-size: 30px;
-    padding-bottom: 50px;
+    padding-bottom: 20px;
 }
 
 
@@ -180,63 +180,97 @@ a {
 
 
 .container-suggestions {
+    display: flex;
+    overflow-x: auto; 
     padding: 20px;
     max-width: 1400px;
     margin: 0 auto;
+    flex-wrap: nowrap;
+}
+.container-suggestions::-webkit-scrollbar {
+    display: none;
 }
 
 
 
 .missions{
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap; 
     gap: 20px;
-    justify-content: center;
     margin-top: 20px;
     
 }
 .mission{
-    flex-grow: 0;
-    flex-shrink: 0;
+    flex: 0 0 auto; 
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
-    padding-top: 15px;
     display: flex;
     flex-direction: column;
-    width: 400px;
-    height: 300px;
-    padding: 20px;
+    width: 300px;
+    height:   400px;
     transition: all 0.3s ease;
     overflow: hidden; 
-    background-color: #003912;
-    color: white;
+    color: black;
+    cursor: pointer;
 }
+
 .mission:hover {
     transform: scale(1.02); /* Légère augmentation de taille */
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée */
     cursor: pointer; /* Change le curseur en main */
 }
+.images{
+    width: 300px;
+    height: 200px;
+  }
 .mission h2{
-    font-size: 40px;
+    font-size: 20px;
     font-family: 'Raleway', sans-serif;
     padding-bottom: 15px;
+    padding-left: 15px;
 }
 .mission h6{
     font-size: 15px;
     font-family: 'Raleway', sans-serif;
-    padding-bottom: 15px;
 }
 .mission p{
     font-size: 15px;
     font-family: 'Raleway', sans-serif;
-    padding-bottom: 15px;
     word-break: break-word;
 }
 .info {
     display: flex;
     gap: 10px;
-    margin-bottom: 8px;
+    margin-left: 25px;
   }
+.info-free{
+    display: flex;
+    gap: 10px;
+    margin-left: 20px;
+    margin-top: 15px;
+}
+.info-free p{
+    font-size: 17px;
+    margin-top: 5px;
+}
+.imagefree{
+    width: 30px;
+    height: 30px;
+    border-radius: 20px;
+}
+.infonote{
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    margin-left: 20px;
+}
+.infonote p{
+    padding-top: 8px;
+}
+.infonote h4{
+    padding-top: 5px;
+    font-size: 20px;
+}
 
 /* Style spécifique pour la description SEULEMENT */
 #description {
@@ -260,9 +294,3 @@ a {
     max-height: 4.2em; /* 3 lignes × 1.4em de line-height */
     line-height: 1.4em;
   }
-
-
-
-
-
-
