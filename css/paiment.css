@@ -16,6 +16,10 @@ header {
     background: #fff;
     height: 70px;
 }
+header a{
+    text-decoration: none;
+    color: black;
+}
 
 .logo {
     font-size: 30px;
@@ -132,6 +136,17 @@ nav a:hover{
 }
 .poste input{
     width: 10%;
+}
+.methode{
+    display: flex;
+    gap: 20px;
+}
+.methode p{
+    margin-top: 20px;
+    font-size: 25px;
+}
+.methode p:active{
+    color: #003912;
 }
 
 

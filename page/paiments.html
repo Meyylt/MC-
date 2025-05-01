@@ -10,20 +10,22 @@
 
     <link rel="stylesheet" href="../css/paiment.css">
     <link rel="stylesheet" href="../css/notif.css">
+    
+    <link rel="stylesheet" href="../css/profil-pop-up.css">
 </head>
 <body>
    
     
     <header >
         <div class="logo">
-            <span>SkillNet</span><span class="dot">●</span>
+            <a href="vitrine-freelancer.html"><span>SkillNet</span><span class="dot">●</span></a>
         </div>
         <input type="text" placeholder="Que cherchez-vous ? exemple: Développement web" >
        
         <div class="header-icons">
            <button class="icon notif-icon"> <img src="../images/bell 1.png" alt="Image" ></button>
            <button class="icon"> <img src="../images/mail 1.png" alt="Image" ></button>
-           <button class="icon"> <img src="../images/user 1 (1).png" alt="Image" > </button>
+           <button class="icon profil-pop-up"> <img src="../images/user 1 (1).png" alt="Image" > </button>
         </div>
     </header>
    
@@ -40,11 +42,11 @@
         <div class="container">
 
             <div class="info-paiment">
-                <div class="cb">
-                    <input type="radio" name="payment-method" id="card">
-                    <p>Carte</p> 
-                    <img src="../images/CB.png" alt="Carte" >
+                <div class="methode">
+                    <p id="btn-carte" class="active">Carte</p> 
+    <p id="btn-poste">Poste</p>   
                 </div>
+              <div id="cartee">
                 <hr>
                 <input type="text" placeholder="Numéro de carte" class="input">
                 <div style="display: flex; gap: 0.5rem;">
@@ -52,17 +54,16 @@
                     <input type="text" placeholder="VVS" style="width: 120px; padding-left: 40px;" class="input">
                 </div>
                 <input type="text" placeholder="Nom & Prénom" class="input">
-                <hr>
-                <div class="poste">
-                    <input type="radio" name="payment-method" id="post">
-                    <p>Poste</p>  
-                </div>
+            </div>
+            <div id="postee">
+
+            </div>
+                
             </div>
             
 
             <div class="informations">
                 <h2>Développement d’un site vitrine</h2>
-                <p>Développement d'un site vitrine moderne et responsive pour présenter une activité, un service ou une entreprise en ligne.</p>
                 <div class="total">
                     <span>Total</span>
                     <span>20000 DA</span>
@@ -104,63 +105,71 @@
     
     
     <script src="../js/notif-pop-up.js"></script>
-    <script>
-       document.getElementById('confirm-payment').addEventListener('click', async function() {
-    try {
-        // Vérifier si l'utilisateur est connecté
-        const userData = JSON.parse(localStorage.getItem('userData'));
-        const token = localStorage.getItem('authToken');
+
+    <div class="pop-up-profil">
+        <a href="profil-client.html">Mon compte</a>
+        <a href="ajouterMission.html">Poster une mission</a>
+         <a href="mesmissions.html">Mes mission</a>
+         <a href="demande-cote-client.html">Mes Demmande</a>
+         <hr>
+         <a href="connexion.html">se deconnecté</a>
+     </div>
+     <script src="../js/profil-pop-up.js"></script>
+  
+     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const btnCarte = document.getElementById('btn-carte');
+    const btnPoste = document.getElementById('btn-poste');
+    const divCarte = document.getElementById('cartee');
+    const divPoste = document.getElementById('postee');
+
+    // Par défaut, carte est active
+    btnCarte.classList.add('active');
+    divCarte.classList.add('active');
+
+    // Gestion du clic sur "Carte"
+    btnCarte.addEventListener('click', function() {
+        if (!this.classList.contains('active')) {
+            this.classList.add('active');
+            btnPoste.classList.remove('active');
+            divCarte.classList.add('active');
+            divPoste.classList.remove('active');
+        }
+    });
+
+    // Gestion du clic sur "Poste"
+    btnPoste.addEventListener('click', function() {
+        if (!this.classList.contains('active')) {
+            this.classList.add('active');
+            btnCarte.classList.remove('active');
+            divPoste.classList.add('active');
+            divCarte.classList.remove('active');
+        }
+    });
+            // Récupérer les données stockées
+            const paymentData = JSON.parse(localStorage.getItem('paymentData'));
+            
+            if (!paymentData) {
+                alert('Aucune donnée de paiement trouvée');
+                window.location.href = 'mesmissions.html';
+                return;
+            }
         
-        if (!userData || !token) {
-            alert('Veuillez vous connecter pour effectuer un paiement');
-            window.location.href = 'connexion.html';
-            return;
-        }
-
-        // Vérifier que l'utilisateur est bien un client
-        if (userData.role !== 'client') {
-            alert('Seuls les clients peuvent effectuer des paiements');
-            return;
-        }
-
-        // Récupérer les informations nécessaires
-        const paymentMethod = document.querySelector('input[name="payment-method"]:checked').id;
-        const amount = 20000; // Montant fixe pour cet exemple
-        const serviceId = 1; // À remplacer par l'ID réel du service
-        const freelancerId = 1; // À remplacer par l'ID réel du freelancer
-        const idClient = userData.id; // Récupération de l'ID client depuis les données utilisateur
-
-        // Envoyer les données au serveur
-        const response = await fetch('http://localhost:3000/transactions', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                montant: amount,
-                typePaiement: paymentMethod === 'card' ? 'CB' : 'CCP',
-                idService: serviceId,
-                idFreelancer: freelancerId,
-                idClient: idClient // On envoie explicitement l'ID client
-            })
+            // Afficher les informations dans la page
+            document.querySelector('.informations h2').textContent = paymentData.titre;
+            document.querySelector('.total span:last-child').textContent = paymentData.prix + ' DA';
+            document.querySelector('.informations h3').textContent = `Livraison dans ${paymentData.duree} jours`;
+        
+            // Nettoyer après utilisation (optionnel)
+            localStorage.removeItem('paymentData');
+        
+            // Gestion du bouton de confirmation
+            document.getElementById('confirm-payment').addEventListener('click', function() {
+                // Ici vous pourrez ajouter la logique pour traiter le paiement
+                alert('Paiement confirmé!');
+                // Redirection ou autre traitement...
+            });
         });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            alert('Paiement effectué avec succès!');
-            // Rediriger vers la page de confirmation ou autre
-            window.location.href = 'confirmation-paiement.html';
-        } else {
-            throw new Error(data.message || 'Erreur lors du paiement');
-        }
-    } catch (error) {
-        console.error('Erreur:', error);
-        alert(error.message);
-    }
-});
-    </script>
-    
+        </script>
 </body>
 </html>

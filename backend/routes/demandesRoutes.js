@@ -32,7 +32,7 @@ router.post("/demande", authMiddleware, (req, res) => {
         // 2. Créer la mission
         const createMissionQuery = `INSERT INTO mission 
                                   (titre, categorie, description, dureEstime, budget, statut, idClient, idFreelancer) 
-                                  VALUES (?, ?, ?, ?, ?, 'En attente', ?, ?)`;
+                                  VALUES (?, ?, ?, ?, ?, 'En demande', ?, ?)`;
         
         const missionValues = [
             titre,
@@ -75,7 +75,7 @@ router.post("/demande", authMiddleware, (req, res) => {
     });
 });
 // Récupérer les demandes reçues (pour un freelancer)
-router.get("/recues", authMiddleware, (req, res) => {
+router.get("/free/recues", authMiddleware, (req, res) => {
     const idFreelancer = req.user.idFreelancer;
 
     const query = `
@@ -154,7 +154,7 @@ router.post("/:id/accepter", authMiddleware, (req, res) => {
     const updateQuery = `
         UPDATE demande d
         JOIN mission m ON d.idMission = m.idMission
-        SET d.statut = 'accepter', m.statut = 'En cours'
+        SET d.statut = 'accepter'
         WHERE d.idDemande = ? AND d.idFreelancer = ?
     `;
 
@@ -192,31 +192,32 @@ router.post("/:id/refuser", authMiddleware, (req, res) => {
         res.json({ message: "Demande refusée avec succès" });
     });
 });
-// Récupérer les demandes envoyées (pour un client)
-router.get("/envoyees", authMiddleware, (req, res) => {
-    const idClient = req.user.idClient;
 
+// Récupérer toutes les demandes du client avec statut
+// Récupérer toutes les demandes du client
+router.get("/client/demandes", authMiddleware, (req, res) => {
+    const idClient = req.user.idClient;
+    
     const query = `
-        SELECT d.*, 
-               m.titre AS mission_titre, 
-               m.description AS mission_description,
-               m.statut AS mission_statut,
-               m.dureEstime AS mission_duree,
-               m.budget AS mission_budget,
-               s.Titre AS service_titre,
-               f.idFreelancer,
-               u.Nom AS freelancer_nom,
-               u.prenom AS freelancer_prenom,
-               u.Nomutilisateure AS freelancer_username,
-               u.image AS freelancer_image
-        FROM demande d
+        SELECT 
+            d.idDemande, d.statut,
+            m.titre, m.description,
+            m. budget ,m.dureEstime,
+            u.Nomutilisateure as user,
+            u.Nom as freelancerNom, u.prenom as freelancerPrenom, u.image as freelancerImage,
+            s.Titre as serviceTitre
+        FROM 
+            demande d
         JOIN mission m ON d.idMission = m.idMission
-        JOIN service s ON d.idService = s.idService
         JOIN freelancer f ON d.idFreelancer = f.idFreelancer
         JOIN utilisateur u ON f.idUtilisateur = u.idUtilisateur
-        WHERE d.idClient = ?
+        JOIN service s ON d.idService = s.idService
+        WHERE 
+            d.idClient = ?
+        ORDER BY 
+            d.idDemande DESC
     `;
-
+    
     bd.query(query, [idClient], (err, results) => {
         if (err) {
             console.error("Erreur:", err);
@@ -226,50 +227,124 @@ router.get("/envoyees", authMiddleware, (req, res) => {
     });
 });
 
-// Supprimer une demande et sa mission associée
-router.delete("/:id", authMiddleware, (req, res) => {
-    const demandeId = req.params.id;
+// Récupérer les détails d'une demande spécifique
+router.get("/client/demandes/:id", authMiddleware, (req, res) => {
+    const idDemande = req.params.id;
     const idClient = req.user.idClient;
-
-    // 1. Récupérer l'idMission associé
-    const getMissionIdQuery = `SELECT idMission FROM demande WHERE idDemande = ? AND idClient = ?`;
     
-    bd.query(getMissionIdQuery, [demandeId, idClient], (err, results) => {
+    const query = `
+        SELECT 
+            d.*, 
+            m.titre, m.description as missionDescription,
+            m. budget ,m.dureEstime,
+            u.Nomutilisateure as user,
+            u.Nom as freelancerNom, u.prenom as freelancerPrenom, u.image as freelancerImage,
+            s.Titre as serviceTitre, s.description as serviceDescription
+        FROM 
+            demande d
+        JOIN mission m ON d.idMission = m.idMission
+        JOIN freelancer f ON d.idFreelancer = f.idFreelancer
+        JOIN utilisateur u ON f.idUtilisateur = u.idUtilisateur
+        JOIN service s ON d.idService = s.idService
+        WHERE 
+            d.idDemande = ? AND d.idClient = ?
+    `;
+    
+    bd.query(query, [idDemande, idClient], (err, results) => {
         if (err) {
             console.error("Erreur:", err);
             return res.status(500).json({ message: "Erreur serveur" });
         }
-        
         if (results.length === 0) {
             return res.status(404).json({ message: "Demande non trouvée" });
         }
-
-        const idMission = results[0].idMission;
-
-        // 2. Supprimer la demande
-        const deleteDemandeQuery = `DELETE FROM demande WHERE idDemande = ?`;
-        
-        bd.query(deleteDemandeQuery, [demandeId], (err) => {
-            if (err) {
-                console.error("Erreur:", err);
-                return res.status(500).json({ message: "Erreur suppression demande" });
-            }
-
-            // 3. Supprimer la mission associée
-            const deleteMissionQuery = `DELETE FROM mission WHERE idMission = ?`;
-            
-            bd.query(deleteMissionQuery, [idMission], (err) => {
-                if (err) {
-                    console.error("Erreur:", err);
-                    return res.status(500).json({ message: "Erreur suppression mission" });
-                }
-
-                res.json({ message: "Demande et mission supprimées avec succès" });
-            });
-        });
+        res.json(results[0]);
     });
 });
 
+// Annuler une demande et supprimer la mission associée
+router.post("/client/demandes/:id/annuler", authMiddleware, (req, res) => {
+    const idDemande = req.params.id;
+    const idClient = req.user.idClient;
 
+    // Démarrer une transaction avec le pool directement
+    bd.beginTransaction(err => {
+        if (err) {
+            console.error("Erreur début transaction:", err);
+            return res.status(500).json({ message: "Erreur serveur" });
+        }
 
+        // 1. Vérifier la demande et récupérer l'idMission
+        bd.query(
+            `SELECT idMission FROM demande WHERE idDemande = ? AND idClient = ? AND statut = 'En attente'`,
+            [idDemande, idClient],
+            (err, results) => {
+                if (err) {
+                    return bd.rollback(() => {
+                        console.error("Erreur sélection:", err);
+                        res.status(500).json({ message: "Erreur serveur" });
+                    });
+                }
+
+                if (results.length === 0) {
+                    return bd.rollback(() => {
+                        res.status(404).json({ message: "Demande non trouvée ou déjà traitée" });
+                    });
+                }
+
+                const idMission = results[0].idMission;
+
+                // 2. Supprimer la demande
+                bd.query(
+                    `DELETE FROM demande WHERE idDemande = ?`,
+                    [idDemande],
+                    (err) => {
+                        if (err) {
+                            return bd.rollback(() => {
+                                console.error("Erreur suppression demande:", err);
+                                res.status(500).json({ message: "Erreur serveur" });
+                            });
+                        }
+
+                        // 3. Supprimer la mission
+                        bd.query(
+                            `DELETE FROM mission WHERE idMission = ?`,
+                            [idMission],
+                            (err) => {
+                                if (err) {
+                                    return bd.rollback(() => {
+                                        console.error("Erreur suppression mission:", err);
+                                        res.status(500).json({ message: "Erreur serveur" });
+                                    });
+                                }
+
+                                // Valider la transaction
+                                bd.commit(err => {
+                                    if (err) {
+                                        return bd.rollback(() => {
+                                            console.error("Erreur commit:", err);
+                                            res.status(500).json({ message: "Erreur serveur" });
+                                        });
+                                    }
+
+                                    res.json({ message: "Demande et mission annulées avec succès" });
+                                });
+                            }
+                        );
+                    }
+                );
+            }
+        );
+    });
+});
+
+// Fonction helper pour rollback
+function rollback(connection, res, error, statusCode = 500) {
+    connection.rollback(() => {
+        connection.release();
+        console.error("Erreur:", error);
+        const message = error.message || "Erreur serveur";
+        res.status(statusCode).json({ message });
+    });
+}
 module.exports = router;

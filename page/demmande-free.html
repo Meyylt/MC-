@@ -196,7 +196,7 @@
     // Fonction pour charger les demandes
     async function loadDemandes(type) {
         try {
-            const response = await fetch(`http://localhost:3001/demandes/${type}`, {
+            const response = await fetch(`http://localhost:3001/demandes/free/${type}`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }

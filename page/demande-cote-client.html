@@ -17,7 +17,7 @@
     
     <header >
         <div class="logo">
-            <span>SkillNet</span><span class="dot">●</span>
+            <a href="vitrine-freelancer.html"><span>SkillNet</span><span class="dot">●</span></a>
         </div>
         <input type="text" placeholder="Que cherchez-vous ? exemple: Développement web" >
        
@@ -40,7 +40,7 @@
     <main>
         <div class="type">
             <h2 id="envoye">Envoyé</h2>
-            <h2 id="recue" class="active">Recue</h2>
+            <h2 id="recue" >Recue</h2>
             
             <select id="status-filter">
                 <option>Toute</option>
@@ -49,7 +49,7 @@
                 <option>refuser</option>
             </select>
         </div>
-        <section class="profile-card">
+        <section class="profile-card" id="demandes-container">
             <div class="profile-info">
                 <img src="../images/freelanceur1.png" alt="Profil" >
                 <div class="profile-info-texte">
@@ -72,7 +72,7 @@
                     <button class="accepter">accepter</button>
                 <div class="action-buttons">
                     <button class="detaill">voire detaill</button>
-                    <button class="paiment">Passe au paiment</button>
+                    <button class="paiment">Passer au paiment</button>
                 </div>
             </div>
             </div>
@@ -97,10 +97,13 @@
         <div class="popup-content">
           <img id="closePopup" src="../images/fermer.png" alt="Fermer" class="close-btn" />
           <h6>Detaills de la mission</h6>
-          <p>freelancer : </p>
-          <p>Titre : </p>
-          <p>Description : </p>
-          <p>La mission a ete soimise pour le service : </p>
+          <p id="free">freelancer : </p>
+          <p id="titre">Titre : </p>
+          <p id="description">Description : </p>
+          <p id="prix">Prix :</p>
+          <p id="duree">Durée :</p>
+          <p id="service">La mission a ete soimise pour le service : </p>
+          
         </div>
 
       </div>
@@ -139,7 +142,35 @@
      <a href="connexion.html">se deconnecté</a>
  </div>
  <script src="../js/profil-pop-up.js"></script>
- <script>
+ 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+const envoyeBtn = document.getElementById('envoye');
+const recueBtn = document.getElementById('recue');
+
+// Par défaut, "Envoyé" est actif
+envoyeBtn.classList.add('active');
+
+// Gestion du clic sur "Envoyé"
+recueBtn.addEventListener('click', function() {
+    if (!this.classList.contains('active')) {
+        this.classList.add('active');
+        envoyeBtn.classList.remove('active');
+        // Ajouter ici le code pour afficher les messages envoyés
+    }
+});
+
+// Gestion du clic sur "Recue"
+envoyeBtn.addEventListener('click', function() {
+    if (!this.classList.contains('active')) {
+        this.classList.add('active');
+        recueBtn.classList.remove('active');
+        // Ajouter ici le code pour afficher les messages reçus
+    }
+});
+});
+</script>
+<script>
     const boutondetaill = document.querySelector(".detaill");
 const popup = document.getElementById("detaill");
 const closeBtn = document.getElementById("closePopup");
@@ -162,35 +193,210 @@ popup.addEventListener("click", function (e) {
 });
 
  </script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-const envoyeBtn = document.getElementById('envoye');
-const recueBtn = document.getElementById('recue');
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
 
-// Par défaut, "Envoyé" est actif
-recueBtn.classList.add('active');
+            const token = localStorage.getItem("authToken");
+    if (!token) {
+        window.location.href = "connexion.html";
+        return;
+    }
 
-// Gestion du clic sur "Envoyé"
-envoyeBtn.addEventListener('click', function() {
-    if (!this.classList.contains('active')) {
-        this.classList.add('active');
-        recueBtn.classList.remove('active');
-        // Ajouter ici le code pour afficher les messages envoyés
+    const demandesContainer = document.querySelector('.profile-card');
+    const popup = document.getElementById('detaill');
+    const closeBtn = document.getElementById('closePopup');
+    
+    // Charger les demandes du client
+    loadClientDemandes();
+    
+    // Fonction pour charger les demandes
+    async function loadClientDemandes() {
+        try {
+            const response = await fetch('http://localhost:3001/demandes/client/demandes', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            
+            if (!response.ok) throw new Error('Erreur réseau');
+            
+            const demandes = await response.json();
+            renderDemandes(demandes);
+            
+        } catch (error) {
+            console.error('Erreur:', error);
+            alert('Impossible de charger les demandes');
+        }
+    }
+    
+    // Afficher les demandes selon leur statut
+    function renderDemandes(demandes) {
+        demandesContainer.innerHTML = '';
+        
+        demandes.forEach(demande => {
+            let demandeHTML = '';
+            
+            // Structure commune
+            const baseHTML = `
+                <div class="profile-info" data-id="${demande.idDemande}">
+                    <img src="../backend/uploads/${demande.freelancerImage || '../images/freelanceur1.png'}" alt="Profil">
+                    <div class="profile-info-texte">
+                        <h3>${demande.user}</h3>
+                    </div>
+            `;
+            
+            // Différents états selon le statut
+            if (demande.statut === 'En attente') {
+                demandeHTML = baseHTML + `
+                    <div class="info">
+                        <button class="endemande">En attente</button>
+                        <div class="action-buttons">
+                            <button class="detaill">Voir détail</button>
+                            <button class="annuler">Annuler</button>
+                        </div>
+                    </div>
+                `;
+            } 
+            else if (demande.statut === 'refuser') {
+                demandeHTML = baseHTML + `
+                    <div class="info">
+                        <button class="refuser">refuser</button>
+                        <div class="action-buttons">
+                            <button class="detaill">Voir détail</button>
+                        </div>
+                    </div>
+                `;
+            } 
+            else if (demande.statut === 'accepter') {
+                demandeHTML = baseHTML + `
+                    <div class="info">
+                        <button class="accepter">accepter</button>
+                        <div class="action-buttons">
+                            <button class="detaill">Voir détail</button>
+                            <button class="paiment" 
+                        data-mission-id="${demande.idMission}"
+                        data-freelancer-id="${demande.idFreelancer}"
+                        data-dureEstime="${demande.dureEstime}"
+                        data-budget="${demande.budget}"
+                        data-titre="${demande.titre}">
+                    Passer au paiement
+                </button>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            demandesContainer.insertAdjacentHTML('beforeend', demandeHTML);
+        });
+        
+        // Ajouter les événements
+        setupEventListeners();
+    }
+    
+    // Configurer les événements
+    function setupEventListeners() {
+        // Boutons "Voir détail"
+        document.querySelectorAll('.detaill').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const demandeId = this.closest('.profile-info').dataset.id;
+                showDemandeDetails(demandeId);
+            });
+        });
+        
+        // Bouton fermer popup
+        closeBtn.addEventListener('click', () => {
+            popup.style.display = 'none';
+        });
+        
+        // Boutons Annuler (pour les demandes en attente)
+        document.querySelectorAll('.annuler').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const demandeId = this.closest('.profile-info').dataset.id;
+                cancelDemande(demandeId);
+            });
+        });
+        document.querySelectorAll('.paiment').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const idMission = this.dataset.missionId;
+        const idFreelancer = this.dataset.freelancerId;
+        const duree = this.dataset.dureestime;
+        const prix = this.dataset.budget;
+        const titre = this.dataset.titre;
+        
+        if (!idMission || !idFreelancer) {
+            console.error('IDs manquants pour le paiement');
+            return;
+        }
+        
+        // Stocker les infos dans localStorage avant redirection
+        localStorage.setItem('paymentData', JSON.stringify({
+            idMission,
+            idFreelancer,
+            duree,
+            prix,
+            titre
+        }));
+        
+        window.location.href = 'paiments.html';
+    });
+});
+    }
+    
+    // Afficher les détails dans le popup
+    async function showDemandeDetails(demandeId) {
+        try {
+            const response = await fetch(`http://localhost:3001/demandes/client/demandes/${demandeId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            
+            if (!response.ok) throw new Error('Erreur réseau');
+            
+            const demande = await response.json();
+            
+            // Remplir le popup
+            document.querySelector('.popup-content h6').textContent = `Détails de la demande #${demandeId}`;
+            document.querySelector('.popup-content p:nth-of-type(1)').textContent = `Freelancer: ${demande.freelancerNom} ${demande.freelancerPrenom}( ${demande.user})`;
+            document.querySelector('.popup-content p:nth-of-type(2)').textContent = `Titre: ${demande.titre}`;
+            document.querySelector('.popup-content p:nth-of-type(3)').textContent = `Description: ${demande.missionDescription}`;
+            document.querySelector('.popup-content p:nth-of-type(5)').textContent = `Prix: ${demande.budget}`;
+            document.querySelector('.popup-content p:nth-of-type(6)').textContent = `Durée: ${demande.dureEstime}`;
+            document.querySelector('.popup-content p:nth-of-type(4)').textContent = `Service: ${demande.serviceTitre}`;
+            popup.style.display = 'flex';
+            
+        } catch (error) {
+            console.error('Erreur:', error);
+            alert('Impossible de charger les détails');
+        }
+    }
+    
+    // Annuler une demande
+    async function cancelDemande(demandeId) {
+        if (!confirm('Voulez-vous vraiment annuler cette demande ?')) return;
+        
+        try {
+            const response = await fetch(`http://localhost:3001/demandes/client/demandes/${demandeId}/annuler`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (!response.ok) throw new Error('Erreur réseau');
+            
+            alert('Demande annulée avec succès');
+            loadClientDemandes(); // Recharger la liste
+            
+        } catch (error) {
+            console.error('Erreur:', error);
+            alert('Échec de l\'annulation');
+        }
     }
 });
 
-// Gestion du clic sur "Recue"
-recueBtn.addEventListener('click', function() {
-    if (!this.classList.contains('active')) {
-        this.classList.add('active');
-        envoyeBtn.classList.remove('active');
-        // Ajouter ici le code pour afficher les messages reçus
-    }
-});
-});
-</script>
-
-    
-    
+    </script>
 </body>
 </html>
