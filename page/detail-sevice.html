@@ -90,54 +90,14 @@
     <div id="soummetrePopup" class="popup-overlay">
         <div class="popup-content">
           <img id="closePopup" src="../images/fermer.png" alt="Fermer" class="close-btn" />
-          <h6>Choisissez la mission a soummetre </h6>
+          <h6>Entrez les infos de la mission a soummetre </h6>
+          
+            <h2>Titre : </h2>
+            <input id="titre-mis" type="text" name="titre" placeholder="Titre" required />
+            <h2>Description : </h2>
+            <input id="description-mis" type="text" name="description" placeholder="Description" required />
+          
           <button class="conf">confirmer</button>
-          <div id="missionssou-container" class="missionssou">
-            <div class="missionsou">
-                  <h2>TITREs</h2>
-                  <div class="infosou">
-                    <h6>description:</h6>
-                    <p id="description">jhdsvuyqvoudzvouvduazvoubzdaucbhouadbcouvcuov</p>
-                  </div>
-                  <div class="infosou">
-                    <h6>temp estimée</h6>
-                  <p id="temp"></p>
-                  </div>
-                  <div class="infosou">
-                    <h6>prix:</h6>
-                  <p id="prix"></p>
-                  </div>
-            </div>
-            <div class="missionsou">
-                <h2>TITREs</h2>
-                <div class="infosou">
-                  <h6>description:</h6>
-                  <p id="description">jhdsvuyqvoudzvouvduazvoubzdaucbhouadbcouvcuov</p>
-                </div>
-                <div class="infosou">
-                  <h6>temp estimée</h6>
-                <p id="temp"></p>
-                </div>
-                <div class="infosou">
-                  <h6>prix:</h6>
-                <p id="prix"></p>
-                </div>
-          </div>
-          <div class="missionsou">
-            <h2>TITREs</h2>
-            <div class="infosou">
-              <h6>description:</h6>
-              <p id="description">jhdsvuyqvoudzvouvduazvoubzdaucbhouadbcouvcuov</p>
-            </div>
-            <div class="infosou">
-              <h6>temp estimée</h6>
-            <p id="temp"></p>
-            </div>
-            <div class="infosou">
-              <h6>prix:</h6>
-            <p id="prix"></p>
-            </div>
-      </div>
         </div>
             
 
@@ -180,7 +140,6 @@
 
             // Charger les détails de la mission
             await loadServiceDetails(serviceId);
-            await loadClientPendingMissions();
         });
 
         async function loadServiceDetails(serviceId) {
@@ -385,77 +344,8 @@ async function loadSimilarServices(categorie, currentServiceId) {
         document.getElementById("services-container").innerHTML = "<p>Erreur lors du chargement des services similaires.</p>";
     }
 }
-async function loadClientPendingMissions() {
-    try {
-        const token = localStorage.getItem("authToken");
-        const response = await fetch("http://localhost:3001/missions/en-attente", {
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-            }
-        });
 
-        if (!response.ok) {
-            throw new Error("Erreur de chargement des missions");
-        }
 
-        const missions = await response.json();
-        displayMissionsInPopup(missions);
-
-    } catch (error) {
-        console.error("Erreur:", error);
-        const container = document.getElementById("missionssou-container");
-        container.innerHTML = `
-            <div class="error-message">
-                <p>${error.message}</p>
-                <button onclick="loadClientPendingMissions()">Réessayer</button>
-            </div>
-        `;
-    }
-}
-let selectedMissionId = null;
-
-function displayMissionsInPopup(missions) {
-    const container = document.getElementById("missionssou-container");
-    container.innerHTML = "";
-
-    if (missions.length === 0) {
-        container.innerHTML = "<p>Aucune mission en attente disponible.</p>";
-        return;
-    }
-
-    missions.forEach(mission => {
-        const missionElement = document.createElement("div");
-        missionElement.className = "missionsou";
-        missionElement.innerHTML = `
-            <h2>${mission.titre}</h2>
-            <div class="infosou">
-                <h6>description:</h6>
-                <p>${mission.description}</p>
-            </div>
-            <div class="infosou">
-                <h6>temp estimée</h6>
-                <p>${mission.dureEstime} jours</p>
-            </div>
-            <div class="infosou">
-                <h6>prix:</h6>
-                <p>${mission.budget} DA</p>
-            </div>
-        `;
-        container.appendChild(missionElement);
-        missionElement.addEventListener('click', () => {
-            // Enlève la classe active de toutes les missions
-            document.querySelectorAll('.missionsou').forEach(m => {
-                m.classList.remove('active');
-            });
-            // Ajoute la classe active à la mission sélectionnée
-            missionElement.classList.add('active');
-            selectedMissionId = mission.id;
-        });
-    });
-
-}
-// Gestion du bouton Confirmer
 document.querySelector('.conf').addEventListener('click', async function() {
     if (!selectedMissionId) {
         alert("Veuillez sélectionner une mission");
@@ -486,6 +376,52 @@ document.querySelector('.conf').addEventListener('click', async function() {
         const result = await response.json();
         alert("Demande envoyée avec succès !");
         document.getElementById("soummetrePopup").style.display = "none";
+        
+    } catch (error) {
+        console.error("Erreur:", error);
+        alert(`Erreur: ${error.message}`);
+    }
+});
+document.querySelector('.conf').addEventListener('click', async function() {
+    const titre = document.getElementById('titre-mis').value;
+    const description = document.getElementById('description-mis').value;
+    
+    if (!titre || !description) {
+        alert("Veuillez remplir tous les champs");
+        return;
+    }
+
+    // Récupérer l'ID du service depuis l'URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const serviceId = urlParams.get('id');
+
+    try {
+        const token = localStorage.getItem("authToken");
+        const response = await fetch("http://localhost:3001/demandes/demande", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                titre,
+                description,
+                idService: serviceId
+            })
+        });
+
+        const result = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(result.message || "Erreur lors de la création de la mission");
+        }
+
+        alert("Mission soumise avec succès !");
+        document.getElementById("soummetrePopup").style.display = "none";
+        
+        // Réinitialiser les champs
+        document.getElementById('titre-mis').value = '';
+        document.getElementById('description-mis').value = '';
         
     } catch (error) {
         console.error("Erreur:", error);

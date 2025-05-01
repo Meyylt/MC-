@@ -362,8 +362,8 @@ a{
     padding: 20px;
     border-radius: 10px;
     text-align: center;
-    width: 800px;
-    height: 600px;/* Agrandissement du pop-up */
+    width: 600px;
+    height: 450px;/* Agrandissement du pop-up */
     max-width: 90%;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     position: relative;
@@ -372,6 +372,28 @@ a{
   .popup-content h6{
     font-size: 25px;
     margin-top: 20px;
+  }
+  .popup-content h2{
+    font-family: 'Raleway', sans-serif;
+    font-size: 20px;
+    margin-top: 50px;
+    text-align: left;
+    margin-left: 20px;
+  }
+  .popup-content input{
+    width: 500px;
+  padding: 8px;
+  border: none;
+  border-bottom: 1px solid green;
+  font-size: 16px;
+  background: transparent;
+  outline: none;
+  text-align: left;
+  transition: border-color 0.3s ease-in-out;
+  margin-top: 20px;
+  }
+  .popup-content input:focus{
+    border-bottom: 2px solid #003912;
   }
   
   .close-btn {
@@ -391,84 +413,6 @@ a{
     cursor: pointer;
     margin-top: 30px;
     width: 150px;
-    margin-left: 500px;
+    margin-left: 400px;
     font-size: 20px;
-  }
-
-
-  .missionssou{
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    margin-top: 20px;
-}
-.missionsou{
-    flex-grow: 0;
-    flex-shrink: 0;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    width: 300px;
-    height: 250px;
-    transition: all 0.3s ease;
-    overflow: hidden; 
-    background-color: white;
-}
-.missionsou:hover {
-    transform: scale(1.02); /* Légère augmentation de taille */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée */
-    cursor: pointer; /* Change le curseur en main */
-}
-.missionsou.active {
-    background-color: #003912;
-    color: white; /* facultatif pour que le texte reste lisible */
-    transition: background-color 0.3s ease;
-}
-
-.missionsou h2{
-    font-size: 25px;
-    font-family: 'Raleway', sans-serif;
-    padding-bottom: 15px;
-}
-.missionsou h6{
-    font-size: 15px;
-    font-family: 'Raleway', sans-serif;
-    padding-bottom: 5px;
-    margin-left: 30px;
-}
-.missionsou p{
-    font-size: 17px;
-    font-family: 'Raleway', sans-serif;
-    padding-bottom: 5px;
-    margin-top: 18px;
-}
-.infosou {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 5px;
-  }
-
-/* Style spécifique pour la description SEULEMENT */
-#description {
-    /* Solution moderne avec préfixes et standard */
-    display: -webkit-box;
-    display: -moz-box;
-    display: box;
-    
-    -webkit-line-clamp: 3;
-    -moz-line-clamp: 3;
-    line-clamp: 3;
-    
-    -webkit-box-orient: vertical;
-    -moz-box-orient: vertical;
-    box-orient: vertical;
-    
-    overflow: hidden;
-    text-overflow: ellipsis;
-    
-    /* Fallback pour les navigateurs plus anciens */
-    max-height: 4.2em; /* 3 lignes × 1.4em de line-height */
-    line-height: 1.4em;
   }

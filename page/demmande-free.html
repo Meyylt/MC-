@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitrine freelanceure</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/demande-free.css">
+    <link rel="stylesheet" href="../css/notif.css">
+    <link rel="stylesheet" href="../css/profil-pop-up.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="vitrine-freelancer.html"><span>SkillNet</span><span class="dot">●</span></a>
+        </div>
+        <div class="header-icons">
+           <button class="icon notif-icon"> <img src="../images/bell 1.png" alt="Image"></button>
+           <a href="messagerie.html"><button class="icon"> <img src="../images/mail 1.png" alt="Image"></button></a>
+           <button class="icon profil-pop-up"> <img src="../images/user 1 (1).png" alt="Image"> </button>
+        </div>
+    </header>
+    <nav>
+        <a href="profil-freelancer.html">Profil</a>
+        <a href="ajouter-service.html">Ajouter un service</a>
+        <a href="messervices.html">Mes service</a>
+        <a href="">Demmande</a>
+        <a href="">Mes mession</a>
+    </nav>
+
+    <main>
+        <div class="type">
+            <h2 id="recue" class="active">Recue</h2>
+            <h2 id="envoye">Envoyé</h2>
+        </div>
+
+        <section class="profile-card">
+            <div class="profile-info">
+                <img src="../images/freelanceur1.png" alt="Profil" >
+                <div class="profile-info-texte">
+                    <h3>NOM dutilisateure</h3>
+                </div>
+                <div class="action-buttons">
+                    <button class="detaill">voire detaill</button>
+                    <button class="accept">Accepter</button>
+                    <button class="decline">Refuser</button>
+                </div>
+            </div>
+            <div class="profile-info">
+                <img src="../images/freelanceur1.png" alt="Profil" >
+                <div class="profile-info-texte">
+                    <h3>NOM dutilisateure</h3>
+                </div>
+                <div class="action-buttons">
+                    <button class="detaill">voire detaill</button>
+                    <button class="accept">Accepter</button>
+                    <button class="decline">Refuser</button>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <div id="detaill" class="popup-overlay">
+        <div class="popup-content">
+          <img id="closePopup" src="../images/fermer.png" alt="Fermer" class="close-btn" />
+          <h6>Detaills de la mission</h6>
+          <p>Client : </p>
+          <p>Titre : </p>
+          <p>Description : </p>
+          <p>La mission a ete soimise pour le service : </p>
+        </div>
+
+      </div>
+
+    <div class="pop-up-nitif">
+        <div class="notification-container">
+            <img src="../images/bell 1.png" alt="Image">
+            <h2>NOTIFICATIONS</h2>
+        </div>
+        <div class="notifications">
+           <div class="notification">
+             <p>FARHI Louisa vous a envoyé une mission</p>
+           </div>
+        </div>
+        <div class="notifications">
+            <div class="notification">
+              <p>FARHI Louisa vous a envoyé une mission</p>
+            </div>
+         </div>
+         <div class="notifications">
+            <div class="notification">
+              <p>FARHI Louisa vous a envoyé une mission</p>
+            </div>
+         </div>
+    </div>
+    
+    <script src="../js/notif-pop-up.js"></script>
+    <div class="pop-up-profil">
+        <a href="profil-freelancer.html">Mon compte</a>
+        <a href="ajouter-service.html">Poster un service</a>
+         <a href="messervices.html">Mes service</a>
+         <hr>
+         <a href="connexion.html">se deconnecté</a>
+     </div>
+     <script src="../js/profil-pop-up.js"></script>
+    
+     <script>
+        const boutondetaill = document.querySelector(".detaill");
+    const popup = document.getElementById("detaill");
+    const closeBtn = document.getElementById("closePopup");
+
+    // Affiche le popup quand on clique sur "Écrire un avis"
+    boutondetaill.addEventListener("click", function () {
+        popup.style.display = "flex";
+    });
+
+    // Ferme le popup quand on clique sur l'image de fermeture
+    closeBtn.addEventListener("click", function () {
+        popup.style.display = "none";
+    });
+
+    // (Optionnel) Ferme le popup si on clique en dehors de la boîte
+    popup.addEventListener("click", function (e) {
+        if (e.target === popup) {
+            popup.style.display = "none";
+        }
+    });
+    
+     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    const envoyeBtn = document.getElementById('envoye');
+    const recueBtn = document.getElementById('recue');
+    
+    // Par défaut, "Envoyé" est actif
+    recueBtn.classList.add('active');
+    
+    // Gestion du clic sur "Envoyé"
+    envoyeBtn.addEventListener('click', function() {
+        if (!this.classList.contains('active')) {
+            this.classList.add('active');
+            recueBtn.classList.remove('active');
+            // Ajouter ici le code pour afficher les messages envoyés
+        }
+    });
+    
+    // Gestion du clic sur "Recue"
+    recueBtn.addEventListener('click', function() {
+        if (!this.classList.contains('active')) {
+            this.classList.add('active');
+            envoyeBtn.classList.remove('active');
+            // Ajouter ici le code pour afficher les messages reçus
+        }
+    });
+});
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+    // Vérification de l'authentification
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+        window.location.href = "connexion.html";
+        return;
+    }
+
+    // Éléments du DOM
+    const recueBtn = document.getElementById('recue');
+    const envoyeBtn = document.getElementById('envoye');
+    const profileCardsSection = document.querySelector('main section.profile-card');
+    const popup = document.getElementById('detaill');
+    const closeBtn = document.getElementById('closePopup');
+
+    // Charger les demandes reçues au démarrage
+    await loadDemandes('recues');
+
+    // Gestion des onglets
+    recueBtn.addEventListener('click', async () => {
+        if (!recueBtn.classList.contains('active')) {
+            recueBtn.classList.add('active');
+            envoyeBtn.classList.remove('active');
+            await loadDemandes('recues');
+        }
+    });
+
+    envoyeBtn.addEventListener('click', async () => {
+        if (!envoyeBtn.classList.contains('active')) {
+            envoyeBtn.classList.add('active');
+            recueBtn.classList.remove('active');
+            await loadDemandes('envoyes');
+        }
+    });
+
+    // Fonction pour charger les demandes
+    async function loadDemandes(type) {
+        try {
+            const response = await fetch(`http://localhost:3001/demandes/${type}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error("Erreur de chargement des demandes");
+            }
+
+            const demandes = await response.json();
+            displayDemandes(demandes);
+
+        } catch (error) {
+            console.error("Erreur:", error);
+            alert(`Erreur: ${error.message}`);
+        }
+    }
+
+    // Afficher les demandes
+    function displayDemandes(demandes) {
+        profileCardsSection.innerHTML = '';
+
+        if (demandes.length === 0) {
+            profileCardsSection.innerHTML = '<p>Aucune demande trouvée</p>';
+            return;
+        }
+
+        demandes.forEach(demande => {
+            const card = document.createElement('div');
+            card.className = 'profile-card';
+            card.dataset.id = demande.idDemande;
+            
+            card.innerHTML = `
+               <div class="profile-info">
+                <img src="../backend/uploads/${demande.client_image || 'user 1 (1).png'}" alt="Profil">
+                <div class="profile-info-texte">
+                    <h3>@${demande.client_username}</h3>
+                    <p>${demande.mission_titre}</p>
+                </div>
+                <div class="action-buttons">
+                    <button class="detaill" data-id="${demande.idDemande}">Voir détail</button>
+                    <button class="accept" data-id="${demande.idDemande}">Accepter</button>
+                    <button class="decline" data-id="${demande.idDemande}">Refuser</button>
+                </div>
+                </div>
+            `;
+            
+            profileCardsSection.appendChild(card);
+        });
+
+        // Ajouter les écouteurs d'événements pour les boutons
+        document.querySelectorAll('.detaill').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const demandeId = e.target.dataset.id;
+                await showDemandeDetails(demandeId);
+                popup.style.display = "flex";
+            });
+        });
+
+        document.querySelectorAll('.accept').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const demandeId = e.target.dataset.id;
+                await updateDemandeStatus(demandeId, 'accepter');
+            });
+        });
+
+        document.querySelectorAll('.decline').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const demandeId = e.target.dataset.id;
+                await updateDemandeStatus(demandeId, 'refuser');
+            });
+        });
+    }
+
+    // Afficher les détails d'une demande dans le popup
+    async function showDemandeDetails(demandeId) {
+        try {
+            const response = await fetch(`http://localhost:3001/demandes/${demandeId}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error("Erreur de chargement des détails");
+            }
+
+            const demande = await response.json();
+            
+            // Mettre à jour le contenu du popup
+            popup.querySelector('h6').textContent = `Détails de la mission: ${demande.mission_titre}`;
+            popup.innerHTML = `
+                <div class="popup-content">
+                <img id="closePopup" src="../images/fermer.png" alt="Fermer" class="close-btn" />
+                <h6>Détails de la mission: ${demande.mission_titre}</h6>
+                <p><strong>Client:</strong> ${demande.client_prenom} ${demande.client_nom} (@${demande.client_username})</p>
+                <p><strong>Titre:</strong> ${demande.mission_titre}</p>
+                <p><strong>Description:</strong> ${demande.mission_description}</p>
+                <p><strong>Service concerné:</strong> ${demande.service_titre} (${demande.service_prix} DA - ${demande.service_duree} jours)</p>
+                <p><strong>Description du service:</strong> ${demande.service_description}</p>
+                </div>
+            `;
+
+            // Réattacher l'écouteur d'événement pour le bouton de fermeture
+            document.getElementById('closePopup').addEventListener('click', () => {
+                popup.style.display = "none";
+            });
+
+        } catch (error) {
+            console.error("Erreur:", error);
+            alert(`Erreur: ${error.message}`);
+        }
+    }
+
+    // Mettre à jour le statut d'une demande
+    async function updateDemandeStatus(demandeId, action) {
+        if (!confirm(`Êtes-vous sûr de vouloir ${action === 'accepter' ? 'accepter' : 'refuser'} cette demande ?`)) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://localhost:3001/demandes/${demandeId}/${action}`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Erreur lors de l'${action === 'accepter' ? 'acceptation' : 'refus'}`);
+            }
+
+            const result = await response.json();
+            alert(result.message);
+            
+            // Recharger les demandes
+            if (recueBtn.classList.contains('active')) {
+                await loadDemandes('recues');
+            } else {
+                await loadDemandes('envoyes');
+            }
+
+        } catch (error) {
+            console.error("Erreur:", error);
+            alert(`Erreur: ${error.message}`);
+        }
+    }
+
+    // Fermer le popup quand on clique en dehors
+    popup.addEventListener('click', (e) => {
+        if (e.target === popup) {
+            popup.style.display = "none";
+        }
+    });
+});
+    </script>
+    
+</body>
+</html>
