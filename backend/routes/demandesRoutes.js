@@ -201,8 +201,11 @@ router.get("/client/demandes", authMiddleware, (req, res) => {
     const query = `
         SELECT 
             d.idDemande, d.statut,
+            d.idMission,
             m.titre, m.description,
             m. budget ,m.dureEstime,
+            m.statut as mstatut,
+            f.idFreelancer,
             u.Nomutilisateure as user,
             u.Nom as freelancerNom, u.prenom as freelancerPrenom, u.image as freelancerImage,
             s.Titre as serviceTitre
@@ -238,6 +241,8 @@ router.get("/client/demandes/:id", authMiddleware, (req, res) => {
             m.titre, m.description as missionDescription,
             m. budget ,m.dureEstime,
             u.Nomutilisateure as user,
+            m.statut as mstatut,
+            f.idFreelancer,
             u.Nom as freelancerNom, u.prenom as freelancerPrenom, u.image as freelancerImage,
             s.Titre as serviceTitre, s.description as serviceDescription
         FROM 

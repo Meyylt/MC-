@@ -145,8 +145,10 @@ nav a:hover{
     margin-top: 20px;
     font-size: 25px;
 }
-.methode p:active{
+.methode p.active {
     color: #003912;
+    font-weight: bold;
+    border-bottom: 2px solid #003912; /* optionnel pour bien marquer */
 }
 
 
@@ -226,3 +228,11 @@ nav a:hover{
 
 
 
+#cartee, #postee {
+    display: none;
+}
+
+#cartee.active,
+#postee.active {
+    display: block;
+}

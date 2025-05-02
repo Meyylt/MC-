@@ -61,6 +61,9 @@
                 </div>
             </div>
         </section>
+        <section class="candidats-container" id="candidats-container">
+           
+        </section>
     </main>
     
     <div id="detaill" class="popup-overlay">
@@ -71,6 +74,17 @@
           <p>Titre : </p>
           <p>Description : </p>
           <p>La mission a ete soimise pour le service : </p>
+        </div>
+
+      </div>
+      <div id="detaillcand" class="popup-overlay">
+        <div class="popup-content">
+          <img id="closePopupcand" src="../images/fermer.png" alt="Fermer" class="close-btn" />
+          <h6>Detaills de la mission</h6>
+          <p>Client : </p>
+          <p>Titre : </p>
+          <p>Budjet : </p>
+          <p>Duree : </p>
         </div>
 
       </div>
@@ -109,17 +123,28 @@
     
      <script>
         const boutondetaill = document.querySelector(".detaill");
+        const boutondetaillcand = document.querySelector(".detaillcand");
+
     const popup = document.getElementById("detaill");
+    const popupcand = document.getElementById("detaillcand");
+
     const closeBtn = document.getElementById("closePopup");
+    const closeBtncand = document.getElementById("closePopupcand");
 
     // Affiche le popup quand on clique sur "Écrire un avis"
     boutondetaill.addEventListener("click", function () {
         popup.style.display = "flex";
     });
+    boutondetaillcand.addEventListener("click", function () {
+        popupcand.style.display = "flex";
+    });
 
     // Ferme le popup quand on clique sur l'image de fermeture
     closeBtn.addEventListener("click", function () {
         popup.style.display = "none";
+    });
+    closeBtncand.addEventListener("click", function () {
+        popupcand.style.display = "none";
     });
 
     // (Optionnel) Ferme le popup si on clique en dehors de la boîte
@@ -128,35 +153,13 @@
             popup.style.display = "none";
         }
     });
+    popupcand.addEventListener("click", function (e) {
+        if (e.target === popupcand) {
+            popupcand.style.display = "none";
+        }
+    });
     
      </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-    const envoyeBtn = document.getElementById('envoye');
-    const recueBtn = document.getElementById('recue');
-    
-    // Par défaut, "Envoyé" est actif
-    recueBtn.classList.add('active');
-    
-    // Gestion du clic sur "Envoyé"
-    envoyeBtn.addEventListener('click', function() {
-        if (!this.classList.contains('active')) {
-            this.classList.add('active');
-            recueBtn.classList.remove('active');
-            // Ajouter ici le code pour afficher les messages envoyés
-        }
-    });
-    
-    // Gestion du clic sur "Recue"
-    recueBtn.addEventListener('click', function() {
-        if (!this.classList.contains('active')) {
-            this.classList.add('active');
-            envoyeBtn.classList.remove('active');
-            // Ajouter ici le code pour afficher les messages reçus
-        }
-    });
-});
-    </script>
     <script>
         document.addEventListener("DOMContentLoaded", async () => {
     // Vérification de l'authentification
@@ -169,34 +172,206 @@
     // Éléments du DOM
     const recueBtn = document.getElementById('recue');
     const envoyeBtn = document.getElementById('envoye');
-    const profileCardsSection = document.querySelector('main section.profile-card');
+    const profileCardsSection = document.querySelector('.profile-card');
+    
+    const candidateuresSection = document.querySelector('.candidats-container');
     const popup = document.getElementById('detaill');
     const closeBtn = document.getElementById('closePopup');
 
     // Charger les demandes reçues au démarrage
-    await loadDemandes('recues');
+    // Par défaut, "Envoyé" est actif
+    recueBtn.classList.add('active');
+    profileCardsSection.style.display = 'block';
+    candidateuresSection.style.display = 'none';
+    loadDemandes(); // Charger directement au chargement
 
-    // Gestion des onglets
-    recueBtn.addEventListener('click', async () => {
-        if (!recueBtn.classList.contains('active')) {
-            recueBtn.classList.add('active');
-            envoyeBtn.classList.remove('active');
-            await loadDemandes('recues');
-        }
-    });
+// Clic sur "Envoyé"
+envoyeBtn.addEventListener('click', function () {
+    if (!this.classList.contains('active')) {
+        this.classList.add('active');
+        recueBtn.classList.remove('active');
+        
+        profileCardsSection.style.display = 'none'; // Cache les demandes reçues
+        candidateuresSection.style.display = 'block';
+        loadCandidats()
+    }
+});
 
-    envoyeBtn.addEventListener('click', async () => {
-        if (!envoyeBtn.classList.contains('active')) {
-            envoyeBtn.classList.add('active');
-            recueBtn.classList.remove('active');
-            await loadDemandes('envoyes');
-        }
-    });
-
-    // Fonction pour charger les demandes
-    async function loadDemandes(type) {
+// Clic sur "Reçue"
+recueBtn.addEventListener('click', function () {
+    if (!this.classList.contains('active')) {
+        this.classList.add('active');
+        envoyeBtn.classList.remove('active');
+        
+        profileCardsSection.style.display = 'block'; // Affiche les demandes reçues
+        candidateuresSection.style.display = 'none';
+        loadDemandes();
+    }
+});
+async function loadCandidats() {
         try {
-            const response = await fetch(`http://localhost:3001/demandes/free/${type}`, {
+            const response = await fetch('http://localhost:3001/candidateures/candidateures', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) throw new Error('Erreur réseau');
+
+            const candidats = await response.json();
+            renderCandidats(candidats);
+
+        } catch (error) {
+            console.error('Erreur:', error);
+            alert('Impossible de charger les candidatures');
+        }
+    }
+   
+  
+    // Afficher les candidatures sous forme de cartes
+    function renderCandidats(candidats) {
+        candidateuresSection.innerHTML = ''; // Vider les candidats existants
+
+        candidats.forEach(candidat => {
+            const candidatHTML = `
+                <div class="profile-info" data-id="${candidat.idCandidat}">
+                    <img src="../backend/uploads/${candidat.clientImage || '../images/freelanceur1.png'}" alt="Profil">
+                    <div class="profile-info-texte">
+                        <h3>${candidat.nomu}</h3>
+                    </div>
+            `;
+            if (candidat.statut === 'En attente') {
+                demandeHTML = candidatHTML + `
+                    <div class="info">
+                        <button class="endemande">En attente</button>
+                        <div class="action-buttons">
+                            <button class="detaillcand" data-id="${candidat.idCandidat}">Voir détail</button>
+                            <button class="annuler" data-id="${candidat.idCandidat}">Annuler</button>
+                        </div>
+                    </div>
+                `;
+            } 
+            else if (candidat.statut === 'refuser') {
+                demandeHTML = candidatHTML + `
+                    <div class="info">
+                        <button class="refuser">refuser</button>
+                        <div class="action-buttons">
+                            <button class="detaillcand" data-id="${candidat.idCandidat}">Voir détail</button>
+                        </div>
+                    </div>
+                `;
+            } else{
+                demandeHTML = candidatHTML + `
+                    <div class="info">
+                        <button class="accepter">accepter</button>
+                        <div class="action-buttons">
+                            <button class="detaillcand" data-id="${candidat.idCandidat}">Voir détail</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            candidateuresSection .insertAdjacentHTML('beforeend', demandeHTML);
+        });
+        document.querySelectorAll('.annuler').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            const candidatId = e.target.dataset.id;
+            await annulerCandidature(candidatId);
+        });
+    });
+    // Ajoutez cet écouteur d'événement
+    document.querySelectorAll('.detaillcand').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            const candidatId = e.target.dataset.id;
+            await showCandidatDetails(candidatId);
+        });
+    });
+
+    } 
+    async function showCandidatDetails(candidatId) {
+    try {
+        const response = await fetch(`http://localhost:3001/candidateures/candidateures/details/${candidatId}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem("authToken")}`
+            }
+        });
+
+        if (!response.ok) throw new Error('Erreur de chargement des détails');
+
+        const candidat = await response.json();
+        
+        // Mettre à jour le contenu du popup
+        popupcand.innerHTML = `
+            <div class="popup-content">
+                <img id="closePopupcand" src="../images/fermer.png" alt="Fermer" class="close-btn" />
+                <h6>Détails de la candidature</h6>
+                <p><strong>Client:</strong> ${candidat.client_prenom} ${candidat.client_nom} (@${candidat.client_username})</p>
+                <p><strong>Titre de la mission:</strong> ${candidat.mission_titre}</p>
+                <p><strong>Budget:</strong> ${candidat.mission_budget} DA</p>
+                <p><strong>Durée estimée:</strong> ${candidat.mission_duree} jours</p>
+                <p><strong>Description:</strong> ${candidat.mission_description}</p>
+            </div>
+        `;
+
+        // Réattacher l'écouteur pour fermer le popup
+        document.getElementById('closePopupcand').addEventListener('click', () => {
+            popupcand.style.display = "none";
+        });
+        popupcand.addEventListener("click", function (e) {
+        if (e.target === popupcand) {
+            popupcand.style.display = "none";
+        }
+    });
+
+        // Afficher le popup
+        popupcand.style.display = "flex";
+
+    } catch (error) {
+        console.error("Erreur:", error);
+        alert(`Erreur: ${error.message}`);
+    }
+}
+    async function annulerCandidature(candidatId) {
+    if (!confirm("Êtes-vous sûr de vouloir annuler cette candidature ?")) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:3001/candidateures/candidateures/${candidatId}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("authToken")}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Erreur lors de l'annulation");
+        }
+
+        const result = await response.json();
+        alert(result.message);
+        
+        // Recharger la liste des candidatures
+        loadCandidats();
+
+    } catch (error) {
+        console.error("Erreur:", error);
+        alert(`Erreur: ${error.message}`);
+    }
+}  
+   
+   
+   
+   
+   
+   
+   
+   
+   
+    // Fonction pour charger les demandes
+    async function loadDemandes() {
+        try {
+            const response = await fetch(`http://localhost:3001/demandes/free/recues`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }

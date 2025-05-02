@@ -153,77 +153,8 @@
                     divCarte.classList.remove('active');
                 }
             });
-        
-            const paymentData = JSON.parse(localStorage.getItem('paymentData'));
-        
-            if (!paymentData) {
-                alert('Aucune donnée de paiement trouvée');
-                window.location.href = 'mesmissions.html';
-                return;
-            }
-        
-            document.querySelector('.informations h2').textContent = paymentData.titre;
-            document.querySelector('.total span:last-child').textContent = paymentData.prix + ' DA';
-            document.querySelector('.informations h3').textContent = `Livraison dans ${paymentData.duree} jours`;
-        
-            localStorage.removeItem('paymentData');
-        
-            document.getElementById('confirm-payment').addEventListener('click', async function () {
-                const typePaiement = btnCarte.classList.contains('active') ? 'CB' : 'CCP';
-        
-                let ccp = '';
-                let cle = '';
-                let numcb = '';
-                let dateexperation = '';
-                let vvs = '';
-                let nomcarte = '';
-        
-                if (typePaiement === 'CCP') {
-                    ccp = document.getElementById('ccp').value;
-                    cle = document.getElementById('cle').value;
-                    nomcarte = document.getElementById('nomposte').value;
-                } else {
-                    numcb = document.getElementById('numcarte').value;
-                    dateexperation = document.getElementById('date-ex').value;
-                    vvs = document.getElementById('vvs').value;
-                    nomcarte = document.getElementById('nomcarte').value;
-                }
-        
-                const paiementData = {
-                    montant: paymentData.prix,
-                    typePaiement,
-                    idFreelancer: paymentData.idFreelancer,
-                    idMission: paymentData.idMission,
-                    ccp,
-                    cle,
-                    numcb,
-                    dateexperation,
-                    vvs,
-                    nomcarte
-                };
-        
-                try {
-                    const response = await fetch('http://localhost:3001/transactions/paiement', {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(paiementData),
-                    });
-        
-                    const data = await response.json();
-        
-                    if (data.success) {
-                        alert('Paiement confirmé et mission mise à jour!');
-                        // window.location.href = 'success.html';
-                    } else {
-                        alert('Erreur lors du paiement : ' + data.message);
-                    }
-                } catch (error) {
-                    alert('Erreur de connexion : ' + error);
-                }
-            });
+            
+              
         });
         </script>
         
