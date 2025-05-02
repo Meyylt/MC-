@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitrine freelanceure</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/mission-free.css">
+    <link rel="stylesheet" href="../css/notif.css">
+    <link rel="stylesheet" href="../css/profil-pop-up.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="vitrine-freelancer.html"><span>SkillNet</span><span class="dot">●</span></a>
+        </div>
+        <div class="header-icons">
+           <button class="icon notif-icon"> <img src="../images/bell 1.png" alt="Image"></button>
+           <a href="messagerie.html"><button class="icon"> <img src="../images/mail 1.png" alt="Image"></button></a>
+           <button class="icon profil-pop-up"> <img src="../images/user 1 (1).png" alt="Image"> </button>
+        </div>
+    </header>
+    <nav>
+        <a href="profil-freelancer.html">Profil</a>
+        <a href="ajouter-service.html">Ajouter un service</a>
+        <a href="messervices.html">Mes service</a>
+        <a href="demmande-free.html">Demmande</a>
+        <a href="">Mes mession</a>
+    </nav>
+
+    <main>
+        <div class="mission-list" id="mission-list">
+            <div class="mission-card">
+                <div class="mission-header">
+                    <span><strong>Mission #1258</strong> - Marie Dupont</span>
+                    <span class="status pending">En cours</span>
+                </div>
+                <div class="mission-details">
+                    <p><strong>Nom:</strong> nom</p>
+                    <p><strong>Description:</strong> des</p>
+                    <p><strong>Prix:</strong> 11 DA</p>
+                    <p><strong>Duree:</strong> 5jours</p>
+                </div>
+                <div class="mission-actions">
+                    <button class="process-btn">marquer comme terminée</button>
+                </div>
+            </div>
+            
+            <div class="mission-card">
+                <div class="mission-header">
+                    <span><strong>Mission #1257</strong> - Jean Martin</span>
+                    <span class="status processing">En confirmation</span>
+                </div>
+                <div class="mission-details">
+                    <p><strong>Nom:</strong> nom</p>
+                    <p><strong>Description:</strong> des</p>
+                    <p><strong>Prix:</strong> 11 DA</p>
+                    <p><strong>Duree:</strong> 5jours</p>
+                </div>
+                <div class="mission-actions">
+                </div>
+            </div>
+            
+            <div class="mission-card">
+                <div class="mission-header">
+                    <span><strong>Mission #1256</strong> - Sophie Leroy</span>
+                    <span class="status shipped">Terminé</span>
+                </div>
+                <div class="mission-details">
+                    <p><strong>Nom:</strong> nom</p>
+                    <p><strong>Description:</strong> des</p>
+                    <p><strong>Prix:</strong> 11 DA</p>
+                    <p><strong>Duree:</strong> 5jours</p>
+                </div>
+                <div class="mission-actions">
+                </div>
+            </div>
+            
+          
+           
+           
+        
+    </main>
+
+    <div class="pop-up-nitif">
+        <div class="notification-container">
+            <img src="../images/bell 1.png" alt="Image">
+            <h2>NOTIFICATIONS</h2>
+        </div>
+        <div class="notifications">
+           <div class="notification">
+             <p>FARHI Louisa vous a envoyé une mission</p>
+           </div>
+        </div>
+        <div class="notifications">
+            <div class="notification">
+              <p>FARHI Louisa vous a envoyé une mission</p>
+            </div>
+         </div>
+         <div class="notifications">
+            <div class="notification">
+              <p>FARHI Louisa vous a envoyé une mission</p>
+            </div>
+         </div>
+    </div>
+    
+    <script src="../js/notif-pop-up.js"></script>
+    <div class="pop-up-profil">
+        <a href="profil-freelancer.html">Mon compte</a>
+        <a href="ajouter-service.html">Poster un service</a>
+         <a href="messervices.html">Mes service</a>
+         <hr>
+         <a href="connexion.html">se deconnecté</a>
+     </div>
+     <script src="../js/profil-pop-up.js"></script>
+
+     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem("authToken");
+            if (!token) {
+                window.location.href = "connexion.html";
+                return;
+            }
+    
+            const missionList = document.getElementById('mission-list');
+    
+            // Charger les missions au démarrage
+            loadFreelancerMissions();
+    
+            function loadFreelancerMissions() {
+                fetch('http://localhost:3001/missions/freelancer/missions', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                .then(function(response) {
+                    if (!response.ok) throw new Error('Erreur réseau');
+                    return response.json();
+                })
+                .then(function(missions) {
+                    // Filtrer les missions pour ne garder que celles avec les statuts voulus
+                    const filteredMissions = missions.filter(mission => 
+                        mission.statut === 'En cours' || 
+                        mission.statut === 'En confirmation' || 
+                        mission.statut === 'Terminé'
+                    );
+                    renderMissions(filteredMissions);
+                })
+                .catch(function(error) {
+                    console.error('Erreur:', error);
+                    alert('Impossible de charger les missions');
+                });
+            }
+    
+            function renderMissions(missions) {
+                missionList.innerHTML = '';
+    
+                if (missions.length === 0) {
+                    missionList.innerHTML = '<p class="no-missions">Aucune mission active trouvée</p>';
+                    return;
+                }
+    
+                missions.forEach(function(mission) {
+                    const missionCard = document.createElement('div');
+                    missionCard.className = 'mission-card';
+                    missionCard.dataset.id = mission.idMission;
+    
+                    let statusClass = '';
+                    let statusText = '';
+                    
+                    switch(mission.statut) {
+                        case 'En cours': 
+                            statusClass = 'pending'; 
+                            statusText = 'En cours';
+                            break;
+                        case 'En confirmation': 
+                            statusClass = 'processing'; 
+                            statusText = 'En confirmation';
+                            break;
+                        case 'Terminé': 
+                            statusClass = 'shipped'; 
+                            statusText = 'Terminé';
+                            break;
+                    }
+    
+                    missionCard.innerHTML = `
+                        <div class="mission-header">
+                            <span><strong>Mission #${mission.idMission}</strong> - ${mission.clientPrenom} ${mission.clientNom}</span>
+                            <span class="status ${statusClass}">${statusText}</span>
+                        </div>
+                        <div class="mission-details">
+                            <p><strong>Titre:</strong> ${mission.titre}</p>
+                            <p><strong>Description:</strong> ${mission.description}</p>
+                            <p><strong>Prix:</strong> ${mission.budget} DA</p>
+                            <p><strong>Durée:</strong> ${mission.dureEstime} jours</p>
+                        </div>
+                        <div class="mission-actions">
+                            ${mission.statut === 'En cours' ? 
+                                '<button class="process-btn complete-btn">Marquer comme terminée</button>' : 
+                                ''}
+                        </div>
+                    `;
+    
+                    missionList.appendChild(missionCard);
+                });
+    
+                setupEventListeners();
+            }
+    
+            function setupEventListeners() {
+                document.querySelectorAll('.complete-btn').forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        const missionId = this.closest('.mission-card').dataset.id;
+                        completeMission(missionId);
+                    });
+                });
+            }
+    
+            function completeMission(missionId) {
+                if (!confirm('Voulez-vous vraiment marquer cette mission comme terminée ?')) return;
+    
+                fetch(`http://localhost:3001/missions/freelancer/missions/${missionId}/complete`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(function(response) {
+                    if (!response.ok) throw new Error('Erreur réseau');
+                    return response.json();
+                })
+                .then(function() {
+                    alert('Mission marquée comme terminée avec succès');
+                    loadFreelancerMissions();
+                })
+                .catch(function(error) {
+                    console.error('Erreur:', error);
+                    alert('Échec de la mise à jour du statut');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

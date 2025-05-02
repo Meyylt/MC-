@@ -409,8 +409,224 @@ router.put("/:id", authMiddleware, (req, res) => {
         });
     });
 });
-// Récupérer les missions en attente du client connecté
 
 
+// Récupérer les missions d'un freelancer (avec filtres de statut)
+router.get("/freelancer/missions", authMiddleware, async (req, res) => {
+    const idFreelancer = req.user.idFreelancer;
+    
+    try {
+        const sql = `
+            SELECT 
+                m.idMission,
+                m.titre,
+                m.description,
+                m.dureEstime,
+                m.budget,
+                m.statut,
+                u.nom AS clientNom,
+                u.prenom AS clientPrenom,
+                u.Nomutilisateure AS clientUsername,
+                u.image AS clientImage
+            FROM mission m
+            JOIN candidateure c ON m.idMission = c.idMission
+            JOIN client cl ON m.idClient = cl.idClient
+            JOIN utilisateur u ON cl.idUtilisateur = u.idUtilisateur
+            WHERE c.idFreelancer = ?
+            ORDER BY 
+                CASE m.statut
+                    WHEN 'En cours' THEN 1
+                    WHEN 'Terminé' THEN 2
+                    WHEN 'En confirmation' THEN 3
+                    ELSE 4
+                END,
+                m.idMission DESC
+        `;
+        
+        const missions = await new Promise((resolve, reject) => {
+            bd.query(sql, [idFreelancer], (err, results) => {
+                if (err) reject(err);
+                else resolve(results);
+            });
+        });
+        
+        res.status(200).json(missions);
+        
+    } catch (error) {
+        console.error("Erreur:", error);
+        res.status(500).json({ 
+            message: "Erreur serveur lors de la récupération des missions",
+            error: error.message 
+        });
+    }
+});
+
+// Marquer une mission comme terminée
+// Récupérer les missions d'un freelancer (avec filtres de statut)
+router.get("/freelancer/missions", authMiddleware, (req, res) => {
+    const idFreelancer = req.user.idFreelancer;
+    
+    const sql = `
+        SELECT 
+            m.idMission,
+            m.titre,
+            m.description,
+            m.dureEstime,
+            m.budget,
+            m.statut,
+            u.nom AS clientNom,
+            u.prenom AS clientPrenom,
+            u.Nomutilisateure AS clientUsername,
+            u.image AS clientImage
+        FROM mission m
+        JOIN candidateure c ON m.idMission = c.idMission
+        JOIN client cl ON m.idClient = cl.idClient
+        JOIN utilisateur u ON cl.idUtilisateur = u.idUtilisateur
+        WHERE c.idFreelancer = ?
+        ORDER BY 
+            CASE m.statut
+                WHEN 'En cours' THEN 1
+                WHEN 'Terminé' THEN 2
+                WHEN 'En confirmation' THEN 3
+                ELSE 4
+            END,
+            m.idMission DESC
+    `;
+    
+    bd.query(sql, [idFreelancer], (err, missions) => {
+        if (err) {
+            console.error("Erreur:", err);
+            return res.status(500).json({ 
+                message: "Erreur serveur lors de la récupération des missions",
+                error: err.message 
+            });
+        }
+        
+        res.status(200).json(missions);
+    });
+});
+
+// Marquer une mission comme terminée
+router.post("/freelancer/missions/:id/complete", authMiddleware, (req, res) => {
+    const missionId = req.params.id;
+    const idFreelancer = req.user.idFreelancer;
+
+    // Vérifier que le freelancer est bien assigné à cette mission
+    const checkSql = `
+        SELECT 1 FROM candidateure 
+        WHERE idMission = ? AND idFreelancer = ? AND statut = 'accepter'
+    `;
+    
+    bd.query(checkSql, [missionId, idFreelancer], (err, checkResult) => {
+        if (err) {
+            console.error("Erreur:", err);
+            return res.status(500).json({ 
+                message: "Erreur serveur",
+                error: err.message 
+            });
+        }
+
+        if (checkResult.length === 0) {
+            return res.status(403).json({ 
+                message: "Non autorisé ou mission non trouvée" 
+            });
+        }
+
+        // Mettre à jour le statut
+        const updateSql = `
+            UPDATE mission SET statut = 'En confirmation' 
+            WHERE idMission = ?
+        `;
+        
+        bd.query(updateSql, [missionId], (err, results) => {
+            if (err) {
+                console.error("Erreur:", err);
+                return res.status(500).json({ 
+                    message: "Erreur serveur",
+                    error: err.message 
+                });
+            }
+
+            res.status(200).json({ 
+                message: "Mission marquée comme terminée avec succès" 
+            });
+        });
+    });
+});
+// Confirmer une mission terminée
+router.put("/:id/confirm", authMiddleware, (req, res) => {
+    const missionId = req.params.id;
+    const idClient = req.user.idClient;
+
+    // Vérifier que la mission appartient bien au client et est en statut "En confirmation"
+    const checkQuery = `
+        SELECT idClient, statut 
+        FROM mission 
+        WHERE idMission = ? 
+        FOR UPDATE`;
+
+    bd.query(checkQuery, [missionId], (err, results) => {
+        if (err) {
+            console.error("Erreur vérification mission:", err);
+            return res.status(500).json({
+                success: false,
+                message: "Erreur base de données",
+                error: err.message
+            });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Mission introuvable"
+            });
+        }
+
+        const mission = results[0];
+
+        if (mission.idClient !== idClient) {
+            return res.status(403).json({
+                success: false,
+                message: "Non autorisé: vous n'êtes pas le propriétaire"
+            });
+        }
+
+        if (mission.statut !== 'En confirmation') {
+            return res.status(400).json({
+                success: false,
+                message: "La mission doit être en statut 'En confirmation' pour être confirmée"
+            });
+        }
+
+        // Mise à jour du statut
+        const updateQuery = `
+            UPDATE mission 
+            SET statut = 'Terminé'
+            WHERE idMission = ? AND idClient = ?`;
+
+        bd.query(updateQuery, [missionId, idClient], (err, result) => {
+            if (err) {
+                console.error("Erreur mise à jour:", err);
+                return res.status(500).json({
+                    success: false,
+                    message: "Échec de la confirmation",
+                    sqlError: err.sqlMessage
+                });
+            }
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Aucune modification effectuée"
+                });
+            }
+
+            res.status(200).json({
+                success: true,
+                message: "Mission confirmée et terminée avec succès"
+            });
+        });
+    });
+});
 
 module.exports = router;

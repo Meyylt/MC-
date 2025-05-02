@@ -37,8 +37,11 @@
             <select id="stat" name="stat" onchange="filterMissions()">
             <option>Toutes</option>
             <option>En attente</option>
+            <option>En demande</option>
             <option>En cours</option>
+            <option>En confirmation</option>
             <option>Terminé</option>
+
             </select>
 
         </div>
@@ -197,6 +200,17 @@ function setupEventListeners() {
     document.getElementById("closePopup")?.addEventListener("click", () => {
         document.getElementById("modifierPopup").style.display = "none";
     });
+    // Gestion du clic sur Confirmer
+    document.addEventListener("click", async (e) => {
+        if (e.target.id === "conf") {
+            const missionElement = e.target.closest(".mission");
+            if (missionElement) {
+                if (confirm("Voulez-vous vraiment confirmer la fin de cette mission ?")) {
+                    await confirmMission(missionElement.dataset.missionId);
+                }
+            }
+        }
+    });
 };
 
 // Fonction pour ouvrir le popup de modification
@@ -327,13 +341,15 @@ function displayMissions(missions) {
         return;
     }
 
+
     missions.forEach(mission => {
         const missionElement = document.createElement("div");
         missionElement.className = "mission";
         missionElement.dataset.missionId = mission.id;
+        let missionHTML = '';
         
-        missionElement.innerHTML = `
-            <h2>${mission.titre}</h2>
+        const baseHTML = `
+                 <h2>${mission.titre}</h2>
             <div class="info">
                 <h6>Catégorie :</h6>
                 <p>${mission.categorie}</p>
@@ -350,15 +366,50 @@ function displayMissions(missions) {
                 <h6>Budget :</h6>
                 <p>${mission.budget} DA</p>
             </div>
-            <div class="info">
-                <h6>Statut :</h6>
-                <p>${mission.statut}</p>
+        `;  
+
+        if(mission.statut=== 'En attente'){
+            missionHTML = baseHTML + `
+                  <div class="info">
+                <h6>statut:</h6>
+                <p>${mission.statut} </p>
             </div>
-            <div class="boutons">
+                   <div class="boutons">
                 <button id="modifier">MODIFIER</button>
             </div>
-        `;
-        container.appendChild(missionElement);
+            
+                `;
+            
+        }else if(mission.statut === 'En cours'){
+            missionHTML = baseHTML + `
+                   <div class="info">
+                <h6>statut:</h6>
+                <p>${mission.statut} </p>
+            </div>
+                `;
+        }else if(mission.statut === 'Terminé'){
+            missionHTML = baseHTML + `
+                   <div class="boutons">
+                <button id="avis">laisser un avis</button>
+            </div>
+                `;
+        }else if(mission.statut === 'En confirmation'){
+            missionHTML = baseHTML + `
+                   <div class="boutons">
+                <button id="conf">confirmer</button>
+            </div>
+                `;
+        } else{
+            missionHTML = baseHTML + `
+                   <div class="info">
+                <h6>statut:</h6>
+                <p>${mission.statut} </p>
+            </div>
+                `;
+        }
+
+        missionElement.innerHTML = missionHTML;
+container.appendChild(missionElement);
     });
 }
 
@@ -373,6 +424,36 @@ function showError(message) {
     `;
 }
 
+// Ajoutez cette fonction pour confirmer la mission
+async function confirmMission(missionId) {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+        window.location.href = "connexion.html";
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:3001/missions/${missionId}/confirm`, {
+            method: "PUT",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || "Erreur lors de la confirmation");
+        }
+
+        alert("Mission confirmée et terminée avec succès !");
+        await loadMissions(); // Recharger les missions pour afficher le nouveau statut
+    } catch (error) {
+        console.error("Erreur:", error);
+        alert(`Erreur: ${error.message}`);
+    }
+}
 // Variable globale
 let currentMissionId = null;
   </script>
