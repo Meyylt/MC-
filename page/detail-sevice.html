@@ -179,12 +179,10 @@
             container.innerHTML = `
              
                 <div>
-                <div class="freelancer-info">
-                    <img class="imagefreee" src="../backend/uploads/${service.imagefree}" alt="Image">
-                   
-                        <p>@${service.nomutilisateure}</p>
-                    
-                </div>
+                <a href="profilfree-coteclient.html?idFreelancer=${service.idFreelancer}">
+                <img class="imagefreee" src="../backend/uploads/${service.imagefree}">
+                <p>@${service.nomutilisateure}</p>
+                </a>
                 
                 <div class="free">
                     <h3>Description du service</h3>

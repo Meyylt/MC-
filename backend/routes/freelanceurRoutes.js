@@ -385,5 +385,105 @@ router.post('/projet/:idProjet/images', upload.single('image'), (req, res) => {
         res.status(401).json({ message: "❌ Token invalide" });
     }
 });
+// Route pour le profil public (sans authentification)
+router.get("/profil-public/:idFreelancer", (req, res) => {
+    const idFreelancer = req.params.idFreelancer;
 
+    const query = `
+    SELECT 
+        U.nomutilisateure,
+        U.nom,
+        U.prenom,
+        F.specialite,
+        COALESCE(ROUND(AVG(N.note), 1), 0.0) AS note,  -- Alias direct en 'note' (commentaire SQL valide)
+        COUNT(N.idNote) AS avis,                        -- Alias direct en 'avis'
+        U.image
+    FROM Utilisateur U
+    JOIN Freelancer F ON U.idUtilisateur = F.idUtilisateur
+    LEFT JOIN note N ON F.idFreelancer = N.idFreelancer
+    WHERE F.idFreelancer = ?
+    GROUP BY F.idFreelancer
+`;
+
+    bd.query(query, [idFreelancer], (err, results) => {
+        if (err) {
+            console.error("❌ Erreur serveur :", err);
+            return res.status(500).json({ message: "Erreur serveur" });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ message: "Freelancer non trouvé" });
+        }
+
+        const freelancer = results[0];
+        res.status(200).json(freelancer); // Envoi direct sans champs supplémentaires
+    });
+});
+// Route pour récupérer les projets d'un freelancer sans authentification (profil public)
+router.get('/projets-freelancer/:idFreelancer', (req, res) => {
+    const idFreelancer = req.params.idFreelancer;
+
+    if (!idFreelancer) {
+        return res.status(400).json({ message: "ID du freelancer manquant" });
+    }
+
+    const query = `
+        SELECT idProjet, titre, description, cover_image, date_creation
+        FROM projet
+        WHERE idFreelancer = ?
+        ORDER BY date_creation DESC`;
+
+    bd.query(query, [idFreelancer], (err, results) => {
+        if (err) {
+            console.error("❌ Erreur serveur :", err);
+            return res.status(500).json({ message: "Erreur serveur" });
+        }
+        
+        res.status(200).json({
+            message: "✅ Projets récupérés avec succès",
+            projets: results
+        });
+    });
+});
+// Route pour récupérer les détails d'un projet sans authentification (profil public)
+router.get('/projet-public/:idProjet', (req, res) => {
+    const idProjet = req.params.idProjet;
+
+    if (!idProjet) {
+        return res.status(400).json({ message: "ID du projet manquant" });
+    }
+
+    // Récupérer les détails du projet
+    const queryProjet = `
+        SELECT p.*
+        FROM projet p
+        WHERE p.idProjet = ?`;
+
+    bd.query(queryProjet, [idProjet], (err, projetResults) => {
+        if (err) {
+            console.error("❌ Erreur serveur :", err);
+            return res.status(500).json({ message: "Erreur serveur" });
+        }
+
+        if (projetResults.length === 0) {
+            return res.status(404).json({ message: "❌ Projet non trouvé" });
+        }
+
+        // Récupérer les images associées
+        const queryImages = `SELECT * FROM imageprojet WHERE idProjet = ?`;
+
+        bd.query(queryImages, [idProjet], (err, imageResults) => {
+            if (err) {
+                console.error("❌ Erreur serveur :", err);
+                return res.status(500).json({ message: "Erreur serveur" });
+            }
+
+            res.status(200).json({
+                message: "✅ Détails du projet récupérés",
+                projet: projetResults[0],
+                images: imageResults
+            });
+        });
+    });
+});
 module.exports = router;

@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>profile freelancer</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap"
+            rel="stylesheet">
+        <link
+            href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&display=swap"
+            rel="stylesheet">
+        <link
+            href="https://fonts.googleapis.com/css2?family=Italiana&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+            rel="stylesheet">
+
+        <link rel="stylesheet" href="../css/profil-freelancer.css">
+        <link rel="stylesheet" href="../css/notif.css">
+        <link rel="stylesheet" href="../css/modifierprofil.css">
+        <link rel="stylesheet" href="../css/profil-pop-up.css">
+        <style>
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        /* Ajoutez les styles du nouveau bouton et du modal ici */
+        .portfolio-add-project {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: #003912;
+            color: white;
+            font-size: 2.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .portfolio-add-project:hover {
+            transform: scale(1.15) rotate(90deg);
+            background: #00290d;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+        }
+
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+        }
+
+        .file-upload label {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #f0f0f0;
+            border: 1px dashed #ccc;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload label:hover {
+            background: #e0e0e0;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 2rem;
+            justify-content: flex-end;
+        }
+
+        .submit-btn {
+            background: #003912;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .cancel-btn {
+            background: #f0f0f0;
+            color: #666;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #00290d;
+            transform: translateY(-2px);
+        }
+
+        .cancel-btn:hover {
+            background: #e0e0e0;
+        }
+
+        /* Ajouter un style pour les images dynamiques */
+        .projets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .projet img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: transform 0.3s;
+        }
+
+        .projet img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Styles supplémentaires */
+        .profile {
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            border-radius: 10px;
+            background: white;
+        }
+
+        #client-specialite {
+            color: #003912;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+
+        #client-note {
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+    </head>
+    <body>
+
+        <header>
+            <div class="logo">
+                <a href="vitrine-client.html"><span>SkillNet</span><span class="dot">●</span></a>
+            </div>
+            <input type="text" placeholder="Que cherchez-vous ? exemple: Développement web">
+
+            <div class="header-icons">
+                <button class="icon notif-icon"> <img src="../images/bell 1.png" alt="Image"></button>
+                <button class="icon"> <img src="../images/mail 1.png" alt="Image"></button>
+                <button class="icon profil-pop-up"> <img src="../images/user 1 (1).png" alt="Image"> </button>
+            </div>
+        </header>
+        <nav>
+            <a href="profil-client.html">Mon profil</a>
+            <a href="ajouterMission.html">Poster une mission</a>
+            <a href="mesmissions.html">Mes missions</a>
+        </nav>
+
+        <main>
+            <div class="container">
+                <div class="profile">
+                    <div>
+                        <img id="client-profil" src="../images/user 1 (1).png" alt="Image">
+                    </div>
+                    <h1 id="client-username">...</h1>
+                    <div class="information">
+                        <p id="client-nom">...</p>
+                        <p id="client-specialite">Spécialité : Développement Web</p>
+                        <p id="client-note">⭐ 4.8 (45 avis)</p>
+                    </div>
+                </div>
+                <div class="porfolio">
+                    <h2>Portfolio</h2>
+                    <p>Vous pourrez ajouter ci-dessous les projets que vous avez effectué au cours de votre carrière</p>
+                    <div class="pro">
+                        <div class="projets" id="projetsContainer">
+                            <!-- Les projets seront chargés dynamiquement ici -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Modal d'ajout de projet -->
+        <div class="modal-overlay" id="projectModal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <h2>Ajouter un nouveau projet</h2>
+                <form id="projectForm">
+                    <div class="form-group">
+                        <label for="projectTitle">Titre du projet</label>
+                        <input type="text" id="projectTitle" name="title" required placeholder="Ex: Site E-commerce">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="projectDesc">Description</label>
+                        <textarea id="projectDesc" name="description" rows="4" required placeholder="Décrivez votre projet..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="coverImage">Image de couverture</label>
+                        <div class="file-upload">
+                            <input type="file" id="coverImage" accept="image/*" required>
+                            <label for="coverImage">Choisir un fichier</label>
+                        </div>
+                    </div>
+
+                    <div class="form-buttons">
+                        <button type="button" class="cancel-btn">Annuler</button>
+                        <button type="submit" class="submit-btn">Publier le projet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Suppression du bouton d'ajout de projet -->
+        <!-- <button class="portfolio-add-project">+</button> -->
+
+        <div id="modifierPopup" class="popup-overlay">
+            <div class="popup-content">
+                <img id="closePopup" src="../images/fermer.png" alt="Fermer" class="close-btn" />
+                <p>Entrer les modification a effectuer</p>
+                <div class="jsp">
+                    <div class="formamodifier">
+                        <input type="text" placeholder="Nom Utilisateure" id="nomutilisateure">
+                        <p class="error-message" id="error-nomutilisateure"></p>
+
+                        <input type="text" placeholder="Nom" id="nom">
+                        <p class="error-message" id="error-nom"></p>
+
+                        <input type="text" placeholder="Prénom" id="prenom">
+                        <p class="error-message" id="error-prenom"></p>
+
+                        <input type="date" placeholder="Date de naissance" id="daten">
+                        <p class="error-message" id="error-daten"></p>
+
+                        <input type="email" placeholder="E-mail" id="email">
+                        <p class="error-message" id="error-email"></p>
+
+                        <button class="modif" id="modifierpopup">modifier</button>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="profilImages">Images du profil</label>
+                        <div class="file-upload">
+                            <input type="file" id="profilImages" multiple accept="image/*">
+                            <label for="profilImages" class="upload-btn">
+                                <i class="fas fa-cloud-upload-alt"></i> Choisir des images
+                            </label>
+                            <span id="file-count">0 fichier(s) sélectionné(s)</span>
+                        </div>
+                        <div id="imagePreview" class="image-preview"></div>
+                        <small>Format recommandé : JPEG ou PNG (max 2MB par image)</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="../js/modifierprofil.js"></script>
+        <div class="pop-up-profil">
+            <a href="profil-client.html">Mon compte</a>
+            <a href="ajouterMission.html">Poster une mission</a>
+            <a href="mesmissions.html">Mes missions</a>
+            <hr>
+            <a href="connexion.html">se deconnecté</a>
+        </div>
+        <script src="../js/profil-pop-up.js"></script>
+
+        <div class="pop-up-nitif">
+            <div class="notification-container">
+                <img src="../images/bell 1.png" alt="Image">
+                <h2>NOTIFICATIONS</h2>
+            </div>
+            <div class="notifications">
+                <div class="notification">
+                    <p>FARHI Louisa vous a envoyé une mission</p>
+                </div>
+            </div>
+            <div class="notifications">
+                <div class="notification">
+                    <p>FARHI Louisa vous a envoyé une mission</p>
+                </div>
+            </div>
+            <div class="notifications">
+                <div class="notification">
+                    <p>FARHI Louisa vous a envoyé une mission</p>
+                </div>
+            </div>
+        </div>
+
+        <script src="../js/notif-pop-up.js"></script>
+
+        <script>
+    document.addEventListener('DOMContentLoaded', function() {
+            // Gestion de l'upload d'images
+            const fileInput = document.getElementById('profilImages');
+            const fileCount = document.getElementById('file-count');
+            const imagePreview = document.getElementById('imagePreview');
+
+            fileInput.addEventListener('change', function(e) {
+                const files = e.target.files;
+                fileCount.textContent = `${files.length} fichier(s) sélectionné(s)`;
+
+                imagePreview.innerHTML = '';
+
+                if (files) {
+                    Array.from(files).forEach(file => {
+                        if (file.type.startsWith('image/')) {
+                            const reader = new FileReader();
+
+                            reader.onload = function(event) {
+                                const img = document.createElement('img');
+                                img.src = event.target.result;
+                                imagePreview.appendChild(img);
+                            }
+
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                }
+            });
+
+        // Gestion du modal
+        const addButton = document.querySelector('.portfolio-add-project');
+        const modal = document.getElementById('projectModal');
+        const closeModal = document.querySelector('.close-modal');
+        const cancelBtn = document.querySelector('.cancel-btn');
+
+        addButton.addEventListener('click', () => {
+            modal.style.display = 'flex';
+        });
+
+        [closeModal, cancelBtn].forEach(element => {
+            element.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+        });
+
+        // Gestion de la soumission du formulaire
+        document.getElementById('projectForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData();
+            formData.append('titre', document.getElementById('projectTitle').value);
+            formData.append('description', document.getElementById('projectDesc').value);
+            formData.append('coverImage', document.getElementById('coverImage').files[0]);
+
+            try {
+                const token = localStorage.getItem('authToken');
+                const response = await fetch('http://localhost:3001/freelancers/ajouter-projet', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: formData
+                });
+
+                if (!response.ok) throw new Error('Erreur lors de l\'ajout');
+
+                alert('Projet ajouté avec succès !');
+                modal.style.display = 'none';
+                await loadProjects(); // Recharger les projets
+
+            } catch (error) {
+                console.error('Erreur:', error);
+                alert(error.message);
+            }
+        });
+
+        // Affichage du nom du fichier
+        document.getElementById('coverImage').addEventListener('change', function(e) {
+            const fileName = e.target.files[0].name;
+            this.nextElementSibling.textContent = fileName;
+        });
+
+        });
+
+    document.addEventListener('DOMContentLoaded', async function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const freelancerId = urlParams.get('idFreelancer');
+
+        try {
+            const response = await fetch(`http://localhost:3001/freelancers/profil-public/${freelancerId}`);
+            const freelancerData = await response.json();
+
+            // Combiner le prénom et le nom
+            const nomComplet = `${freelancerData.prenom} ${freelancerData.nom}`;
+
+            // Formater la note avec un seul décimal
+            const noteFormatee = parseFloat(freelancerData.note).toFixed(1);
+
+            // Gérer l'affichage de la spécialité
+            const specialite = freelancerData.specialite || 'Non spécifiée';
+
+            // Mettre à jour les éléments HTML
+            document.getElementById('client-username').textContent = `@${freelancerData.nomutilisateure}`;
+            document.getElementById('client-specialite').textContent = `Spécialité : ${specialite}`;
+            document.getElementById('client-nom').textContent = nomComplet;
+            document.getElementById('client-note').textContent = `⭐ ${noteFormatee} (${freelancerData.avis} avis${freelancerData.avis !== 1 ? 's' : ''})`;
+
+            // Mettre à jour l'image si elle existe
+            if(freelancerData.image) {
+                document.getElementById('client-profil').src = `../backend/uploads/${freelancerData.image}`;
+            }
+
+        } catch (error) {
+            console.error('Erreur:', error);
+            document.getElementById('client-username').textContent = "Profil non trouvé";
+        }
+    });
+
+document.getElementById('modifierpopup').addEventListener('click', async function() {
+    try {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            window.location.href = 'connexion.html';
+            return;
+        }
+        const form = new FormData();
+
+form.append("nomutilisateure", document.getElementById('nomutilisateure').value.trim());
+form.append("nom", document.getElementById('nom').value.trim());
+form.append("prenom", document.getElementById('prenom').value.trim());
+form.append("daten", document.getElementById('daten').value);
+form.append("email", document.getElementById('email').value.trim());
+const fileInput = document.getElementById("profilImages");
+if (fileInput.files.length > 0) {
+// Envoi seulement du premier fichier (compatible avec upload.single)
+form.append("image", fileInput.files[0]);
+}
+const formData = {
+    nomutilisateure: document.getElementById('nomutilisateure').value.trim(),
+    nom: document.getElementById('nom').value.trim(),
+    prenom: document.getElementById('prenom').value.trim(),
+    daten: document.getElementById('daten').value,
+    email: document.getElementById('email').value.trim(),
+};
+
+        // Réinitialiser les messages d'erreur
+        document.querySelectorAll('.error-message').forEach(el => {
+            el.textContent = '';
+        });
+        const errors = validateForm(formData);
+        if (Object.keys(errors).length > 0) {
+            displayErrors(errors);
+            return;
+        }
+
+        const response = await fetch('http://localhost:3001/freelancers/modifier-profil', {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: form
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || "Erreur lors de la modification");
+        }
+
+        alert(data.message);
+        window.location.reload();
+
+    } catch (error) {
+        console.error("Erreur:", error);
+        alert(error.message);
+    }
+});
+function validateForm(data) {
+    const errors = {};
+    const regexNomPrenom = /^[A-Za-zÀ-ÖØ-öø-ÿ\s-]+$/;
+
+    if (!data.nomutilisateure) errors.nomutilisateure = "Le nom d'utilisateur est requis";
+    if (!data.nom) errors.nom = "Le nom est requis";
+    else if (!regexNomPrenom.test(data.nom)) errors.nom = "Le nom ne doit contenir que des lettres";
+
+    if (!data.prenom) errors.prenom = "Le prénom est requis";
+    else if (!regexNomPrenom.test(data.prenom)) errors.prenom = "Le prénom ne doit contenir que des lettres";
+
+    if (!data.daten) errors.daten = "La date de naissance est requise";
+    else if (calculerAge(data.daten) < 18) errors.daten = "Vous devez avoir au moins 18 ans";
+
+    if (!data.email) errors.email = "L'email est requis";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) errors.email = "L'email n'est pas valide";
+
+    return errors;
+}
+
+function displayErrors(errors) {
+    for (const [field, message] of Object.entries(errors)) {
+        const errorElement = document.getElementById(`error-${field}`);
+        if (errorElement) errorElement.textContent = message;
+    }
+}
+
+function showSuccessMessage(message) {
+    // Vous pouvez remplacer l'alert par un beau popup
+    alert(message);
+    window.location.reload();
+}
+
+function showErrorMessage(message) {
+    // Afficher l'erreur de manière plus élégante
+    alert(`Erreur: ${message}`);
+}
+
+// Fonction pour calculer l'âge
+function calculerAge(dateNaissance) {
+    const aujourdHui = new Date();
+    const naissance = new Date(dateNaissance);
+    let age = aujourdHui.getFullYear() - naissance.getFullYear();
+    const mois = aujourdHui.getMonth() - naissance.getMonth();
+
+    if (mois < 0 || (mois === 0 && aujourdHui.getDate() < naissance.getDate())) {
+        age--;
+    }
+
+    return age;
+}
+
+// Fonction pour charger les projets
+async function loadProjects() {
+    try {
+        const token = localStorage.getItem('authToken');
+        const response = await fetch('http://localhost:3001/freelancers/mes-projets', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        const projects = await response.json();
+        const container = document.getElementById('projetsContainer');
+        container.innerHTML = '';
+
+        projects.forEach(project => {
+            const projectHTML = `
+                    <a href="projet-details-public.html?idProjet=${project.idProjet}" class="projet-link">
+                        <div class="projet">
+                            <img src="../backend/uploads/${project.cover_image}" alt="${project.titre}">
+                            <p>${project.titre}</p>
+                        </div>
+                    </a>
+                    `;
+            container.insertAdjacentHTML('beforeend', projectHTML);
+        });
+
+    } catch (error) {
+        console.error('Erreur:', error);
+    }
+}
+
+// Charger les projets au chargement de la page
+document.addEventListener('DOMContentLoaded', loadProjects);
+   </script>
+    </body>
+</html>

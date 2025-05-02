@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails Projet - SkillNet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* ---------- Styles du Header ---------- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .dot {
+            color: #003912;
+        }
+
+        header input {
+            width: 400px;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .icon {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .icon img {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* ---------- Navigation ---------- */
+        nav {
+            display: flex;
+            justify-content: center;
+            padding: 15px 0;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        nav a {
+            margin: 0 20px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #003912;
+        }
+
+        /* ---------- Contenu principal ---------- */
+        .project-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 10px 25px;
+            margin-bottom: 2rem;
+            background: #003912;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .back-button:hover {
+            background: #00290d;
+            transform: translateY(-2px);
+        }
+
+        .project-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 2rem;
+        }
+
+        .project-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .project-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .project-image:hover {
+            transform: scale(1.03);
+        }
+
+        .project-title {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            font-size: 2.2rem;
+        }
+
+        /* Style pour la description */
+        .project-description {
+            font-family: 'Poppins', sans-serif;
+            color: #666;
+            text-align: center;
+            max-width: 800px;
+            margin: -1.5rem auto 2.5rem auto;
+            line-height: 1.6;
+            padding: 0 20px;
+        }
+
+        /* Message pour les erreurs ou le chargement */
+        .message {
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            padding: 30px;
+            color: #666;
+        }
+
+        .error-message {
+            color: #e74c3c;
+        }
+
+        /* Information sur le freelancer */
+        .freelancer-info {
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 2rem;
+            color: #666;
+        }
+
+        .freelancer-info a {
+            color: #003912;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .freelancer-info a:hover {
+            text-decoration: underline;
+        }
+
+        /* Style pour la date */
+        .project-date {
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            color: #999;
+            font-size: 0.9rem;
+            margin-top: -2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Loader */
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #003912;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 30px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="vitrine-freelancer.html"><span>SkillNet</span><span class="dot">●</span></a>
+        </div>
+        <input type="text" placeholder="Que cherchez-vous ? exemple: Développement web">
+        <div class="header-icons">
+            <button class="icon notif-icon"><img src="../images/bell 1.png" alt="Notifications"></button>
+            <a href="messagerie.html"><button class="icon"><img src="../images/mail 1.png" alt="Messages"></button></a>
+            <button class="icon profil-pop-up"><img src="../images/user 1 (1).png" alt="Profil"></button>
+        </div>
+    </header>
+
+    <nav>
+        <a href="index.html">Accueil</a>
+        <a href="services.html">Services</a>
+        <a href="freelancers.html">Freelancers</a>
+        <a href="contact.html">Contact</a>
+        <a href="about.html">À propos</a>
+    </nav>
+
+    <main class="project-container">
+        <a href="javascript:history.back()" class="back-button">← Retour au profil</a>
+        <h1 id="projectTitle">Chargement...</h1>
+        <div class="project-date" id="projectDate"></div>
+        <div class="freelancer-info" id="freelancerInfo"></div>
+        <div id="projectDescription" class="project-description"></div>
+        <div class="project-gallery" id="projectGallery">
+            <div class="loader"></div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Récupérer l'ID du projet depuis l'URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const idProjet = urlParams.get('idProjet');
+
+            if (!idProjet) {
+                showError('Projet non trouvé');
+                return;
+            }
+
+            try {
+                // Charger les données du projet
+                const response = await fetch(`http://localhost:3001/freelancers/projet-public/${idProjet}`);
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Erreur lors du chargement du projet');
+                }
+
+                const data = await response.json();
+                const projet = data.projet;
+                const images = data.images;
+
+                // Afficher les informations du projet
+                document.getElementById('projectTitle').textContent = projet.titre;
+                document.getElementById('projectDescription').textContent = projet.description;
+                
+                // Afficher la date de création si disponible
+                if (projet.date_creation) {
+                    const date = new Date(projet.date_creation);
+                    const dateFormatee = date.toLocaleDateString('fr-FR', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric'
+                    });
+                    document.getElementById('projectDate').textContent = `Créé le ${dateFormatee}`;
+                }
+
+                // Récupérer et afficher les informations du freelancer
+                if (projet.idFreelancer) {
+                    try {
+                        const freelancerResponse = await fetch(`http://localhost:3001/freelancers/info/${projet.idFreelancer}`);
+                        
+                        if (freelancerResponse.ok) {
+                            const freelancerData = await freelancerResponse.json();
+                            document.getElementById('freelancerInfo').innerHTML = `
+                                Projet réalisé par <a href="profilfree-coteclient.html?idFreelancer=${projet.idFreelancer}">${freelancerData.prenom} ${freelancerData.nom}</a>
+                                ${freelancerData.metier ? ` - ${freelancerData.metier}` : ''}
+                            `;
+                        } else {
+                            // Si on ne peut pas récupérer les infos du freelancer, on n'affiche rien
+                            document.getElementById('freelancerInfo').style.display = 'none';
+                        }
+                    } catch (freelancerError) {
+                        console.error('Erreur lors du chargement des infos du freelancer:', freelancerError);
+                        // En cas d'erreur, on cache simplement cette section
+                        document.getElementById('freelancerInfo').style.display = 'none';
+                    }
+                }
+
+                // Afficher la galerie d'images
+                const gallery = document.getElementById('projectGallery');
+                
+                if (images && images.length > 0) {
+                    gallery.innerHTML = images.map(img => `
+                        <div class="project-item">
+                            <img src="../backend/uploads/${img.url_image}" alt="${img.titre || projet.titre}" class="project-image">
+                            ${img.titre ? `<div class="project-title">${img.titre}</div>` : ''}
+                        </div>
+                    `).join('');
+                } else {
+                    gallery.innerHTML = '<div class="message">Aucune image disponible pour ce projet</div>';
+                }
+
+            } catch (error) {
+                console.error('Erreur:', error);
+                showError(error.message || 'Impossible de charger les détails du projet');
+            }
+        });
+
+        // Fonction pour afficher un message d'erreur
+        function showError(message) {
+            document.getElementById('projectTitle').textContent = 'Erreur';
+            document.getElementById('projectDescription').textContent = '';
+            document.getElementById('projectDate').textContent = '';
+            document.getElementById('freelancerInfo').style.display = 'none';
+            document.getElementById('projectGallery').innerHTML = `
+                <div class="message error-message">${message}</div>
+            `;
+        }
+    </script>
+</body>
+</html>
