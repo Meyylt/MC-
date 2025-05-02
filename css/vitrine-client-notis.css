@@ -99,6 +99,10 @@ nav a:hover{
     padding: 20px;
     margin: 10px;
 }
+.candidats-container{
+    padding: 20px;
+    margin: 10px;
+}
 
 .profile-info {
     display: flex;
@@ -183,6 +187,42 @@ nav a:hover{
     border-radius: 5px;
     cursor: pointer;
     width: 120px;
+    font-size: 15px;
+    font-family: 'Raleway', sans-serif;
+    margin-right: 20px;
+}
+.detaillcand{
+    background-color: #003912;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 120px;
+    font-size: 15px;
+    font-family: 'Raleway', sans-serif;
+    margin-right: 20px;
+}
+.accept{
+    background-color: #003912;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 120px;
+    font-size: 15px;
+    font-family: 'Raleway', sans-serif;
+    margin-right: 20px;
+}
+.decline{
+    background-color: white;
+    color: #003912;
+    border: 1px solid #ddd;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100px;
     font-size: 15px;
     font-family: 'Raleway', sans-serif;
     margin-right: 20px;
