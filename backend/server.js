@@ -39,7 +39,7 @@ app.use("/candidateures", candidateureRoutes);
 const demandesRoutes = require("./routes/demandesRoutes");
 app.use("/demandes", demandesRoutes);
 const notesRoutes = require("./routes/notesRoutes");
-app.use("notes",notesRoutes);
+app.use("/notes",notesRoutes);
 
 // 🌍 Route d'accueil
 app.get("/", (req, res) => {

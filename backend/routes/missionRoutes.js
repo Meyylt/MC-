@@ -234,7 +234,8 @@ router.get("/missions", authMiddleware, (req, res) => {
         m.description,
         m.dureEstime,
         m.budget,
-        m.statut
+        m.statut,
+        m.idFreelancer
     FROM mission m
     WHERE m.idClient = ?
     ORDER BY m.idMission DESC
@@ -263,6 +264,7 @@ router.get("/:id", (req, res) => {
             m.dureEstime,
             m.budget,
             m.statut,
+            m.idFreelancer,
             u.nom as clientNom,
             u.prenom as clientPrenom
         FROM mission m

@@ -27,10 +27,11 @@ stars.forEach((star, index) => {
     // Hover
     star.addEventListener('mouseover', () => {
         for (let i = 0; i <= index; i++) {
-            stars[i].src = '../images/etoileplein.png'; // Remplace par ton chemin
+            stars[i].src = '../images/etoil.png'; // Remplace par ton chemin
         }
         for (let i = index + 1; i < stars.length; i++) {
-            stars[i].src = '../images/etoil.png';
+            
+            stars[i].src = '../images/etoileplein.png'; 
         }
     });
 
@@ -50,6 +51,6 @@ let selectedRating = 0;
 
 function updateStars() {
     stars.forEach((star, i) => {
-        star.src = i < selectedRating ? '../images/etoileplein.png' : '../images/etoil.png';
+        star.src = i < selectedRating ? '../images/etoil.png' : '../images/etoileplein.png';
     });
 }

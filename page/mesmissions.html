@@ -142,8 +142,8 @@
     </div>
     <script src="../js/profil-pop-up.js"></script>
 
-    <div id="ajouterPopup" class="popup-overlay">
-        <div class="popup-content">
+    <div id="ajouterPopup" class="popupavis-overlay">
+        <div class="popupavis-content">
           <img id="closePopupavis" src="../images/fermer.png" alt="Fermer" class="close-btn" />
           <h6>Partager vos refléxions</h6>
           <form>
@@ -180,9 +180,87 @@ document.addEventListener("DOMContentLoaded", async () => {
         window.location.href = "connexion.html";
         return;
     }
-
+   let idFreelancer=null;
     await loadMissions();
     setupEventListeners();
+    document.addEventListener("click", function (e) {
+        if (e.target.classList.contains("avis")) {
+            const missionElement = e.target.closest(".mission");
+            if (missionElement) {
+                // Récupérer l'ID du freelancer
+                const idFreelancer = missionElement.dataset.idFreelancer;
+                document.getElementById("ajouterPopup").style.display = "flex";
+                
+                // Ajouter l'ID du freelancer au popup d'avis
+                document.getElementById("ajouterPopup").dataset.idFreelancer = idFreelancer;
+            }
+        }
+    });
+
+
+    document.querySelector(".ajouteravis").addEventListener("click", async () => {
+        const note = getSelectedRating(); // Fonction pour récupérer la note
+        const commentaire = document.getElementById("ecrireavis").value.trim();
+        const idFreelancer = document.getElementById("ajouterPopup").dataset.idFreelancer;
+        
+        if (!note || !commentaire) {
+            alert("La note et le commentaire sont obligatoires.");
+            return;
+        }
+
+        if (!idFreelancer) {
+            alert("pas");
+            return;
+        }
+
+        try {
+            const response = await fetch("http://localhost:3001/notes/add", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("authToken")}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    note,
+                    commentaire,
+                    idFreelancer
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Erreur lors de l'ajout de l'avis");
+            }
+
+            alert("Avis ajouté avec succès !");
+            document.getElementById("ajouterPopup").style.display = "none";
+        } catch (error) {
+            console.error("Erreur:", error);
+            alert(`Erreur: ${error.message}`);
+        }
+    });
+});
+
+// Fonction pour récupérer la note sélectionnée
+function getSelectedRating() {
+    const stars = document.querySelectorAll(".noteavis img");
+    for (let i = 0; i < stars.length; i++) {
+        if (stars[i].style.opacity !== "1") {
+            return i;
+        }
+    }
+    return null;
+}
+
+// Écouteur pour gérer le clic sur les étoiles pour la note
+document.querySelectorAll(".noteavis img").forEach((star, index) => {
+    star.addEventListener("click", () => {
+        const stars = document.querySelectorAll(".noteavis img");
+        stars.forEach((s, i) => {
+            s.style.opacity = i <= index ? "1" : "0.5"; // Changer l'opacité pour afficher les étoiles sélectionnées
+        });
+    });
 });
 // Ajoutez cette fonction pour filtrer les missions
 async function filterMissions() {
@@ -238,8 +316,7 @@ function openEditPopup(missionElement) {
         categorie: missionElement.querySelector(".info:nth-child(2) p").textContent,
         description: missionElement.querySelector(".info:nth-child(3) p").textContent,
         dureEstime: missionElement.querySelector(".info:nth-child(4) p").textContent.replace(" jours", ""),
-        budget: missionElement.querySelector(".info:nth-child(5) p").textContent.replace(" DA", ""),
-        statut: missionElement.querySelector(".info:nth-child(6) p").textContent
+        budget: missionElement.querySelector(".info:nth-child(5) p").textContent.replace(" DA", "")
     };
 
     // Remplissage du formulaire
@@ -362,6 +439,7 @@ function displayMissions(missions) {
         const missionElement = document.createElement("div");
         missionElement.className = "mission";
         missionElement.dataset.missionId = mission.id;
+        missionElement.dataset.idFreelancer = mission.idFreelancer;
         let missionHTML = '';
         
         const baseHTML = `
@@ -382,10 +460,12 @@ function displayMissions(missions) {
                 <h6>Budget :</h6>
                 <p>${mission.budget} DA</p>
             </div>
+
         `;  
 
         if(mission.statut=== 'En attente'){
             missionHTML = baseHTML + `
+                 
                    <div class="boutons">
                 <button id="modifier">MODIFIER</button>
             </div>
@@ -401,7 +481,7 @@ function displayMissions(missions) {
         }else if(mission.statut === 'Terminé'){
             missionHTML = baseHTML + `
                    <div class="boutons">
-                <button id="avis" class="avis">laisser un avis</button>
+                <button id="avis" class="avis" data-id-freelancer=="${mission.idFreelancer}">laisser un avis</button>
             </div>
                 `;
         }else if(mission.statut === 'En confirmation'){

@@ -4,9 +4,10 @@ const db = require("../bd");
 const authMiddleware = require("../middleware/auth");
 
 // Route pour ajouter un nouvel avis sur un freelancer (autorise plusieurs avis)
-router.post('/', authMiddleware, (req, res) => {
+router.post('/add', authMiddleware, (req, res) => {
     const { note, commentaire, idFreelancer } = req.body;
     const idClient = req.user.idClient;
+    console.log(`Avis ajouté pour le freelancer ${idFreelancer} : Note = ${note}, Commentaire = ${commentaire}`);
 
     // Validation des données
     if (!note || !commentaire || !idFreelancer) {
@@ -23,6 +24,7 @@ router.post('/', authMiddleware, (req, res) => {
         });
     }
 
+    
     // Insertion directe du nouvel avis (sans vérification d'existence)
     db.query(
         `INSERT INTO note 
