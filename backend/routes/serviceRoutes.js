@@ -18,10 +18,16 @@ router.get("/", (req, res) => {
             u.nom as freelancerNom,
             s.image,
             u.nomutilisateure ,
+            
+        COALESCE(ROUND(AVG(N.note), 1), 0.0) AS note,  -- Alias direct en 'note' (commentaire SQL valide)
+        COUNT(N.idNote) AS avis, 
             u.image as imagefree
         FROM service s
         JOIN Freelancer f ON s.idFreelancer = f.idFreelancer
         JOIN Utilisateur u ON f.idUtilisateur = u.idUtilisateur
+        LEFT JOIN note N ON F.idFreelancer = N.idFreelancer
+        
+    GROUP BY s.idService
         ORDER BY s.idService DESC
     `;
     
@@ -193,11 +199,16 @@ router.get("/:id", (req, res) => {
             s.image,
             u.nomutilisateure ,
             u.image as imagefree,
+            COALESCE(ROUND(AVG(N.note), 1), 0.0) AS note,  -- Alias direct en 'note' (commentaire SQL valide)
+        COUNT(N.idNote) AS avis, 
             f.idFreelancer
         FROM service s
         JOIN Freelancer f ON s.idFreelancer = f.idFreelancer
         JOIN Utilisateur u ON f.idUtilisateur = u.idUtilisateur
+        
+        LEFT JOIN note N ON F.idFreelancer = N.idFreelancer
         WHERE s.idService = ?
+        GROUP BY s.idService
     `;
     
     bd.query(sql, [serviceId], (err, results) => {
@@ -262,11 +273,16 @@ router.get("/freelancer/:id", authMiddleware, (req, res) => {
         u.nom as freelancerNom,
         s.image,
         u.nomutilisateure ,
+            COALESCE(ROUND(AVG(N.note), 1), 0.0) AS note,  -- Alias direct en 'note' (commentaire SQL valide)
+        COUNT(N.idNote) AS avis, 
         u.image as imagefree
     FROM service s
     JOIN Freelancer f ON s.idFreelancer = f.idFreelancer
     JOIN Utilisateur u ON f.idUtilisateur = u.idUtilisateur
+    LEFT JOIN note N ON F.idFreelancer = N.idFreelancer
     WHERE s.idFreelancer = ?
+    
+        GROUP BY s.idService
     ORDER BY s.idService DESC
 `;
 
@@ -294,11 +310,17 @@ router.get("/categorie/:categorie", authMiddleware, (req, res) => {
             u.nom as freelancerNom,
             s.image,
             u.nomutilisateure,
+            
+            COALESCE(ROUND(AVG(N.note), 1), 0.0) AS note,  -- Alias direct en 'note' (commentaire SQL valide)
+        COUNT(N.idNote) AS avis, 
             u.image as imagefree
         FROM service s
         JOIN Freelancer f ON s.idFreelancer = f.idFreelancer
         JOIN Utilisateur u ON f.idUtilisateur = u.idUtilisateur
+        
+    LEFT JOIN note N ON F.idFreelancer = N.idFreelancer
         WHERE s.categorie = ?
+        GROUP BY s.idService
         ORDER BY s.idService DESC
     `;
 

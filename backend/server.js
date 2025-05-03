@@ -41,11 +41,8 @@ app.use("/demandes", demandesRoutes);
 const notesRoutes = require("./routes/notesRoutes");
 app.use("/notes", notesRoutes);
 const rechercheRoutes = require("./routes/rechercheRoutes");
-app.use("/", rechercheRoutes); // Ou tu peux mettre "/recherche"
-// 🌍 Route d'accueil
-app.get("/", (req, res) => {
-  res.send("Hello, Node.js Backend!");
-});
+app.use("/recherches", rechercheRoutes); // Ou tu peux mettre "/recherche"
+
 
 // 🚀 Démarrer le serveur
 const PORT = 3001;
