@@ -67,6 +67,8 @@
                   </div>
                   <div class="boutons">
                     <button id="modifier"  >MODIFIER</button>
+                    
+                <button id="avis" class="avis">laisser un avis</button>
                 </div>
                   
             </div>
@@ -140,7 +142,32 @@
     </div>
     <script src="../js/profil-pop-up.js"></script>
 
-    
+    <div id="ajouterPopup" class="popup-overlay">
+        <div class="popup-content">
+          <img id="closePopupavis" src="../images/fermer.png" alt="Fermer" class="close-btn" />
+          <h6>Partager vos refléxions</h6>
+          <form>
+            <label for="noteavis">Evaluer le produit*</label>
+            <div is="noteavis" class="noteavis">
+                <img id="etoile1" src="../images/etoil.png" />
+                <img id="etoile2" src="../images/etoil.png" />
+                <img id="etoile3" src="../images/etoil.png" />
+                <img id="etoile4" src="../images/etoil.png" />
+                <img id="etoile5" src="../images/etoil.png" />
+
+            </div>
+
+            <label for="ecrireavis">Ecrire un avis*</label>
+            <textarea id="ecrireavis" rows="5" placeholder="Décrivez le produit en détail..." required></textarea>
+
+                
+          </form>
+          <button type="submit" class="ajouteravis">Ajouter</button>
+        </div>
+
+      </div>
+      <script src="../js/ajoutercom.js"></script>
+      
     
 
 
@@ -199,17 +226,6 @@ function setupEventListeners() {
     // Fermeture du popup
     document.getElementById("closePopup")?.addEventListener("click", () => {
         document.getElementById("modifierPopup").style.display = "none";
-    });
-    // Gestion du clic sur Confirmer
-    document.addEventListener("click", async (e) => {
-        if (e.target.id === "conf") {
-            const missionElement = e.target.closest(".mission");
-            if (missionElement) {
-                if (confirm("Voulez-vous vraiment confirmer la fin de cette mission ?")) {
-                    await confirmMission(missionElement.dataset.missionId);
-                }
-            }
-        }
     });
 };
 
@@ -370,14 +386,9 @@ function displayMissions(missions) {
 
         if(mission.statut=== 'En attente'){
             missionHTML = baseHTML + `
-                  <div class="info">
-                <h6>statut:</h6>
-                <p>${mission.statut} </p>
-            </div>
                    <div class="boutons">
                 <button id="modifier">MODIFIER</button>
             </div>
-            
                 `;
             
         }else if(mission.statut === 'En cours'){
@@ -390,7 +401,7 @@ function displayMissions(missions) {
         }else if(mission.statut === 'Terminé'){
             missionHTML = baseHTML + `
                    <div class="boutons">
-                <button id="avis">laisser un avis</button>
+                <button id="avis" class="avis">laisser un avis</button>
             </div>
                 `;
         }else if(mission.statut === 'En confirmation'){
@@ -424,36 +435,6 @@ function showError(message) {
     `;
 }
 
-// Ajoutez cette fonction pour confirmer la mission
-async function confirmMission(missionId) {
-    const token = localStorage.getItem("authToken");
-    if (!token) {
-        window.location.href = "connexion.html";
-        return;
-    }
-
-    try {
-        const response = await fetch(`http://localhost:3001/missions/${missionId}/confirm`, {
-            method: "PUT",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-            }
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.message || "Erreur lors de la confirmation");
-        }
-
-        alert("Mission confirmée et terminée avec succès !");
-        await loadMissions(); // Recharger les missions pour afficher le nouveau statut
-    } catch (error) {
-        console.error("Erreur:", error);
-        alert(`Erreur: ${error.message}`);
-    }
-}
 // Variable globale
 let currentMissionId = null;
   </script>
