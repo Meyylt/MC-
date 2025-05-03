@@ -218,7 +218,7 @@
       document.getElementById("search-btn").addEventListener("click", () => {
         const keyword = document.getElementById("search-bar").value;
         fetch(
-          `http://localhost:3001/api/recherche?query=${encodeURIComponent(
+          `http://localhost:3001/recherches/recherche?query=${encodeURIComponent(
             keyword
           )}`
         )
