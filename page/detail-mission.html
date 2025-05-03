@@ -1,123 +1,144 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Détail d'une mission</title>
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/detail-mission.css">
-    <link rel="stylesheet" href="../css/notif.css">
-    <link rel="stylesheet" href="../css/profil-pop-up.css">
-</head>
-<body>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Italiana&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/detail-mission.css" />
+    <link rel="stylesheet" href="../css/notif.css" />
+    <link rel="stylesheet" href="../css/profil-pop-up.css" />
+  </head>
+  <body>
     <header>
-        <div class="logo">
-            <a href="vitrine-freelancer.html"><span>SkillNet</span><span class="dot">●</span></a>
-        </div>
-        <input type="text" placeholder="Que cherchez-vous ? exemple: Développement web">
-        <div class="header-icons">
-           <button class="icon notif-icon"> <img src="../images/bell 1.png" alt="Image"></button>
-           <button class="icon"> <img src="../images/mail 1.png" alt="Image"></button>
-           <button class="icon profil-pop-up"> <img src="../images/user 1 (1).png" alt="Image"> </button>
-        </div>
+      <div class="logo">
+        <a href="vitrine-freelancer.html"
+          ><span>SkillNet</span><span class="dot">●</span></a
+        >
+      </div>
+      <input
+        type="text"
+        id="search-bar"
+        placeholder="Que cherchez-vous ? exemple: Développement web"
+      />
+      <button id="search-btn">🔍</button>
+      <div class="header-icons">
+        <button class="icon notif-icon">
+          <img src="../images/bell 1.png" alt="Image" />
+        </button>
+        <button class="icon">
+          <img src="../images/mail 1.png" alt="Image" />
+        </button>
+        <button class="icon profil-pop-up">
+          <img src="../images/user 1 (1).png" alt="Image" />
+        </button>
+      </div>
     </header>
-   
+
     <nav>
-        <a href="grapgisme-designe-free.html">Graphisme & Design</a>
-        <a href="developpementweb-free.html">Développement Web</a>
-        <a href="redaction-free.html">Rédaction & Traduction</a>
-        <a href="video-free.html">Vidéo & animation</a>
-        <a href="musique-free.html">Musique & Audio</a>
+      <a href="grapgisme-designe-free.html">Graphisme & Design</a>
+      <a href="developpementweb-free.html">Développement Web</a>
+      <a href="redaction-free.html">Rédaction & Traduction</a>
+      <a href="video-free.html">Vidéo & animation</a>
+      <a href="musique-free.html">Musique & Audio</a>
     </nav>
 
     <main>
-        <div id="container" class="container">
-            
-        </div>
+      <div id="container" class="container"></div>
     </main>
 
     <div class="pop-up-nitif">
-        <div class="notification-container">
-            <img src="../images/bell 1.png" alt="Image">
-            <h2>NOTIFICATIONS</h2>
+      <div class="notification-container">
+        <img src="../images/bell 1.png" alt="Image" />
+        <h2>NOTIFICATIONS</h2>
+      </div>
+      <div class="notifications">
+        <div class="notification">
+          <p>FARHI Louisa vous a envoyé une mission</p>
         </div>
-        <div class="notifications">
-           <div class="notification">
-             <p>FARHI Louisa vous a envoyé une mission</p>
-           </div>
-        </div>
+      </div>
     </div>
-    
+
     <div class="pop-up-profil">
-        <a href="profil-freelancer.html">Mon compte</a>
-        <a href="ajouter-service.html">Poster un service</a>
-        <a href="#">Mes service</a>
-        <hr>
-        <a href="connexion.html">se deconnecté</a>
+      <a href="profil-freelancer.html">Mon compte</a>
+      <a href="ajouter-service.html">Poster un service</a>
+      <a href="#">Mes service</a>
+      <hr />
+      <a href="connexion.html">se deconnecté</a>
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", async () => {
-            // Vérification de l'authentification
-            const token = localStorage.getItem("authToken");
-            if (!token) {
-                window.location.href = "connexion.html";
-                return;
-            }
+      document.addEventListener("DOMContentLoaded", async () => {
+        // Vérification de l'authentification
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          window.location.href = "connexion.html";
+          return;
+        }
 
-            // Récupérer l'ID de la mission depuis l'URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const missionId = urlParams.get('id');
+        // Récupérer l'ID de la mission depuis l'URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const missionId = urlParams.get("id");
 
-            if (!missionId) {
-                document.getElementById("container").innerHTML = `
+        if (!missionId) {
+          document.getElementById("container").innerHTML = `
                     <div class="error-message">
                         <p>Aucune mission sélectionnée</p>
                         <a href="vitrine-freelancer.html">Retour aux missions</a>
                     </div>
                 `;
-                return;
+          return;
+        }
+
+        // Charger les détails de la mission
+        await loadMissionDetails(missionId);
+      });
+
+      async function loadMissionDetails(missionId) {
+        try {
+          const token = localStorage.getItem("authToken");
+          const response = await fetch(
+            `http://localhost:3001/missions/${missionId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
             }
+          );
 
-            // Charger les détails de la mission
-            await loadMissionDetails(missionId);
-        });
+          if (!response.ok) {
+            throw new Error("Erreur de chargement des détails de la mission");
+          }
 
-        async function loadMissionDetails(missionId) {
-            try {
-                const token = localStorage.getItem("authToken");
-                const response = await fetch(`http://localhost:3001/missions/${missionId}`, {
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "Content-Type": "application/json"
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error("Erreur de chargement des détails de la mission");
-                }
-
-                const mission = await response.json();
-                displayMissionDetails(mission);
-
-            } catch (error) {
-                console.error("Erreur:", error);
-                document.getElementById("container").innerHTML = `
+          const mission = await response.json();
+          displayMissionDetails(mission);
+        } catch (error) {
+          console.error("Erreur:", error);
+          document.getElementById("container").innerHTML = `
                     <div class="error-message">
                         <p>${error.message}</p>
                         <button onclick="loadMissionDetails(${missionId})">Réessayer</button>
                     </div>
                 `;
-            }
         }
+      }
 
-        function displayMissionDetails(mission) {
-            const container = document.getElementById("container");
-            
+      function displayMissionDetails(mission) {
+        const container = document.getElementById("container");
 
-            container.innerHTML = `
+        container.innerHTML = `
              
                 <div>
                 <div class="freelancer-info">
@@ -147,54 +168,88 @@
                 </div>
                 
             `;
-            
-        }
-        // Gestion de la postulation
-document.addEventListener("click", async (e) => {
-    if (e.target.id === "apply-btn") {
-        e.preventDefault();
-        
-        // Récupérer l'ID de la mission depuis l'URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const missionId = urlParams.get('id');
-        
-        if (!missionId) {
+      }
+      // Gestion de la postulation
+      document.addEventListener("click", async (e) => {
+        if (e.target.id === "apply-btn") {
+          e.preventDefault();
+
+          // Récupérer l'ID de la mission depuis l'URL
+          const urlParams = new URLSearchParams(window.location.search);
+          const missionId = urlParams.get("id");
+
+          if (!missionId) {
             alert("Erreur: Impossible de trouver l'ID de la mission");
             return;
-        }
+          }
 
-        try {
+          try {
             const token = localStorage.getItem("authToken");
-            const response = await fetch("http://localhost:3001/candidateures/postuler", {
+            const response = await fetch(
+              "http://localhost:3001/candidateures/postuler",
+              {
                 method: "POST",
                 headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json"
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ idMission: missionId })
-            });
+                body: JSON.stringify({ idMission: missionId }),
+              }
+            );
 
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message || "Erreur lors de la postulation");
+              throw new Error(data.message || "Erreur lors de la postulation");
             }
 
             alert(data.message);
             // Optionnel: Désactiver le bouton après postulation
             e.target.disabled = true;
             e.target.textContent = "Postulation envoyée";
-
-        } catch (error) {
+          } catch (error) {
             console.error("Erreur:", error);
             alert(error.message);
+          }
         }
-    }
-});
+      });
+    </script>
+    <script>
+      document.getElementById("search-btn").addEventListener("click", () => {
+        const keyword = document.getElementById("search-bar").value;
+        fetch(
+          `http://localhost:3001/api/recherche?query=${encodeURIComponent(
+            keyword
+          )}`
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            const container = document.getElementById("container");
+            container.innerHTML = ""; // Efface les anciens résultats
+            if (data.length === 0) {
+              container.innerHTML = "<p>Aucun résultat trouvé.</p>";
+              return;
+            }
 
-       
-     </script>
+            data.forEach((mission) => {
+              container.innerHTML += `
+                  <div class="mission-result" onclick="window.location.href='detail-mission.html?id=${mission.idMission}'" style="cursor: pointer;">
+                    <h3>${mission.titre}</h3>
+                    <p>${mission.categorie}</p>
+                    <p>${mission.description}</p>
+                    <p>Durée estimée : ${mission.dureEstime} jours</p>
+                    <p>Budget : ${mission.budget} DA</p>
+                  </div>
+                `;
+            });
+          })
+          .catch((error) => {
+            console.error("Erreur lors de la recherche :", error);
+          });
+      });
+    </script>
+
     <script src="../js/notif-pop-up.js"></script>
     <script src="../js/profil-pop-up.js"></script>
-</body>
+  </body>
 </html>

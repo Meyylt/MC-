@@ -17,7 +17,7 @@ console.log(process.env.SECRET_KEY);
 app.use(express.json()); // Permet de lire les données JSON
 app.use(express.urlencoded({ extended: true })); // Permet de lire les formulaires HTML
 app.use(cors()); // ✅ Active CORS pour éviter les erreurs de blocage
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // 🛠️ Importation des routes
 const clientRoutes = require("./routes/clientRoutes");
@@ -39,8 +39,9 @@ app.use("/candidateures", candidateureRoutes);
 const demandesRoutes = require("./routes/demandesRoutes");
 app.use("/demandes", demandesRoutes);
 const notesRoutes = require("./routes/notesRoutes");
-app.use("/notes",notesRoutes);
-
+app.use("/notes", notesRoutes);
+const rechercheRoutes = require("./routes/rechercheRoutes");
+app.use("/", rechercheRoutes); // Ou tu peux mettre "/recherche"
 // 🌍 Route d'accueil
 app.get("/", (req, res) => {
   res.send("Hello, Node.js Backend!");
