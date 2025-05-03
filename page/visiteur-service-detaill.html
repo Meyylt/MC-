@@ -21,11 +21,6 @@
         </div>
         <input type="text" placeholder="Que cherchez-vous ? exemple: Développement web" >
        
-        <div class="header-icons">
-           <button class="icon notif-icon"> <img src="../images/bell 1.png" alt="Image" ></button>
-           <button class="icon"> <img src="../images/mail 1.png" alt="Image" ></button>
-           <button class="icon profil-pop-up" > <img src="../images/user 1 (1).png" alt="Image" > </button>
-        </div>
     </header>
    
     <nav>
@@ -110,23 +105,6 @@
     </div>
      <script src="../js/notif-pop-up.js"></script>
 
-    <div id="soummetrePopup" class="popup-overlay">
-        <div class="popup-content">
-          <img id="closePopup" src="../images/fermer.png" alt="Fermer" class="close-btn" />
-          <h6>Entrez les infos de la mission a soummetre </h6>
-          
-            <h2>Titre : </h2>
-            <input id="titre-mis" type="text" name="titre" placeholder="Titre" required />
-            <h2>Description : </h2>
-            <input id="description-mis" type="text" name="description" placeholder="Description" required />
-          
-          <button class="conf">confirmer</button>
-        </div>
-            
-
-        </div>
-
-      </div>
       
 
     <div class="pop-up-profil">
@@ -318,26 +296,13 @@ function formatDate(dateString) {
                 </div>
                 
             `;
-            const boutonAvis = document.querySelector(".soummetre");
-    const popup = document.getElementById("soummetrePopup");
-    const closeBtn = document.getElementById("closePopup");
+           
+            document.querySelector('.soummetre').addEventListener('click', async function() {
+    window.location.href = "connexion.html";
 
-    // Affiche le popup quand on clique sur "Écrire un avis"
-    boutonAvis.addEventListener("click", function () {
-        popup.style.display = "flex";
-    });
+});
 
-    // Ferme le popup quand on clique sur l'image de fermeture
-    closeBtn.addEventListener("click", function () {
-        popup.style.display = "none";
-    });
-
-    // (Optionnel) Ferme le popup si on clique en dehors de la boîte
-    popup.addEventListener("click", function (e) {
-        if (e.target === popup) {
-            popup.style.display = "none";
-        }
-    });
+    
             
 
         }
@@ -459,92 +424,11 @@ async function loadSimilarServices(categorie, currentServiceId) {
 }
 
 
-document.querySelector('.conf').addEventListener('click', async function() {
-    if (!selectedMissionId) {
-        alert("Veuillez sélectionner une mission");
-        return;
-    }
 
-    try {
-        const token = localStorage.getItem("authToken");
-        const urlParams = new URLSearchParams(window.location.search);
-        const serviceId = urlParams.get('id');
-
-        const response = await fetch("http://localhost:3001/demandes/add", {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                idMission: selectedMissionId,
-                idService: serviceId
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error("Erreur lors de la création de la demande");
-        }
-
-        const result = await response.json();
-        alert("Demande envoyée avec succès !");
-        document.getElementById("soummetrePopup").style.display = "none";
-        
-    } catch (error) {
-        console.error("Erreur:", error);
-        alert(`Erreur: ${error.message}`);
-    }
-});
-document.querySelector('.conf').addEventListener('click', async function() {
-    const titre = document.getElementById('titre-mis').value;
-    const description = document.getElementById('description-mis').value;
-    
-    if (!titre || !description) {
-        alert("Veuillez remplir tous les champs");
-        return;
-    }
-
-    // Récupérer l'ID du service depuis l'URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const serviceId = urlParams.get('id');
-
-    try {
-        const token = localStorage.getItem("authToken");
-        const response = await fetch("http://localhost:3001/demandes/demande", {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                titre,
-                description,
-                idService: serviceId
-            })
-        });
-
-        const result = await response.json();
-        
-        if (!response.ok) {
-            throw new Error(result.message || "Erreur lors de la création de la mission");
-        }
-
-        alert("Mission soumise avec succès !");
-        document.getElementById("soummetrePopup").style.display = "none";
-        
-        // Réinitialiser les champs
-        document.getElementById('titre-mis').value = '';
-        document.getElementById('description-mis').value = '';
-        
-    } catch (error) {
-        console.error("Erreur:", error);
-        alert(`Erreur: ${error.message}`);
-    }
-});
+   
 
 
       
      </script>
-     <script src="../js/soummetre.js"></script>
 </body>
 </html>

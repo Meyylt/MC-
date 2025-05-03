@@ -202,6 +202,19 @@ a{
 .container-suggestions::-webkit-scrollbar {
     display: none;
 }
+.commentaire-countainer {
+    display: flex;
+    overflow-x: auto; 
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    flex-wrap: nowrap;
+    margin-top: 10px;
+    margin-left: 20px;
+}
+.commentaire-countainer::-webkit-scrollbar {
+    display: none;
+}
 
 
 
@@ -416,3 +429,88 @@ a{
     margin-left: 400px;
     font-size: 20px;
   }
+  .commentaire-countainer {
+    display: flex;
+    overflow-x: auto; 
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    flex-wrap: nowrap;
+    margin-top: 10px;
+    margin-left: 20px;
+}
+.commentaire-countainer::-webkit-scrollbar {
+    display: none;
+}
+.commentaires{
+    display: flex;
+    flex-wrap: nowrap; 
+    gap: 20px;
+    margin-top: 20px;
+    margin-left: 50px;
+    
+    
+}
+.commentaire{
+    flex: 0 0 auto; 
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    height:   250px;
+    transition: all 0.3s ease;
+    overflow: hidden; 
+    color: black;
+    cursor: pointer;
+}
+
+.commentaire:hover {
+    transform: scale(1.02); /* Légère augmentation de taille */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée */
+    cursor: pointer; /* Change le curseur en main */
+}
+.imageclient{
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+.infoclient{
+    display: flex;
+    gap: 10px;
+}
+.user{
+    margin-top: 20px;
+    font-size: 20px;
+}
+
+.date{
+    margin-top: 25px;
+    margin-left: 20px;
+    font-size: 15px;
+    color: #5f5e5e;
+}
+.commentaire hr{
+    width: 350px;
+    margin-top: 10px;
+    margin-left: 20px;
+    color: #5f5e5e;
+}
+.noteclient{
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    margin-left: 20px;
+}
+.noteclient img{
+    width: 30px;
+    height: 30px;
+}
+.com{
+    word-wrap: break-word;
+  white-space: normal;
+  margin-left: 20px;
+  margin-top: 10px;
+}

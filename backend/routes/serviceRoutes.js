@@ -225,6 +225,7 @@ router.get("/:id", (req, res) => {
     });
 });
 
+
 // Récupérer les services du freelancer connecté
 router.get("/mes-services", authMiddleware, (req, res) => {
     const idFreelancer = req.user.idFreelancer; // Assurez-vous que le middleware fournit cette info

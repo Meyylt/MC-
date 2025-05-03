@@ -41,7 +41,9 @@ app.use("/demandes", demandesRoutes);
 const notesRoutes = require("./routes/notesRoutes");
 app.use("/notes", notesRoutes);
 const rechercheRoutes = require("./routes/rechercheRoutes");
-app.use("/recherches", rechercheRoutes); // Ou tu peux mettre "/recherche"
+app.use("/recherches", rechercheRoutes); 
+const commentaireRoutes = require("./routes/commentaireRoutes");
+app.use("/commentaires", commentaireRoutes);
 
 
 // 🚀 Démarrer le serveur
