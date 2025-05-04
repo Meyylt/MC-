@@ -1,138 +1,139 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vitrine Client</title>
-    <link rel="stylesheet" href="../css/accueil-client.css">
-    <link rel="stylesheet" href="../css/notif.css">
-    <link rel="stylesheet" href="../css/profil-pop-up.css">
-    <link rel="stylesheet" href="../css/header.css">
-</head>
-<body>
+    <link rel="stylesheet" href="../css/accueil-client.css" />
+    <link rel="stylesheet" href="../css/notif.css" />
+    <link rel="stylesheet" href="../css/profil-pop-up.css" />
+    <link rel="stylesheet" href="../css/header.css" />
+  </head>
+  <body>
     <header>
-        <div class="logo">
-            <span>SkillNet</span><span class="dot">●</span>
-        </div>
-        <div class="btnn">
-            
-            <a href="../page/connexion.html" class="btn-outline">Connexion</a>
-            <a href="../page/inscription.html" class="btn-outline">S'inscrire</a>
-        </div>
+      <div class="logo"><span>SkillNet</span><span class="dot">●</span></div>
+      <div class="btnn">
+        <a href="../page/connexion.html" class="btn-outline">Connexion</a>
+        <a href="../page/inscription.html" class="btn-outline">S'inscrire</a>
+      </div>
     </header>
 
     <nav>
-        <a href="visiteur-gra.html">Graphisme & Design</a>
-        <a href="visiteur-web.html">Développement Web</a>
-        <a href="visiteur-radac.html">Rédaction & Traduction</a>
-        <a href="visiteur;video.html">Vidéo & animation</a>
-        <a href="visiteur-musique.html">Musique & Audio</a>
+      <a href="visiteur-gra.html">Graphisme & Design</a>
+      <a href="visiteur-web.html">Développement Web</a>
+      <a href="visiteur-radac.html">Rédaction & Traduction</a>
+      <a href="visiteur;video.html">Vidéo & animation</a>
+      <a href="visiteur-musique.html">Musique & Audio</a>
     </nav>
 
     <section class="hero">
-        <img src="../images/Group 271.png" alt="Arrière-plan">
-        <div class="overlay">
-            <div class="search-bar">
-                <input type="text" placeholder="Que cherchez-vous ? exemple: Développement web">
-            </div>
-            <a href="ajouterMission.html"><button class="mission-button">Ajoutez votre mission du jour</button></a>
+      <img src="../images/Group 271.png" alt="Arrière-plan" />
+      <div class="overlay">
+        <div class="search-bar">
+          <input
+            type="text"
+            placeholder="Que cherchez-vous ? exemple: Développement web"
+          />
         </div>
+        <a href="ajouterMission.html"
+          ><button class="mission-button">
+            Ajoutez votre mission du jour
+          </button></a
+        >
+      </div>
     </section>
-    
+
     <main>
-        <h2>Les services disponibles</h2>
-        <div class="container-suggestions">
-            <div id="missions-container" class="missions">
-            </div>
-        </div>
+      <h2>Les services disponibles</h2>
+      <div class="container-suggestions">
+        <div id="missions-container" class="missions"></div>
+      </div>
     </main>
     <div class="pop-up-nitif">
-        <div class="notification-container">
-            <img src="../images/bell 1.png" alt="Image">
-            <h2>NOTIFICATIONS</h2>
+      <div class="notification-container">
+        <img src="../images/bell 1.png" alt="Image" />
+        <h2>NOTIFICATIONS</h2>
+      </div>
+      <div class="notifications">
+        <div class="notification">
+          <p>FARHI Louisa vous a envoyé une mission</p>
         </div>
-        <div class="notifications">
-           <div class="notification">
-             <p>FARHI Louisa vous a envoyé une mission</p>
-           </div>
+      </div>
+      <div class="notifications">
+        <div class="notification">
+          <p>FARHI Louisa vous a envoyé une mission</p>
         </div>
-        <div class="notifications">
-            <div class="notification">
-              <p>FARHI Louisa vous a envoyé une mission</p>
-            </div>
-         </div>
-         <div class="notifications">
-            <div class="notification">
-              <p>FARHI Louisa vous a envoyé une mission</p>
-            </div>
-         </div>
+      </div>
+      <div class="notifications">
+        <div class="notification">
+          <p>FARHI Louisa vous a envoyé une mission</p>
         </div>
-    
+      </div>
+    </div>
+
     <script src="../js/notif-pop-up.js"></script>
 
     <div class="pop-up-profil">
-       <a href="profil-client.html">Mon compte</a>
-       <a href="ajouterMission.html">Poster une mission</a>
-        <a href="mesmissions.html">Mes mission</a>
-        <a href="demande-cote-client.html">Mes Demmande</a>
-        <hr>
-        <a href="connexion.html">se deconnecté</a>
+      <a href="profil-client.html">Mon compte</a>
+      <a href="ajouterMission.html">Poster une mission</a>
+      <a href="mesmissions.html">Mes mission</a>
+      <a href="demande-cote-client.html">Mes Demmande</a>
+      <hr />
+      <a href="connexion.html">se deconnecté</a>
     </div>
     <script src="../js/profil-pop-up.js"></script>
 
-
-
     <script>
-        document.addEventListener("DOMContentLoaded", async () => {
-    try {
-        // Récupérer le token d'authentification
-        const token = localStorage.getItem("authToken");
-        if (!token) {
+      document.addEventListener("DOMContentLoaded", async () => {
+        try {
+          // Récupérer le token d'authentification
+          const token = localStorage.getItem("authToken");
+          if (!token) {
             window.location.href = "connexion.html";
             return;
-        }
+          }
 
-        // Charger les services depuis l'API
-        const response = await fetch("http://localhost:3001/services", {
+          // Charger les services depuis l'API
+          const response = await fetch("http://localhost:3001/services", {
             headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-            }
-        });
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          });
 
-        if (!response.ok) {
+          if (!response.ok) {
             throw new Error("Erreur de chargement des services");
-        }
+          }
 
-        const services = await response.json();
-        displayServices(services);
-
-    } catch (error) {
-        console.error("Erreur:", error);
-        document.getElementById("missions-container").innerHTML = `
+          const services = await response.json();
+          displayServices(services);
+        } catch (error) {
+          console.error("Erreur:", error);
+          document.getElementById("missions-container").innerHTML = `
             <div class="error-message">
                 <p>${error.message}</p>
                 <button onclick="location.reload()">Réessayer</button>
             </div>
         `;
-    }
-});
+        }
+      });
 
-function displayServices(services) {
-    const container = document.getElementById("missions-container");
-    container.innerHTML = "";
+      function displayServices(services) {
+        const container = document.getElementById("missions-container");
+        container.innerHTML = "";
 
-    if (services.length === 0) {
-        container.innerHTML = '<p class="no-services">Aucun service disponible pour le moment</p>';
-        return;
-    }
+        if (services.length === 0) {
+          container.innerHTML =
+            '<p class="no-services">Aucun service disponible pour le moment</p>';
+          return;
+        }
 
-    services.forEach(service => {
-        const serviceElement = document.createElement("a");
-        serviceElement.className = "mission";
-        serviceElement.href = `visiteur-service-detaill.html?id=${service.id}`;
+        services.forEach((service) => {
+          const serviceElement = document.createElement("a");
+          serviceElement.className = "mission";
+          serviceElement.href = `visiteur-service-detaill.html?id=${service.id}`;
 
-        serviceElement.innerHTML = `
+          serviceElement.innerHTML = `
             <img class="images" src="../backend/uploads/${service.image}">
             <div class="info-free">
                 <img class="imagefree" src="../backend/uploads/${service.imagefree}">
@@ -151,13 +152,9 @@ function displayServices(services) {
                 <p>(${service.avis})</p>
             </div>
         `;
-        container.appendChild(serviceElement);
-    });
-}
-
-       </script>
-
-
-  
-</body>
+          container.appendChild(serviceElement);
+        });
+      }
+    </script>
+  </body>
 </html>

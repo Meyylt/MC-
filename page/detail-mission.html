@@ -32,9 +32,8 @@
         id="search-bar"
         placeholder="Que cherchez-vous ? exemple: Développement web"
       />
-      <button id="search-btn">🔍</button>
+      <button id="search-btn"></button>
       <div class="header-icons">
-       
         <button class="icon">
           <img src="../images/mail 1.png" alt="Image" />
         </button>
@@ -70,12 +69,12 @@
 
     <div class="pop-up-profil">
       <a href="profil-freelancer.html">Mon compte</a>
-        <a href="ajouter-service.html">Ajouter un service</a>
-        <a href="messervices.html">Mes service</a>
-        <a href="demmande-free.html">Demmande</a>
-        <a href="mission-free.html">Mes missions</a>
-        <hr>
-        <a href="vitrine-visiteur.html">se deconnecté</a>
+      <a href="ajouter-service.html">Ajouter un service</a>
+      <a href="messervices.html">Mes service</a>
+      <a href="demmande-free.html">Demmande</a>
+      <a href="mission-free.html">Mes missions</a>
+      <hr />
+      <a href="vitrine-visiteur.html">se deconnecté</a>
     </div>
 
     <script>
@@ -247,6 +246,42 @@
             console.error("Erreur lors de la recherche :", error);
           });
       });
+      document
+        .getElementById("search-bar")
+        .addEventListener("keydown", (event) => {
+          if (event.key === "Enter") {
+            const keyword = document.getElementById("search-bar").value;
+            fetch(
+              `http://localhost:3001/recherches/recherche?query=${encodeURIComponent(
+                keyword
+              )}`
+            )
+              .then((res) => res.json())
+              .then((data) => {
+                const container = document.getElementById("container");
+                container.innerHTML = ""; // Efface les anciens résultats
+                if (data.length === 0) {
+                  container.innerHTML = "<p>Aucun résultat trouvé.</p>";
+                  return;
+                }
+
+                data.forEach((mission) => {
+                  container.innerHTML += `
+                  <div class="mission-result" onclick="window.location.href='detail-mission.html?id=${mission.idMission}'" style="cursor: pointer;">
+                    <h3>${mission.titre}</h3>
+                    <p>${mission.categorie}</p>
+                    <p>${mission.description}</p>
+                    <p>Durée estimée : ${mission.dureEstime} jours</p>
+                    <p>Budget : ${mission.budget} DA</p>
+                  </div>
+                `;
+                });
+              })
+              .catch((error) => {
+                console.error("Erreur lors de la recherche :", error);
+              });
+          }
+        });
     </script>
 
     <script src="../js/notif-pop-up.js"></script>
