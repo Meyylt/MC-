@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Graphisme & Design</title>
+    <title>Musique & Audio</title>
     <link rel="stylesheet" href="../css/categorie.css">
     <link rel="stylesheet" href="../css/notif.css">
     <link rel="stylesheet" href="../css/profil-pop-up.css">
@@ -12,20 +12,20 @@
 <body>
     <header>
         <div class="logo">
-            <a href="vitrine-client.html"><span>SkillNet</span><span class="dot">●</span></a>
+            <a href="vitrine-visiteur.html"><span>SkillNet</span><span class="dot">●</span></a>
         </div>
-        <div class="header-icons">
-           <button class="icon"><img src="../images/mail 1.png" alt="Message"></button>
-           <button class="icon profil-pop-up"><img src="../images/user 1 (1).png" alt="Profil"></button>
+        <div class="btnn">
+            
+            <a href="../page/connexion.html" class="btn-outline">Connexion</a>
+            <a href="../page/inscription.html" class="btn-outline">S'inscrire</a>
         </div>
     </header>
-
-    <nav>
-        <a href="grapgisme-designe.html">Graphisme & Design</a>
-        <a href="developpementweb.html">Développement Web</a>
-        <a href="redactionettraduction.html">Rédaction & Traduction</a>
-        <a href="videoetanimation.html">Vidéo & animation</a>
-        <a href="musiqueetaudio.html">Musique & Audio</a>
+   <nav>
+    <a href="visiteur-gra.html">Graphisme & Design</a>
+    <a href="visiteur-web.html">Développement Web</a>
+    <a href="visiteur-radac.html">Rédaction & Traduction</a>
+    <a href="visiteur;video.html">Vidéo & animation</a>
+    <a href="visiteur-musique.html">Musique & Audio</a>
     </nav>
 
    
@@ -44,15 +44,37 @@
 
 
 
+    <div class="pop-up-nitif">
+        <div class="notification-container">
+            <img src="../images/bell 1.png" alt="Image">
+            <h2>NOTIFICATIONS</h2>
+        </div>
+        <div class="notifications">
+           <div class="notification">
+             <p>FARHI Louisa vous a envoyé une mission</p>
+           </div>
+        </div>
+        <div class="notifications">
+            <div class="notification">
+              <p>FARHI Louisa vous a envoyé une mission</p>
+            </div>
+         </div>
+         <div class="notifications">
+            <div class="notification">
+              <p>FARHI Louisa vous a envoyé une mission</p>
+            </div>
+         </div>
+        </div>
     
+    <script src="../js/notif-pop-up.js"></script>
 
     <div class="pop-up-profil">
-        <a href="profil-client.html">Mon compte</a>
-        <a href="ajouterMission.html">Poster une mission</a>
-         <a href="mesmissions.html">Mes mission</a>
-         <a href="demande-cote-client.html">Mes Demmande</a>
-         <hr>
-         <a href="vitrine-visiteur.html">se deconnecté</a>
+       <a href="profil-client.html">Mon compte</a>
+       <a href="ajouterMission.html">Poster une mission</a>
+        <a href="mesmissions.html">Mes mission</a>
+        <a href="demande-cote-client.html">Mes Demmande</a>
+        <hr>
+        <a href="connexion.html">se deconnecté</a>
     </div>
     <script src="../js/profil-pop-up.js"></script>
 
@@ -69,7 +91,7 @@
                 }
         
                 // Charger les services depuis l'API
-                const response = await fetch("http://localhost:3001/services/graphisme", {
+                const response = await fetch("http://localhost:3001/services/musique", {
                     headers: {
                         "Authorization": `Bearer ${token}`,
                         "Content-Type": "application/json"
@@ -106,10 +128,11 @@
             services.forEach(service => {
                 const serviceElement = document.createElement("a");
                 serviceElement.className = "mission";
-                serviceElement.href = `detail-sevice.html?id=${service.id}`; // Lien vers la page de détail
+                serviceElement.href = `visiteur-service-detaill?id=${service.id}`; // Lien vers la page de détail
                 
                 serviceElement.innerHTML = `
-                   <img class="images" src="../backend/uploads/${service.image}">
+                    
+                    <img class="images" src="../backend/uploads/${service.image}">
                     <div class="info-free">
                         <img class="imagefree" src="../backend/uploads/${service.imagefree}">
                         <p>@${service.nomutilisateure}</p>

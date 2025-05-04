@@ -2,7 +2,7 @@
 .pop-up-profil{
     display: none;
     width: 200px;
-    height: 250px;
+    height: 320px;
     background-color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     position: absolute;

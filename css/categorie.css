@@ -296,6 +296,16 @@ a {
     line-height: 1.4em;
   }
 
+  .btnn a.btn-outline {
+    border-radius: 10px;
+    border: 1px solid #003912;
+    color: #003912;
+    padding: 10px;
+}
+.btnn a.btn-outline:hover {
+    background: #003912;
+    color: white;
+}
 
 
 

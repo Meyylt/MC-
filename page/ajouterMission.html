@@ -15,7 +15,6 @@
         <a href="vitrine-client.html"><span>SkillNet</span><span class="dot">●</span></a>
       </div>
       <div class="icons">
-        <img src="../images/bell 1.png" alt="Notification" class="icon notif-icon" />
         <img src="../images/mail 1.png" alt="Message" class="icon" />
         <img src="../images/user 1 (1).png" alt="Profil" class="icon profil-pop-up" />
       </div>
@@ -38,16 +37,15 @@
         <button type="submit" id="poster">Poster</button>
       </form>
     </div>
-      <!-- Conteneur pour afficher les missions -->
-      <div id="missionsContainer" class="missions-container"></div>
-    </main>
+      </main>
       
     <div class="pop-up-profil">
-      <a href="#">Mon compte</a>
-      <a href="ajouterMission.html">Poster une mission</a>
-       <a href="#">Mes mission</a>
-       <hr>
-       <a href="connexion.html">se deconnecté</a>
+      <a href="profil-client.html">Mon compte</a>
+       <a href="ajouterMission.html">Poster une mission</a>
+        <a href="mesmissions.html">Mes mission</a>
+        <a href="demande-cote-client.html">Mes Demmande</a>
+        <hr>
+        <a href="vitrine-visiteur.html">se deconnecté</a>
    </div>
    <script src="../js/profil-pop-up.js"></script>
 
@@ -61,29 +59,6 @@
       </div>
     </div>
 
-    <div class="pop-up-nitif">
-      <div class="notification-container">
-          <img src="../images/bell 1.png" alt="Image" >
-          <h2>NOTIFICATIONS</h2>
-      </div>
-      <div class="notifications">
-         <div class="notification">
-           <p>FARHI Louisa vous a envoyé une mission</p>
-         </div>
-      </div>
-      <div class="notifications">
-          <div class="notification">
-            <p>FARHI Louisa vous a envoyé une mission</p>
-          </div>
-       </div>
-       <div class="notifications">
-          <div class="notification">
-            <p>FARHI Louisa vous a envoyé une mission</p>
-          </div>
-       </div>
-    </div>
-  
-    <script src="../js/notif-pop-up.js"></script>
     <script src="../js/ajouterMission.js"></script>
     <script>
      document.getElementById("missionForm").addEventListener("submit", async (e) => {
