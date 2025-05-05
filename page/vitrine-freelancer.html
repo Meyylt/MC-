@@ -26,8 +26,10 @@
       <div class="logo"><span>SkillNet</span><span class="dot">●</span></div>
       <input
         type="text"
+        id="searchInput"
         placeholder="Que cherchez-vous ? exemple: Développement web"
       />
+
       <div class="header-icons">
         <a href="messagerie.html"
           ><button class="icon">
@@ -182,6 +184,35 @@
           container.appendChild(missionElement);
         });
       }
+      function filterMissions(searchTerm) {
+        const missionElements = document.querySelectorAll(".missionsug");
+
+        missionElements.forEach((missionElement) => {
+          const title = missionElement
+            .querySelector("h2")
+            .textContent.toLowerCase();
+          const category = missionElement
+            .querySelector(".info p")
+            .textContent.toLowerCase();
+          const description = missionElement
+            .querySelectorAll(".info p")[1]
+            .textContent.toLowerCase();
+
+          const combinedText = `${title} ${category} ${description}`;
+
+          if (combinedText.includes(searchTerm.toLowerCase())) {
+            missionElement.style.display = "";
+          } else {
+            missionElement.style.display = "none";
+          }
+        });
+      }
+      document
+        .getElementById("searchInput")
+        .addEventListener("input", (event) => {
+          const searchTerm = event.target.value;
+          filterMissions(searchTerm);
+        });
     </script>
   </body>
 </html>

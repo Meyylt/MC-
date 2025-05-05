@@ -19,8 +19,11 @@
         <div class="logo">
             <a href="vitrine-client.html"><span>SkillNet</span><span class="dot">●</span></a>
         </div>
-        <input type="text" placeholder="Que cherchez-vous ? exemple: Développement web" >
-       
+        <input type="text" id="searchInput" placeholder="Que cherchez-vous ? exemple: Développement web">
+
+
+        <div id="suggestionsContainer" class="suggestions-container"></div>
+
         <div class="header-icons">
            <button class="icon"> <img src="../images/mail 1.png" alt="Image" ></button>
            <button class="icon profil-pop-up" > <img src="../images/user 1 (1).png" alt="Image" > </button>
@@ -517,6 +520,98 @@ document.querySelector('.conf').addEventListener('click', async function() {
     }
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+    const searchInput = document.getElementById("searchInput");
+
+    searchInput.addEventListener("keypress", async (e) => {
+        if (e.key === "Enter") {
+            const query = searchInput.value.trim();
+            if (query) {
+                // Redirige vers une page de résultats de recherche ou effectue une recherche dans le contenu existant
+                searchServices(query);
+            }
+        }
+    });
+});
+
+async function searchServices(query) {
+    try {
+        // Effectuer la requête de recherche, par exemple, vers une API
+        const token = localStorage.getItem("authToken");
+        const response = await fetch(`http://localhost:3001/services/search?query=${query}`, {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Erreur de recherche");
+        }
+
+        const results = await response.json();
+        displaySearchResults(results);
+    } catch (error) {
+        console.error("Erreur de recherche:", error);
+        alert("Une erreur est survenue lors de la recherche.");
+    }
+}
+
+function displaySearchResults(results) {
+    const container = document.getElementById("container");
+    container.innerHTML = "";
+
+    if (results.length === 0) {
+        container.innerHTML = "<p>Aucun résultat trouvé.</p>";
+        return;
+    }
+
+    results.forEach(service => {
+        const serviceElement = document.createElement("div");
+        serviceElement.className = "service";
+        serviceElement.innerHTML = `
+            <h2>${service.Titre}</h2>
+            <p>${service.description}</p>
+            <p>${service.prix} DA</p>
+        `;
+        container.appendChild(serviceElement);
+    });
+}
+searchInput.addEventListener("input", async (e) => {
+    const query = searchInput.value.trim();
+    if (query.length > 2) { // Afficher des suggestions après 3 caractères
+        showSuggestions(query);
+    } else {
+        hideSuggestions();
+    }
+});
+
+async function showSuggestions(query) {
+    try {
+        const response = await fetch(`http://localhost:3001/services/search/suggestions?query=${query}`);
+        const suggestions = await response.json();
+
+        const suggestionsContainer = document.getElementById("suggestionsContainer");
+        suggestionsContainer.innerHTML = "";
+        suggestions.forEach(suggestion => {
+            const suggestionElement = document.createElement("div");
+            suggestionElement.className = "suggestion";
+            suggestionElement.textContent = suggestion.Titre;
+            suggestionElement.addEventListener("click", () => {
+                searchInput.value = suggestion.Titre;
+                searchServices(suggestion.Titre);
+            });
+            suggestionsContainer.appendChild(suggestionElement);
+        });
+    } catch (error) {
+        console.error("Erreur lors de l'affichage des suggestions:", error);
+    }
+}
+
+function hideSuggestions() {
+    const suggestionsContainer = document.getElementById("suggestionsContainer");
+    suggestionsContainer.innerHTML = "";
+}
 
       
      </script>

@@ -32,6 +32,7 @@
         <div class="search-bar">
           <input
             type="text"
+            id="search-input"
             placeholder="Que cherchez-vous ? exemple: Développement web"
           />
         </div>
@@ -152,6 +153,88 @@
                 <p>(${service.avis})</p>
             </div>
         `;
+          container.appendChild(serviceElement);
+        });
+      }
+      document.addEventListener("DOMContentLoaded", async () => {
+        try {
+          const token = localStorage.getItem("authToken");
+          if (!token) {
+            window.location.href = "connexion.html";
+            return;
+          }
+
+          const response = await fetch("http://localhost:3001/services", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error("Erreur de chargement des services");
+          }
+
+          const services = await response.json();
+          displayServices(services);
+
+          // Ajouter l'écouteur d'événement pour la recherche
+          const searchInput = document.getElementById("search-input");
+          searchInput.addEventListener("input", () => {
+            const query = searchInput.value.toLowerCase();
+            const filteredServices = services.filter((service) => {
+              return (
+                service.Titre.toLowerCase().includes(query) ||
+                service.nomutilisateure.toLowerCase().includes(query)
+              );
+            });
+            displayServices(filteredServices);
+          });
+        } catch (error) {
+          console.error("Erreur:", error);
+          document.getElementById("missions-container").innerHTML = `
+            <div class="error-message">
+                <p>${error.message}</p>
+                <button onclick="location.reload()">Réessayer</button>
+            </div>
+          `;
+        }
+      });
+
+      function displayServices(services) {
+        const container = document.getElementById("missions-container");
+        container.innerHTML = "";
+
+        if (services.length === 0) {
+          container.innerHTML =
+            '<p class="no-services">Aucun service disponible pour le moment</p>';
+          return;
+        }
+
+        services.forEach((service) => {
+          const serviceElement = document.createElement("a");
+          serviceElement.className = "mission";
+          serviceElement.href = `visiteur-service-detaill.html?id=${service.id}`;
+
+          serviceElement.innerHTML = `
+            <img class="images" src="../backend/uploads/${service.image}">
+            <div class="info-free">
+                <img class="imagefree" src="../backend/uploads/${service.imagefree}">
+                <p>@${service.nomutilisateure}</p>
+            </div>
+            <h2>${service.Titre}</h2>
+            <div class="info">
+                <h6>Prix:</h6>
+                <p>${service.prix} DA</p>
+                <p>/</p>
+                <p>${service.dureEstime} jours</p>
+            </div>
+            <div class="infonote">
+                <img class="vert" src="../images/vert.png">
+                <h4>${service.note}</h4>
+                <p>(${service.avis})</p>
+            </div>
+          `;
           container.appendChild(serviceElement);
         });
       }

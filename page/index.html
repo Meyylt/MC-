@@ -1,76 +1,131 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SkillNet</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/navbar.css">
-</head>
-<body>
-
-    
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/navbar.css" />
+  </head>
+  <body>
     <header class="navbar">
-        <div class="logo">
-            <span>SkillNet</span><span class="dot">●</span>
-        </div>
-        <nav>
-            <a href="#">Devenir freelanceur</a>
-            <a href="../page/connexion.html"><strong>Se connecter</strong></a>
-            <a href="../page/inscription.html" class="btn-outline">S’inscrire</a>
-        </nav>
+      <div class="logo"><span>SkillNet</span><span class="dot">●</span></div>
+      <nav>
+        <a href="#">Devenir freelanceur</a>
+        <a href="../page/connexion.html"><strong>Se connecter</strong></a>
+        <a href="../page/inscription.html" class="btn-outline">S’inscrire</a>
+      </nav>
     </header>
 
     <section class="hero">
-        <img src="../images/Group 271.png" alt="Arrière-plan">
-        <div class="overlay">
-            
-            <div class="search-bar">
-                <input type="text" placeholder="Que cherchez-vous ? exemple: Développement web">
-            </div>
+      <img src="../images/Group 271.png" alt="Arrière-plan" />
+      <div class="overlay">
+        <div class="search-bar">
+            <input
+              type="text"
+              id="search-bar"
+              placeholder="Que cherchez-vous ? exemple: Développement web"
+            />
+            <button id="search-btn"></button>
+          </div>
+          
         </div>
+      </div>
     </section>
+    <section class="search-results">
+        <div id="container" class="container"></div>
+      </section>
+      
 
     <section class="services">
-        <h2>Services populaire</h2>
-        <div class="services-grid">
-            <div class="service-card">
-                <img src="../images/image 1.png" alt="Conception de logo">
-                <p class="txt">Conception de logo</p>
-            </div>
-            <div class="service-card">
-                <img src="../images/casque-utilisateur (2) 1.png" alt="Voix off">
-                <p class="txt">Voix off</p>
-            </div>
-            <div class="service-card">
-                <img src="../images/programmation 1.png" alt="Programmation">
-                <p class="txt">Programmation</p>
-            </div>
-            <div class="service-card">
-                <img src="../images/animer 1.png" alt="Animation">
-                <p class="txt">Animation</p>
-            </div>
-            <div class="service-card">
-                <img src="../images/image 1.png" alt="Conception de logo">
-                <p class="txt">Conception de logo</p>
-            </div>
-            <div class="service-card">
-                <img src="../images/casque-utilisateur (2) 1.png" alt="Voix off">
-                <p class="txt">Voix off</p>
-            </div>
-            <div class="service-card">
-                <img src="../images/programmation 1.png" alt="Programmation">
-                <p class="txt">Programmation</p>
-            </div>
-            <div class="service-card">
-                <img src="../images/animer 1.png" alt="Animation">
-                <p class="txt">Animation</p>
-            </div>
+      <h2>Services populaire</h2>
+      <div class="services-grid">
+        <div class="service-card">
+          <img src="../images/image 1.png" alt="Conception de logo" />
+          <p class="txt">Conception de logo</p>
         </div>
+        <div class="service-card">
+          <img src="../images/casque-utilisateur (2) 1.png" alt="Voix off" />
+          <p class="txt">Voix off</p>
+        </div>
+        <div class="service-card">
+          <img src="../images/programmation 1.png" alt="Programmation" />
+          <p class="txt">Programmation</p>
+        </div>
+        <div class="service-card">
+          <img src="../images/animer 1.png" alt="Animation" />
+          <p class="txt">Animation</p>
+        </div>
+        <div class="service-card">
+          <img src="../images/image 1.png" alt="Conception de logo" />
+          <p class="txt">Conception de logo</p>
+        </div>
+        <div class="service-card">
+          <img src="../images/casque-utilisateur (2) 1.png" alt="Voix off" />
+          <p class="txt">Voix off</p>
+        </div>
+        <div class="service-card">
+          <img src="../images/programmation 1.png" alt="Programmation" />
+          <p class="txt">Programmation</p>
+        </div>
+        <div class="service-card">
+          <img src="../images/animer 1.png" alt="Animation" />
+          <p class="txt">Animation</p>
+        </div>
+      </div>
     </section>
     <section class="how-it-works">
-<img src="images/Group 272.png" alt="" class="full-width-image">
+      <img src="images/Group 272.png" alt="" class="full-width-image" />
     </section>
+    <script>
+        document.getElementById("search-btn").addEventListener("click", () => {
+          const keyword = document.getElementById("search-bar").value.trim();
+          if (!keyword) {
+            alert("Veuillez entrer un mot-clé pour la recherche.");
+            return;
+          }
+      
+          fetch(`http://localhost:3001/api/recherche?query=${encodeURIComponent(keyword)}`)
+            .then((res) => {
+              if (!res.ok) {
+                throw new Error("Erreur lors de la récupération des résultats.");
+              }
+              return res.json();
+            })
+            .then((data) => {
+              const container = document.getElementById("container");
+              container.innerHTML = ""; // Efface les anciens résultats
+              if (data.length === 0) {
+                container.innerHTML = "<p>Aucun résultat trouvé.</p>";
+                return;
+              }
+      
+              data.forEach((mission) => {
+                container.innerHTML += `
+                  <div class="mission-result" onclick="window.location.href='detail-mission.html?id=${mission.idMission}'" style="cursor: pointer;">
+                    <h3>${mission.titre}</h3>
+                    <p>${mission.categorie}</p>
+                    <p>${mission.description}</p>
+                    <p>Durée estimée : ${mission.dureEstime} jours</p>
+                    <p>Budget : ${mission.budget} DA</p>
+                  </div>
+                `;
+              });
+            })
+            .catch((error) => {
+              console.error("Erreur lors de la recherche :", error);
+              alert("Une erreur est survenue lors de la recherche.");
+            });
+        });document.getElementById("search-bar").addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+              event.preventDefault(); // Empêche le comportement par défaut du formulaire
+              document.getElementById("search-btn").click(); // Simule un clic sur le bouton de recherche
+            }
+          });
+          
 
-</body>
+      </script>
+      
+      
+  </body>
 </html>

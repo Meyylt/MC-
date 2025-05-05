@@ -1,237 +1,257 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vitrine Client Notif</title>
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Italiana&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
 
-    <link rel="stylesheet" href="../css/vitrine-client-notis.css">
-    <link rel="stylesheet" href="../css/notif.css">
-    <link rel="stylesheet" href="../css/profil-pop-up.css">
-</head>
-<body>
-   
-    
-    <header >
-        <div class="logo">
-            <a href="vitrine-client.html"><span>SkillNet</span><span class="dot">●</span></a>
-        </div>
-        <input type="text" placeholder="Que cherchez-vous ? exemple: Développement web" >
-       
-        <div class="header-icons">
-           <button class="icon"> <img src="../images/mail 1.png" alt="Image" ></button>
-           <button class="icon profil-pop-up"> <img src="../images/user 1 (1).png" alt="Image" > </button>
-        </div>
+    <link rel="stylesheet" href="../css/vitrine-client-notis.css" />
+    <link rel="stylesheet" href="../css/notif.css" />
+    <link rel="stylesheet" href="../css/profil-pop-up.css" />
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <a href="vitrine-client.html"
+          ><span>SkillNet</span><span class="dot">●</span></a
+        >
+      </div>
+      <input
+        type="text"
+        id="search-bar"
+        placeholder="Que cherchez-vous ? exemple: Développement web"
+      />
+
+      <div class="header-icons">
+        <button class="icon">
+          <img src="../images/mail 1.png" alt="Image" />
+        </button>
+        <button class="icon profil-pop-up">
+          <img src="../images/user 1 (1).png" alt="Image" />
+        </button>
+      </div>
     </header>
-   
+
     <nav>
-        <a href="grapgisme-designe.html">Graphisme & Design</a>
-        <a href="developpementweb.html">Développement Web</a>
-        <a href="redactionettraduction.html">Rédaction & Traduction</a>
-        <a href="videoetanimation.html">Vidéo & animation</a>
-        <a href="musiqueetaudio.html">Musique & Audio</a>
+      <a href="grapgisme-designe.html">Graphisme & Design</a>
+      <a href="developpementweb.html">Développement Web</a>
+      <a href="redactionettraduction.html">Rédaction & Traduction</a>
+      <a href="videoetanimation.html">Vidéo & animation</a>
+      <a href="musiqueetaudio.html">Musique & Audio</a>
     </nav>
 
-    
     <main>
-        <div class="type">
-            <h2 id="envoye">Envoyé</h2>
-            <h2 id="recue" >Recue</h2>
-            
+      <div class="type">
+        <h2 id="envoye">Envoyé</h2>
+        <h2 id="recue">Recue</h2>
+      </div>
+      <section class="profile-card" id="demandes-container">
+        <div class="profile-info">
+          <img src="../images/freelanceur1.png" alt="Profil" />
+          <div class="profile-info-texte">
+            <h3>NOM dutilisateure</h3>
+          </div>
+          <div class="info">
+            <button class="endemande">En attente</button>
+            <div class="action-buttons">
+              <button class="detaill">voire detaill</button>
+              <button class="annuler">Annuler</button>
+            </div>
+          </div>
         </div>
-        <section class="profile-card" id="demandes-container">
-            <div class="profile-info">
-                <img src="../images/freelanceur1.png" alt="Profil" >
-                <div class="profile-info-texte">
-                    <h3>NOM dutilisateure</h3>
-                </div>
-                <div class="info">
-                    <button class="endemande">En attente</button>
-                <div class="action-buttons">
-                    <button class="detaill">voire detaill</button>
-                    <button class="annuler">Annuler</button>
-                </div>
+        <div class="profile-info">
+          <img src="../images/freelanceur1.png" alt="Profil" />
+          <div class="profile-info-texte">
+            <h3>NOM dutilisateure</h3>
+          </div>
+          <div class="info">
+            <button class="accepter">accepter</button>
+            <div class="action-buttons">
+              <button class="detaill">voire detaill</button>
+              <button class="paiment">Passer au paiment</button>
             </div>
+          </div>
+        </div>
+        <div class="profile-info">
+          <img src="../images/freelanceur1.png" alt="Profil" />
+          <div class="profile-info-texte">
+            <h3>NOM dutilisateure</h3>
+          </div>
+          <div class="info">
+            <button class="refuser">refuser</button>
+            <div class="action-buttons">
+              <button class="detaill">voire detaill</button>
             </div>
-            <div class="profile-info">
-                <img src="../images/freelanceur1.png" alt="Profil" >
-                <div class="profile-info-texte">
-                    <h3>NOM dutilisateure</h3>
-                </div>
-                <div class="info">
-                    <button class="accepter">accepter</button>
-                <div class="action-buttons">
-                    <button class="detaill">voire detaill</button>
-                    <button class="paiment">Passer au paiment</button>
-                </div>
-            </div>
-            </div>
-            <div class="profile-info">
-                <img src="../images/freelanceur1.png" alt="Profil" >
-                <div class="profile-info-texte">
-                    <h3>NOM dutilisateure</h3>
-                </div>
-                <div class="info">
-                <button class="refuser">refuser</button>
-                <div class="action-buttons">
-                    <button class="detaill">voire detaill</button>
-                </div>
-            </div>
-            </div>
-        </section>
-        <section class="candidats-container" id="candidats-container">
-           
-        </section>
-            
+          </div>
+        </div>
+      </section>
+      <section class="candidats-container" id="candidats-container"></section>
     </main>
 
     <div id="detaill" class="popup-overlay">
-        <div class="popup-content">
-          <img id="closePopup" src="../images/fermer.png" alt="Fermer" class="close-btn" />
-          <h6>Detaills de la mission</h6>
-          <p id="free">freelancer : </p>
-          <p id="titre">Titre : </p>
-          <p id="description">Description : </p>
-          <p id="prix">Prix :</p>
-          <p id="duree">Durée :</p>
-          <p id="service">La mission a ete soimise pour le service : </p>
-          
-        </div>
-
+      <div class="popup-content">
+        <img
+          id="closePopup"
+          src="../images/fermer.png"
+          alt="Fermer"
+          class="close-btn"
+        />
+        <h6>Detaills de la mission</h6>
+        <p id="free">freelancer :</p>
+        <p id="titre">Titre :</p>
+        <p id="description">Description :</p>
+        <p id="prix">Prix :</p>
+        <p id="duree">Durée :</p>
+        <p id="service">La mission a ete soimise pour le service :</p>
       </div>
-      <div id="detaillcand" class="popup-overlay">
-        <div class="popup-content">
-          <img id="closePopupcand" src="../images/fermer.png" alt="Fermer" class="close-btn" />
-          <h6>Detaills de la mission</h6>
-          <p id="free">freelancer : </p>
-          <p id="titre">Titre : </p>
-          <p id="description">Description : </p>
-          <p id="prix">Prix :</p>
-          <p id="duree">Durée :</p>
-          
-        </div>
-
+    </div>
+    <div id="detaillcand" class="popup-overlay">
+      <div class="popup-content">
+        <img
+          id="closePopupcand"
+          src="../images/fermer.png"
+          alt="Fermer"
+          class="close-btn"
+        />
+        <h6>Detaills de la mission</h6>
+        <p id="free">freelancer :</p>
+        <p id="titre">Titre :</p>
+        <p id="description">Description :</p>
+        <p id="prix">Prix :</p>
+        <p id="duree">Durée :</p>
       </div>
+    </div>
 
+    <div class="pop-up-profil">
+      <a href="profil-client.html">Mon compte</a>
+      <a href="ajouterMission.html">Poster une mission</a>
+      <a href="mesmissions.html">Mes mission</a>
+      <a href="demande-cote-client.html">Mes Demmande</a>
+      <hr />
+      <a href="vitrine-visiteur.html">se deconnecté</a>
+    </div>
+    <script src="../js/profil-pop-up.js"></script>
 
-  <div class="pop-up-profil">
-    <a href="profil-client.html">Mon compte</a>
-       <a href="ajouterMission.html">Poster une mission</a>
-        <a href="mesmissions.html">Mes mission</a>
-        <a href="demande-cote-client.html">Mes Demmande</a>
-        <hr>
-        <a href="vitrine-visiteur.html">se deconnecté</a>
- </div>
- <script src="../js/profil-pop-up.js"></script>
- 
-
-<script>
-    const boutondetaill = document.querySelector(".detaill");
-    const boutondetaillcand = document.querySelector(".detaillcand");
-const popup = document.getElementById("detaill");
-const popupcand = document.getElementById("detaillcand");
-const closeBtn = document.getElementById("closePopup");
-const closeBtncand = document.getElementById("closePopupcand");
-
-// Affiche le popup quand on clique sur "Écrire un avis"
-boutondetaill.addEventListener("click", function () {
-   
-    popup.style.display = "flex";
-});
-boutondetaillcand.addEventListener("click", function () {
-    popupcand.style.display = "flex";
-});
-
-// Ferme le popup quand on clique sur l'image de fermeture
-closeBtn.addEventListener("click", function () {
-    popup.style.display = "none";
-});
-closeBtncand.addEventListener("click", function () {
-    popupcand.style.display = "none";
-});
-
-// (Optionnel) Ferme le popup si on clique en dehors de la boîte
-popup.addEventListener("click", function (e) {
-    if (e.target === popup) {
-        popup.style.display = "none";
-    }
-});
-
-popupcand.addEventListener("click", function (e) {
-    if (e.target === popupcand) {
-        popupcand.style.display = "none";
-    }
-});
- </script>
-    
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+      const boutondetaill = document.querySelector(".detaill");
+      const boutondetaillcand = document.querySelector(".detaillcand");
+      const popup = document.getElementById("detaill");
+      const popupcand = document.getElementById("detaillcand");
+      const closeBtn = document.getElementById("closePopup");
+      const closeBtncand = document.getElementById("closePopupcand");
 
-            const token = localStorage.getItem("authToken");
-    if (!token) {
-        window.location.href = "connexion.html";
-        return;
-    }
+      // Affiche le popup quand on clique sur "Écrire un avis"
+      boutondetaill.addEventListener("click", function () {
+        popup.style.display = "flex";
+      });
+      boutondetaillcand.addEventListener("click", function () {
+        popupcand.style.display = "flex";
+      });
 
-    const popup = document.getElementById('detaill');
-    const closeBtn = document.getElementById('closePopup');
-    const envoyeBtn = document.getElementById('envoye');
-const recueBtn = document.getElementById('recue');
-const demandesContainer = document.querySelector('.profile-card');
+      // Ferme le popup quand on clique sur l'image de fermeture
+      closeBtn.addEventListener("click", function () {
+        popup.style.display = "none";
+      });
+      closeBtncand.addEventListener("click", function () {
+        popupcand.style.display = "none";
+      });
 
-const candidatsContainer = document.getElementById('candidats-container');
+      // (Optionnel) Ferme le popup si on clique en dehors de la boîte
+      popup.addEventListener("click", function (e) {
+        if (e.target === popup) {
+          popup.style.display = "none";
+        }
+      });
 
-// Par défaut, "Envoyé" est actif
-envoyeBtn.classList.add('active');
-loadClientDemandes(); // Charger directement au chargement
+      popupcand.addEventListener("click", function (e) {
+        if (e.target === popupcand) {
+          popupcand.style.display = "none";
+        }
+      });
+    </script>
 
-// Clic sur "Envoyé"
-envoyeBtn.addEventListener('click', function () {
-    if (!this.classList.contains('active')) {
-        this.classList.add('active');
-        recueBtn.classList.remove('active');
-        loadClientDemandes(); // Charger les demandes envoyées
-    }
-});
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          window.location.href = "connexion.html";
+          return;
+        }
 
-// Clic sur "Reçue"
-recueBtn.addEventListener('click', function () {
-    if (!this.classList.contains('active')) {
-        this.classList.add('active');
-        envoyeBtn.classList.remove('active');
-        loadCandidats();
-    }
-});
-async function loadCandidats() {
-        try {
-            const response = await fetch('http://localhost:3001/candidateures/candidats', {
+        const popup = document.getElementById("detaill");
+        const closeBtn = document.getElementById("closePopup");
+        const envoyeBtn = document.getElementById("envoye");
+        const recueBtn = document.getElementById("recue");
+        const demandesContainer = document.querySelector(".profile-card");
+
+        const candidatsContainer = document.getElementById(
+          "candidats-container"
+        );
+
+        // Par défaut, "Envoyé" est actif
+        envoyeBtn.classList.add("active");
+        loadClientDemandes(); // Charger directement au chargement
+
+        // Clic sur "Envoyé"
+        envoyeBtn.addEventListener("click", function () {
+          if (!this.classList.contains("active")) {
+            this.classList.add("active");
+            recueBtn.classList.remove("active");
+            loadClientDemandes(); // Charger les demandes envoyées
+          }
+        });
+
+        // Clic sur "Reçue"
+        recueBtn.addEventListener("click", function () {
+          if (!this.classList.contains("active")) {
+            this.classList.add("active");
+            envoyeBtn.classList.remove("active");
+            loadCandidats();
+          }
+        });
+        async function loadCandidats() {
+          try {
+            const response = await fetch(
+              "http://localhost:3001/candidateures/candidats",
+              {
                 headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
 
-            if (!response.ok) throw new Error('Erreur réseau');
+            if (!response.ok) throw new Error("Erreur réseau");
 
             const candidats = await response.json();
             renderCandidats(candidats);
-
-        } catch (error) {
-            console.error('Erreur:', error);
-            alert('Impossible de charger les candidatures');
+          } catch (error) {
+            console.error("Erreur:", error);
+            alert("Impossible de charger les candidatures");
+          }
         }
-    }
 
-    // Afficher les candidatures sous forme de cartes
-    function renderCandidats(candidats) {
-        demandesContainer.innerHTML = ''; // Vider les candidats existants
+        // Afficher les candidatures sous forme de cartes
+        function renderCandidats(candidats) {
+          demandesContainer.innerHTML = ""; // Vider les candidats existants
 
-        candidats.forEach(candidat => {
+          candidats.forEach((candidat) => {
             const candidatHTML = `
                 <div class="profile-info" data-id="${candidat.idCandidat}">
-                    <img src="../backend/uploads/${candidat.freelancerImage || '../images/freelanceur1.png'}" alt="Profil">
+                    <img src="../backend/uploads/${
+                      candidat.freelancerImage || "../images/freelanceur1.png"
+                    }" alt="Profil">
                     <div class="profile-info-texte">
                         <h3>${candidat.nomu}</h3>
                     </div>
@@ -243,162 +263,187 @@ async function loadCandidats() {
                 </div>
             `;
 
-            demandesContainer.insertAdjacentHTML('beforeend', candidatHTML);
-        });
+            demandesContainer.insertAdjacentHTML("beforeend", candidatHTML);
+          });
 
-        setupEventListenerss();
-    }
+          setupEventListenerss();
+        }
 
-    // Configurer les événements pour accepter, refuser, et voir les détails
-    function setupEventListenerss() {
-        // Bouton "Voir détail"
-        document.querySelectorAll('.detaillcand').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const candidatId = this.closest('.profile-info').dataset.id;
-                showCandidatDetails(candidatId);
+        // Configurer les événements pour accepter, refuser, et voir les détails
+        function setupEventListenerss() {
+          // Bouton "Voir détail"
+          document.querySelectorAll(".detaillcand").forEach((btn) => {
+            btn.addEventListener("click", function () {
+              const candidatId = this.closest(".profile-info").dataset.id;
+              showCandidatDetails(candidatId);
             });
-        });
+          });
 
-        // Bouton "Accepter"
-        document.querySelectorAll('.accept').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const candidatId = this.closest('.profile-info').dataset.id;
-                acceptCandidat(candidatId);
+          // Bouton "Accepter"
+          document.querySelectorAll(".accept").forEach((btn) => {
+            btn.addEventListener("click", function () {
+              const candidatId = this.closest(".profile-info").dataset.id;
+              acceptCandidat(candidatId);
             });
-        });
+          });
 
-        // Bouton "Refuser"
-        document.querySelectorAll('.decline').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const candidatId = this.closest('.profile-info').dataset.id;
-                declineCandidat(candidatId);
+          // Bouton "Refuser"
+          document.querySelectorAll(".decline").forEach((btn) => {
+            btn.addEventListener("click", function () {
+              const candidatId = this.closest(".profile-info").dataset.id;
+              declineCandidat(candidatId);
             });
-        });
-    }
+          });
+        }
 
-    // Afficher les détails du candidat dans un popup (similaire à ton précédent code)
-    async function showCandidatDetails(candidatId) {
-        try {
-            const response = await fetch(`http://localhost:3001/candidateures/candidats/${candidatId}`, {
+        // Afficher les détails du candidat dans un popup (similaire à ton précédent code)
+        async function showCandidatDetails(candidatId) {
+          try {
+            const response = await fetch(
+              `http://localhost:3001/candidateures/candidats/${candidatId}`,
+              {
                 headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
 
-            if (!response.ok) throw new Error('Erreur réseau');
+            if (!response.ok) throw new Error("Erreur réseau");
 
             const candidat = await response.json();
 
-            const popupcand = document.getElementById('detaillcand');
+            const popupcand = document.getElementById("detaillcand");
             // Remplir le popup
-            popupcand.querySelector('.popup-content h6').textContent = `Détails de la mission #${candidat.mission_titre}`;
-            popupcand.querySelector('.popup-content p:nth-of-type(1)').textContent = `Freelancer: ${candidat.free_prenom} ${candidat.free_nom} (@${candidat.nomu})`;
-            popupcand.querySelector('.popup-content p:nth-of-type(2)').textContent = `Titre: ${candidat.mission_titre}`;
-            popupcand.querySelector('.popup-content p:nth-of-type(3)').textContent = `Description:${candidat.mission_description}`;
-            popupcand.querySelector('.popup-content p:nth-of-type(4)').textContent = `Budjet: ${candidat.mission_budjet}`;
-            popupcand.querySelector('.popup-content p:nth-of-type(5)').textContent = `Durée: ${candidat.mission_duree}`;
-            popupcand.style.display = 'flex';
+            popupcand.querySelector(
+              ".popup-content h6"
+            ).textContent = `Détails de la mission #${candidat.mission_titre}`;
+            popupcand.querySelector(
+              ".popup-content p:nth-of-type(1)"
+            ).textContent = `Freelancer: ${candidat.free_prenom} ${candidat.free_nom} (@${candidat.nomu})`;
+            popupcand.querySelector(
+              ".popup-content p:nth-of-type(2)"
+            ).textContent = `Titre: ${candidat.mission_titre}`;
+            popupcand.querySelector(
+              ".popup-content p:nth-of-type(3)"
+            ).textContent = `Description:${candidat.mission_description}`;
+            popupcand.querySelector(
+              ".popup-content p:nth-of-type(4)"
+            ).textContent = `Budjet: ${candidat.mission_budjet}`;
+            popupcand.querySelector(
+              ".popup-content p:nth-of-type(5)"
+            ).textContent = `Durée: ${candidat.mission_duree}`;
+            popupcand.style.display = "flex";
 
             popupcand.addEventListener("click", function (e) {
-    if (e.target === popupcand) {
-        popupcand.style.display = "none";
-    }
-});
-        
-        } catch (error) {
-            console.error('Erreur:', error);
-            alert('Impossible de charger les détails du candidat');
+              if (e.target === popupcand) {
+                popupcand.style.display = "none";
+              }
+            });
+          } catch (error) {
+            console.error("Erreur:", error);
+            alert("Impossible de charger les détails du candidat");
+          }
         }
-    }
 
-    // Accepter un candidat
-    async function acceptCandidat(candidatId) {
-        if (!confirm('Voulez-vous vraiment accepter cette candidature ?')) return;
+        // Accepter un candidat
+        async function acceptCandidat(candidatId) {
+          if (!confirm("Voulez-vous vraiment accepter cette candidature ?"))
+            return;
 
-        try {
-            const response = await fetch(`http://localhost:3001/candidateures/candidats/${candidatId}/accepter`, {
-                method: 'POST',
+          try {
+            const response = await fetch(
+              `http://localhost:3001/candidateures/candidats/${candidatId}/accepter`,
+              {
+                method: "POST",
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+                },
+              }
+            );
 
-            if (!response.ok) throw new Error('Erreur réseau');
+            if (!response.ok) throw new Error("Erreur réseau");
 
-            alert('Candidature acceptée avec succès');
+            alert("Candidature acceptée avec succès");
             loadCandidats(); // Recharger la liste des candidatures
-
-        } catch (error) {
-            console.error('Erreur:', error);
-            alert('Échec de l\'acceptation de la candidature');
-        } 
-    }
-
-    // Refuser un candidat
-    async function declineCandidat(candidatId) {
-        if (!confirm('Voulez-vous vraiment refuser cette candidature ?')) return;
-
-        try {
-            const response = await fetch(`http://localhost:3001/candidateures/candidats/${candidatId}/refuser`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (!response.ok) throw new Error('Erreur réseau');
-
-            alert('Candidature refusée avec succès');
-            loadCandidats(); // Recharger la liste des candidatures
-
-        } catch (error) {
-            console.error('Erreur:', error);
-            alert('Échec du refus de la candidature');
+          } catch (error) {
+            console.error("Erreur:", error);
+            alert("Échec de l'acceptation de la candidature");
+          }
         }
-    }
-    
-    
-    // Fonction pour charger les demandes
-    async function loadClientDemandes() {
-        try {
-            const response = await fetch('http://localhost:3001/demandes/client/demandes', {
+
+        // Refuser un candidat
+        async function declineCandidat(candidatId) {
+          if (!confirm("Voulez-vous vraiment refuser cette candidature ?"))
+            return;
+
+          try {
+            const response = await fetch(
+              `http://localhost:3001/candidateures/candidats/${candidatId}/refuser`,
+              {
+                method: "POST",
                 headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            
-            if (!response.ok) throw new Error('Erreur réseau');
-            
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+
+            if (!response.ok) throw new Error("Erreur réseau");
+
+            alert("Candidature refusée avec succès");
+            loadCandidats(); // Recharger la liste des candidatures
+          } catch (error) {
+            console.error("Erreur:", error);
+            alert("Échec du refus de la candidature");
+          }
+        }
+
+        // Fonction pour charger les demandes
+        async function loadClientDemandes() {
+          try {
+            const response = await fetch(
+              "http://localhost:3001/demandes/client/demandes",
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+
+            if (!response.ok) throw new Error("Erreur réseau");
+
             const demandes = await response.json();
             renderDemandes(demandes);
-            
-        } catch (error) {
-            console.error('Erreur:', error);
-            alert('Impossible de charger les demandes');
+          } catch (error) {
+            console.error("Erreur:", error);
+            alert("Impossible de charger les demandes");
+          }
         }
-    }
-    
-    // Afficher les demandes selon leur statut
-    function renderDemandes(demandes) {
-        demandesContainer.innerHTML = '';
-        
-        demandes.forEach(demande => {
-            let demandeHTML = '';
-            
+
+        // Afficher les demandes selon leur statut
+        function renderDemandes(demandes) {
+          demandesContainer.innerHTML = "";
+
+          demandes.forEach((demande) => {
+            let demandeHTML = "";
+
             // Structure commune
             const baseHTML = `
                 <div class="profile-info" data-id="${demande.idDemande}">
-                    <img src="../backend/uploads/${demande.freelancerImage || '../images/freelanceur1.png'}" alt="Profil">
+                    <img src="../backend/uploads/${
+                      demande.freelancerImage || "../images/freelanceur1.png"
+                    }" alt="Profil">
                     <div class="profile-info-texte">
                         <h3>${demande.user}</h3>
                     </div>
             `;
-            
+
             // Différents états selon le statut
-            if (demande.statut === 'En attente') {
-                demandeHTML = baseHTML + `
+            if (demande.statut === "En attente") {
+              demandeHTML =
+                baseHTML +
+                `
                     <div class="info">
                         <button class="endemande">En attente</button>
                         <div class="action-buttons">
@@ -407,9 +452,10 @@ async function loadCandidats() {
                         </div>
                     </div>
                 `;
-            } 
-            else if (demande.statut === 'refuser') {
-                demandeHTML = baseHTML + `
+            } else if (demande.statut === "refuser") {
+              demandeHTML =
+                baseHTML +
+                `
                     <div class="info">
                         <button class="refuser">refuser</button>
                         <div class="action-buttons">
@@ -417,10 +463,11 @@ async function loadCandidats() {
                         </div>
                     </div>
                 `;
-            } 
-            else if (demande.statut === 'accepter') {
-                if(demande.mstatut==='En cours'){
-                    demandeHTML = baseHTML + `
+            } else if (demande.statut === "accepter") {
+              if (demande.mstatut === "En cours") {
+                demandeHTML =
+                  baseHTML +
+                  `
                     <div class="info">
                         <button class="accepter">accepter</button>
                         <div class="action-buttons">
@@ -429,8 +476,10 @@ async function loadCandidats() {
                         </div>
                     </div>
                 `;
-                }else{
-                    demandeHTML = baseHTML + `
+              } else {
+                demandeHTML =
+                  baseHTML +
+                  `
                     <div class="info">
                         <button class="accepter">accepter</button>
                         <div class="action-buttons">
@@ -446,127 +495,205 @@ async function loadCandidats() {
                         </div>
                     </div>
                 `;
-                }
-                
+              }
             }
-            
-            demandesContainer.insertAdjacentHTML('beforeend', demandeHTML);
-        });
-        
-        // Ajouter les événements
-        setupEventListeners();
-    }
-    
-    // Configurer les événements
-    function setupEventListeners() {
-        // Boutons "Voir détail"
-        document.querySelectorAll('.detaill').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const demandeId = this.closest('.profile-info').dataset.id;
-                showDemandeDetails(demandeId);
-            });
-        });
-        
-        // Bouton fermer popup
-        closeBtn.addEventListener('click', () => {
-            popup.style.display = 'none';
-        });
-        
-        // Boutons Annuler (pour les demandes en attente)
-        document.querySelectorAll('.annuler').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const demandeId = this.closest('.profile-info').dataset.id;
-                cancelDemande(demandeId);
-            });
-        });
-        document.querySelectorAll('.paiment').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const idMission = this.dataset.missionId;
-        const idFreelancer = this.dataset.freelancerId;
-        const duree = this.dataset.dureestime;
-        const prix = this.dataset.budget;
-        const titre = this.dataset.titre;
-        
-        if (!idMission || !idFreelancer) {
-            console.error('IDs manquants pour le paiement');
-            return;
+
+            demandesContainer.insertAdjacentHTML("beforeend", demandeHTML);
+          });
+
+          // Ajouter les événements
+          setupEventListeners();
         }
-        
-        // Stocker les infos dans localStorage avant redirection
-        localStorage.setItem('paymentData', JSON.stringify({
-            idMission,
-            idFreelancer,
-            duree,
-            prix,
-            titre
-        }));
-        
-        window.location.href = 'paiments.html';
-    });
-});
-    }
-    
-    // Afficher les détails dans le popup
-    async function showDemandeDetails(demandeId) {
-        try {
-            const response = await fetch(`http://localhost:3001/demandes/client/demandes/${demandeId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+
+        // Configurer les événements
+        function setupEventListeners() {
+          // Boutons "Voir détail"
+          document.querySelectorAll(".detaill").forEach((btn) => {
+            btn.addEventListener("click", function () {
+              const demandeId = this.closest(".profile-info").dataset.id;
+              showDemandeDetails(demandeId);
             });
-            
-            if (!response.ok) throw new Error('Erreur réseau');
-            
+          });
+
+          // Bouton fermer popup
+          closeBtn.addEventListener("click", () => {
+            popup.style.display = "none";
+          });
+
+          // Boutons Annuler (pour les demandes en attente)
+          document.querySelectorAll(".annuler").forEach((btn) => {
+            btn.addEventListener("click", function () {
+              const demandeId = this.closest(".profile-info").dataset.id;
+              cancelDemande(demandeId);
+            });
+          });
+          document.querySelectorAll(".paiment").forEach((btn) => {
+            btn.addEventListener("click", function () {
+              const idMission = this.dataset.missionId;
+              const idFreelancer = this.dataset.freelancerId;
+              const duree = this.dataset.dureestime;
+              const prix = this.dataset.budget;
+              const titre = this.dataset.titre;
+
+              if (!idMission || !idFreelancer) {
+                console.error("IDs manquants pour le paiement");
+                return;
+              }
+
+              // Stocker les infos dans localStorage avant redirection
+              localStorage.setItem(
+                "paymentData",
+                JSON.stringify({
+                  idMission,
+                  idFreelancer,
+                  duree,
+                  prix,
+                  titre,
+                })
+              );
+
+              window.location.href = "paiments.html";
+            });
+          });
+        }
+
+        // Afficher les détails dans le popup
+        async function showDemandeDetails(demandeId) {
+          try {
+            const response = await fetch(
+              `http://localhost:3001/demandes/client/demandes/${demandeId}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+
+            if (!response.ok) throw new Error("Erreur réseau");
+
             const demande = await response.json();
-            
+
             // Remplir le popup
-            document.querySelector('.popup-content h6').textContent = `Détails de la demande #${demandeId}`;
-            document.querySelector('.popup-content p:nth-of-type(1)').textContent = `Freelancer: ${demande.freelancerNom} ${demande.freelancerPrenom}( ${demande.user})`;
-            document.querySelector('.popup-content p:nth-of-type(2)').textContent = `Titre: ${demande.titre}`;
-            document.querySelector('.popup-content p:nth-of-type(3)').textContent = `Description: ${demande.missionDescription}`;
-            document.querySelector('.popup-content p:nth-of-type(5)').textContent = `Prix: ${demande.budget}`;
-            document.querySelector('.popup-content p:nth-of-type(6)').textContent = `Durée: ${demande.dureEstime}`;
-            document.querySelector('.popup-content p:nth-of-type(4)').textContent = `Service: ${demande.serviceTitre}`;
-            popup.style.display = 'flex';
+            document.querySelector(
+              ".popup-content h6"
+            ).textContent = `Détails de la demande #${demandeId}`;
+            document.querySelector(
+              ".popup-content p:nth-of-type(1)"
+            ).textContent = `Freelancer: ${demande.freelancerNom} ${demande.freelancerPrenom}( ${demande.user})`;
+            document.querySelector(
+              ".popup-content p:nth-of-type(2)"
+            ).textContent = `Titre: ${demande.titre}`;
+            document.querySelector(
+              ".popup-content p:nth-of-type(3)"
+            ).textContent = `Description: ${demande.missionDescription}`;
+            document.querySelector(
+              ".popup-content p:nth-of-type(5)"
+            ).textContent = `Prix: ${demande.budget}`;
+            document.querySelector(
+              ".popup-content p:nth-of-type(6)"
+            ).textContent = `Durée: ${demande.dureEstime}`;
+            document.querySelector(
+              ".popup-content p:nth-of-type(4)"
+            ).textContent = `Service: ${demande.serviceTitre}`;
+            popup.style.display = "flex";
             popup.addEventListener("click", function (e) {
-    if (e.target === popup) {
-        popup.style.display = "none";
-    }
-});
-            
-        } catch (error) {
-            console.error('Erreur:', error);
-            alert('Impossible de charger les détails');
-        }
-    }
-    
-    // Annuler une demande
-    async function cancelDemande(demandeId) {
-        if (!confirm('Voulez-vous vraiment annuler cette demande ?')) return;
-        
-        try {
-            const response = await fetch(`http://localhost:3001/demandes/client/demandes/${demandeId}/annuler`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
+              if (e.target === popup) {
+                popup.style.display = "none";
+              }
             });
-            
-            if (!response.ok) throw new Error('Erreur réseau');
-            
-            alert('Demande annulée avec succès');
-            loadClientDemandes(); // Recharger la liste
-            
-        } catch (error) {
-            console.error('Erreur:', error);
-            alert('Échec de l\'annulation');
+          } catch (error) {
+            console.error("Erreur:", error);
+            alert("Impossible de charger les détails");
+          }
         }
-    }
-});
 
+        // Annuler une demande
+        async function cancelDemande(demandeId) {
+          if (!confirm("Voulez-vous vraiment annuler cette demande ?")) return;
 
+          try {
+            const response = await fetch(
+              `http://localhost:3001/demandes/client/demandes/${demandeId}/annuler`,
+              {
+                method: "POST",
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+                },
+              }
+            );
 
+            if (!response.ok) throw new Error("Erreur réseau");
+
+            alert("Demande annulée avec succès");
+            loadClientDemandes(); // Recharger la liste
+          } catch (error) {
+            console.error("Erreur:", error);
+            alert("Échec de l'annulation");
+          }
+        }
+      });
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("search-bar");
+        const demandesContainer = document.querySelector(".profile-card");
+
+        searchInput.addEventListener("input", async function () {
+          const searchTerm = searchInput.value;
+
+          // Si la recherche est vide, on peut vider les résultats
+          if (searchTerm.trim() === "") {
+            demandesContainer.innerHTML = ""; // Effacer les résultats précédents
+            return;
+          }
+
+          try {
+            // Requête au backend pour récupérer les données correspondant à la recherche
+            const response = await fetch(
+              `http://localhost:3001/search?query=${searchTerm}`,
+              {
+                method: "GET",
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+                },
+              }
+            );
+
+            if (!response.ok) throw new Error("Erreur de recherche");
+
+            const results = await response.json();
+            renderSearchResults(results);
+          } catch (error) {
+            console.error("Erreur:", error);
+            alert("Impossible d'effectuer la recherche");
+          }
+        });
+
+        // Afficher les résultats dans le DOM
+        function renderSearchResults(results) {
+          demandesContainer.innerHTML = ""; // Vider les résultats existants
+
+          if (results.length === 0) {
+            demandesContainer.innerHTML = "<p>Aucun résultat trouvé</p>";
+            return;
+          }
+
+          results.forEach((result) => {
+            const resultHTML = `
+                <div class="profile-info">
+                    <img src="../images/freelanceur1.png" alt="Profil">
+                    <div class="profile-info-texte">
+                        <h3>${result.nom}</h3>
+                    </div>
+                    <div class="info">
+                        <button class="endemande">En attente</button>
+                    </div>
+                </div>
+            `;
+            demandesContainer.insertAdjacentHTML("beforeend", resultHTML);
+          });
+        }
+      });
     </script>
-</body>
+  </body>
 </html>
